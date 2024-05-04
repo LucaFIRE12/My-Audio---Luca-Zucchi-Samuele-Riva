@@ -6,15 +6,46 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.924" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBaseline_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnCancella"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/ic_sfondo_bottone"
+            android:src="@drawable/baseline_delete_24_disabled" />
+
+        <ImageButton
+            android:id="@+id/btnRegistra"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:background="@drawable/ic_registra"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"/>
+
+        <ImageButton
+            android:id="@+id/btnElenco"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/ic_sfondo_bottone"
+            android:src="@drawable/ic_elenco" />
+
+        <ImageButton
+            android:id="@+id/btnFatto"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/ic_sfondo_bottone"
+            android:src="@drawable/baseline_done_24"
+            android:visibility="gone" />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/timer"
@@ -25,7 +56,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.442" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
