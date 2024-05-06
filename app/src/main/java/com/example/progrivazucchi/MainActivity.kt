@@ -1,24 +1,38 @@
 package com.example.progrivazucchi
 
+import android.Manifest
 import android.content.pm.PackageManager
+import android.media.MediaRecorder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.core.app.ActivityCompat
-import kotlinx.android.synthetic.main.activity_main.btnRegistra
+import android.widget.ImageButton
+import java.text.SimpleDateFormat
+
 
 const val REQUEST_CODE =200
 class MainActivity : AppCompatActivity() {
     //richiesta dei permessi necessari
-    private var permissions = arrayOf(Manifest.permission.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION)
+    private var permissions = arrayOf(Manifest.permission.RECORD_AUDIO) // creazione di un array di permessi richiesti al manifest file ,contenente info sul
+    // progetto ed in grado di rilasciare permessi che vanno esplicitamente richiesti nel codice. il risultato è una finestra in app che richiede all'utente un
+    // permesso a cui lui decide se dare il consenso
+
 
     private var permissionGranted = false
+
+    private lateinit var recorder: MediaRecorder
+    private var dirPath = ""
+    private var nomeFile = "" //inizializzazione nome di un file audio generico
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val btnRegistra = findViewById<Button>(R.id.btnRegistra)
-
+        val btnRegistra = findViewById<ImageButton>(R.id.btnRegistra)
+        var simpleDateFormat = SimpleDateFormat("GG.MM.AAAA_hh.mm.ss")
         permissionGranted = ActivityCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED
 
         if(!permissionGranted)
@@ -48,6 +62,23 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE)
             return
         }
-        // start recording
+
+        // inizio processo di registrazione audio
+
+        recorder = MediaRecorder()
+        dirPath = "${externalCacheDir?.absolutePath}/"
+
+        nomeFile = "audio_record-$date"
+
+        // impostazioni di registrazione o setUp
+        recorder.apply{
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+            // set utile per salvare i file in formato mp3
+            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            setOutputFile()
+
+
+        }
     }
 }
