@@ -8,6 +8,7 @@
 
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="100dp"
@@ -18,13 +19,12 @@
 
 
         <ImageButton
-            android:contentDescription="NULL"
             android:id="@+id/btnCancella"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/ic_sfondo_bottone"
-            android:src="@drawable/baseline_delete_24_disabled"
-            />
+            android:contentDescription="NULL"
+            android:src="@drawable/baseline_delete_24_disabled" />
 
         <ImageButton
             android:id="@+id/btnRegistra"
@@ -34,15 +34,15 @@
             android:layout_marginEnd="20dp"
             android:autofillHints="bottone registra"
             android:background="@drawable/ic_registra"
-            android:contentDescription="NULL"/>
+            android:contentDescription="NULL" />
 
         <ImageButton
             android:id="@+id/btnElenco"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/ic_sfondo_bottone"
-            android:src="@drawable/ic_elenco"
-            android:contentDescription="NULL"/>
+            android:contentDescription="NULL"
+            android:src="@drawable/ic_elenco" />
 
         <ImageButton
             android:id="@+id/btnFatto"
@@ -55,14 +55,22 @@
 
 
     <TextView
-        android:id="@+id/timer"
+        android:id="@+id/cronometro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="00:00.00"
         android:textSize="56sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/forma_onda"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="20px"/>
+
+    <com.example.progrivazucchi.FormaOnda
+        android:id="@+id/forma_onda"
+        android:layout_width="match_parent"
+        android:layout_height="400px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

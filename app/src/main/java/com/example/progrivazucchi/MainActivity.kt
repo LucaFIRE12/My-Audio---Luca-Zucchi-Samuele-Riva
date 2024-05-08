@@ -3,21 +3,20 @@ package com.example.progrivazucchi
 import android.Manifest
 import android.content.pm.PackageManager
 import android.media.MediaRecorder
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.LinearLayout
 import androidx.core.app.ActivityCompat
 import android.widget.ImageButton
-import androidx.annotation.RequiresApi
+import android.widget.TextView
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Timer
 
 
 const val REQUEST_CODE =200
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
+
     //richiesta dei permessi necessari
     private var permissions = arrayOf(Manifest.permission.RECORD_AUDIO) // creazione di un array di permessi richiesti al manifest file ,contenente info sul
     // progetto ed in grado di rilasciare permessi che vanno esplicitamente richiesti nel codice. il risultato è una finestra in app che richiede all'utente un
@@ -26,12 +25,14 @@ class MainActivity : AppCompatActivity() {
 
     private var permissionGranted = false
 
+
     private lateinit var recorder: MediaRecorder
     private var dirPath = ""
     private var nomeFile = "" //inizializzazione nome di un file audio generico
     private var staRegistrando = false
     private var inPausa = false
 
+    private lateinit var tempo: Tempo
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +47,9 @@ class MainActivity : AppCompatActivity() {
         if(!permissionGranted)
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE) //all'utente verra presentata la
         //interfaccia utente per richiedere i permessi, successivamente verrà informato se sono stati accettati
+
+        //richiama il metodo OnTimerTickListener sia da questa classe che tutto ciò che è presnet dentro al file Tempo.kt
+        tempo = Tempo(this)
 
         findViewById<ImageButton>(R.id.btnRegistra).setOnClickListener{
             when {
@@ -68,19 +72,22 @@ class MainActivity : AppCompatActivity() {
         // al grantResult (risposta alla richiesta sviluppata dall'utente) che riceviamo di conseguenza
         //è necessario avere un permesso ogni volta che si vuole iniziare a registrare
     }
+
     // funzione per la gestione del bottone di registrazione, con controllo dei permessi
-
-
     private fun fermaRegistrazione(){
         recorder.pause()
         inPausa = true
         findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_registra)
+
+        tempo.pausa() //metodo presente dentro la classe Tempo.kt
     }
 
     private fun tornaARegistrare(){
         recorder.resume()
         inPausa = false
         findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_pausa)
+
+        tempo.stop() //metodo presente dentro la classe Tempo.kt
     }
 
 
@@ -124,6 +131,20 @@ class MainActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_pausa) // settaggio bottone di pausa
         staRegistrando = true
         inPausa = false
+        tempo.avvio() //metodo presente dentro la classe Tempo.kt
+
+    }
+
+    private fun fermaRegistrare(){
+        tempo.stop()
+    }
+
+    // quando viene dato il via al timer, questa funzione fa partire il tempo e lo ferma
+    override fun onTimerTick(duration: String) {
+
+         val esecuzione = findViewById<TextView>(R.id.cronometro)
+         esecuzione.text = duration
+         findViewById<FormaOnda>(R.id.forma_onda).aggiungiAmpiezza(recorder.maxAmplitude.toFloat())     //aggiorna la forma d'onda
     }
 }
 

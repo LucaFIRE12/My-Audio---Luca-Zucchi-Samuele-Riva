@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.progrivazucchi"
-        minSdk = 31
+        minSdk = 30
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -35,6 +35,7 @@ android {
         jvmTarget = "1.8"
     }
 }
+
 
 dependencies {
 
