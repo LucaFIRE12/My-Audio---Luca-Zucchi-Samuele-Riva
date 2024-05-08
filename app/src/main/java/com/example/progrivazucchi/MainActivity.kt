@@ -3,12 +3,14 @@ package com.example.progrivazucchi
 import android.Manifest
 import android.content.pm.PackageManager
 import android.media.MediaRecorder
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.core.app.ActivityCompat
 import android.widget.ImageButton
+import androidx.annotation.RequiresApi
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -20,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private var permissions = arrayOf(Manifest.permission.RECORD_AUDIO) // creazione di un array di permessi richiesti al manifest file ,contenente info sul
     // progetto ed in grado di rilasciare permessi che vanno esplicitamente richiesti nel codice. il risultato è una finestra in app che richiede all'utente un
     // permesso a cui lui decide se dare il consenso
-    val btnRegistra = findViewById<ImageButton>(R.id.btnRegistra)
+    //val btnRegistra = findViewById<ImageButton>(R.id.btnRegistra)
 
     private var permissionGranted = false
 
@@ -29,9 +31,7 @@ class MainActivity : AppCompatActivity() {
     private var nomeFile = "" //inizializzazione nome di un file audio generico
     private var staRegistrando = false
     private var inPausa = false
-    var simpleDateFormat = SimpleDateFormat("GG.MM.AAAA_hh.mm.ss") // costruzione formato di una data relativa
-    // a un salvataggio
-    var date = simpleDateFormat.format(Date())
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,9 +45,9 @@ class MainActivity : AppCompatActivity() {
 
         if(!permissionGranted)
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE) //all'utente verra presentata la
-            //interfaccia utente per richiedere i permessi, successivamente verrà informato se sono stati accettati
+        //interfaccia utente per richiedere i permessi, successivamente verrà informato se sono stati accettati
 
-        btnRegistra.setOnClickListener{
+        findViewById<ImageButton>(R.id.btnRegistra).setOnClickListener{
             when {
                 inPausa -> tornaARegistrare()
                 staRegistrando -> fermaRegistrazione()
@@ -64,9 +64,9 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if(requestCode == REQUEST_CODE)
             permissionGranted = grantResults[0] == PackageManager.PERMISSION_GRANTED
-            //i permessi concessi dovrebbero corrispondere
-            // al grantResult (risposta alla richiesta sviluppata dall'utente) che riceviamo di conseguenza
-            //è necessario avere un permesso ogni volta che si vuole iniziare a registrare
+        //i permessi concessi dovrebbero corrispondere
+        // al grantResult (risposta alla richiesta sviluppata dall'utente) che riceviamo di conseguenza
+        //è necessario avere un permesso ogni volta che si vuole iniziare a registrare
     }
     // funzione per la gestione del bottone di registrazione, con controllo dei permessi
 
@@ -74,14 +74,15 @@ class MainActivity : AppCompatActivity() {
     private fun fermaRegistrazione(){
         recorder.pause()
         inPausa = true
-        btnRegistra.setImageResource(R.drawable.ic_registra)
+        findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_registra)
     }
 
     private fun tornaARegistrare(){
         recorder.resume()
         inPausa = false
-        btnRegistra.setImageResource(R.drawable.ic_pausa)
+        findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_pausa)
     }
+
 
     private fun inizioRegistrazione() {
         if (!permissionGranted) {
@@ -91,8 +92,15 @@ class MainActivity : AppCompatActivity() {
 
         // inizio processo di registrazione audio
 
+
+
+
         recorder = MediaRecorder()
         dirPath = "${externalCacheDir?.absolutePath}/"
+
+        var simpleDateFormat = SimpleDateFormat("dd.mm.yyyy_hh.mm.ss") // costruzione formato di una data relativa
+        // a un salvataggio
+        var date = simpleDateFormat.format(Date())
 
 
         nomeFile = "audio_record-$date"
@@ -113,8 +121,11 @@ class MainActivity : AppCompatActivity() {
             start()
         }
 
-        btnRegistra.setImageResource(R.drawable.ic_pausa) // settaggio bottone di pausa
+        findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_pausa) // settaggio bottone di pausa
         staRegistrando = true
         inPausa = false
     }
 }
+
+
+
