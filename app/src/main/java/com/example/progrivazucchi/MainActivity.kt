@@ -13,6 +13,7 @@ import android.widget.Button
 import androidx.core.app.ActivityCompat
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -22,6 +23,8 @@ import java.util.Timer
 
 const val REQUEST_CODE =200
 class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
+
+    private lateinit var ampiezza: ArrayList<Float>
 
     //richiesta dei permessi necessari
     private var permissions = arrayOf(Manifest.permission.RECORD_AUDIO) // creazione di un array di permessi richiesti al manifest file ,contenente info sul
@@ -72,17 +75,28 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
 
         findViewById<ImageButton>(R.id.btnElenco).setOnClickListener{
             //TODO
+            Toast.makeText(this, "bottone elenco", Toast.LENGTH_SHORT).show()
+            // messaggio mostrato quando si schiaccia sul bottone elenco
+
+
         }
 
         findViewById<ImageButton>(R.id.btnFatto).setOnClickListener(){
             fermaRegistrare()
             //TODO
+            Toast.makeText(this, "registrazione salvata", Toast.LENGTH_SHORT).show()
+            // messaggio mostrato quando si schiaccia sul bottone salvataggio
         }
 
         findViewById<ImageButton>(R.id.btnCancella).setOnClickListener(){
             fermaRegistrare()
-            File("$dirPath$nomeFile.mp3")
+            File("$dirPath$nomeFile.mp3") // formato nome del file
+            Toast.makeText(this, "registrazione eliminata", Toast.LENGTH_SHORT).show()
+            // messaggio mostrato quando si schiaccia sul bottone cancella
         }
+
+        findViewById<ImageButton>(R.id.btnCancella).isClickable = false // btnCancella non
+        // cliccabile in questo momento
 
     }
 
@@ -156,10 +170,22 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
             start()
         }
 
-        findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_pausa) // settaggio bottone di pausa
+        // settaggio bottone di pausa
+        findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_pausa)
+
+
         staRegistrando = true
         inPausa = false
         tempo.avvio() //metodo presente dentro la classe Tempo.kt
+
+        findViewById<ImageButton>(R.id.btnCancella).isClickable = true // il bottone cancella
+        // è cliccabile
+        findViewById<ImageButton>(R.id.btnCancella).setImageResource(R.drawable.baseline_delete_24)
+
+        findViewById<ImageButton>(R.id.btnElenco).visibility = View.GONE // in questo momento
+        //il bottone elenco non è visibile
+        findViewById<ImageButton>(R.id.btnFatto).visibility = View.VISIBLE // in questo momento
+        //il bottone fatto è visibile
 
     }
 
@@ -181,7 +207,10 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
 
         findViewById<ImageButton>(R.id.btnCancella).isClickable = false // tasto cancella non cliccabile
         findViewById<ImageButton>(R.id.btnCancella).setImageResource(R.drawable.baseline_delete_24_disabled)
-        findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.baseline_delete_24_disabled)
+        findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_registra)
+
+        findViewById<TextView>(R.id.cronometro).text = "00:00.00"
+        ampiezza = findViewById<com.example.progrivazucchi.FormaOnda>(R.id.forma_onda).clear()
 
     }
 
