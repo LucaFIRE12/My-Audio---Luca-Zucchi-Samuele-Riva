@@ -1,13 +1,20 @@
 package com.example.progrivazucchi
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.media.MediaRecorder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.view.View
+import android.widget.Button
 import androidx.core.app.ActivityCompat
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
+import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -17,11 +24,13 @@ import java.util.Timer
 const val REQUEST_CODE =200
 class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
 
+    private lateinit var ampiezza: ArrayList<Float>
+
     //richiesta dei permessi necessari
     private var permissions = arrayOf(Manifest.permission.RECORD_AUDIO) // creazione di un array di permessi richiesti al manifest file ,contenente info sul
     // progetto ed in grado di rilasciare permessi che vanno esplicitamente richiesti nel codice. il risultato è una finestra in app che richiede all'utente un
     // permesso a cui lui decide se dare il consenso
-    //val btnRegistra = findViewById<ImageButton>(R.id.btnRegistra)
+
 
     private var permissionGranted = false
 
@@ -33,6 +42,8 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
     private var inPausa = false
 
     private lateinit var tempo: Tempo
+
+    private lateinit var vibrazione: Vibrator
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +61,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
 
         //richiama il metodo OnTimerTickListener sia da questa classe che tutto ciò che è presnet dentro al file Tempo.kt
         tempo = Tempo(this)
+        vibrazione = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         findViewById<ImageButton>(R.id.btnRegistra).setOnClickListener{
             when {
@@ -57,8 +69,38 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
                 staRegistrando -> fermaRegistrazione()
                 else -> inizioRegistrazione()
             }
+
+            vibrazione.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
         }
+
+        findViewById<ImageButton>(R.id.btnElenco).setOnClickListener{
+            //TODO
+            Toast.makeText(this, "bottone elenco", Toast.LENGTH_SHORT).show()
+            // messaggio mostrato quando si schiaccia sul bottone elenco
+
+
+        }
+
+        findViewById<ImageButton>(R.id.btnFatto).setOnClickListener(){
+            fermaRegistrare()
+            //TODO
+            Toast.makeText(this, "registrazione salvata", Toast.LENGTH_SHORT).show()
+            // messaggio mostrato quando si schiaccia sul bottone salvataggio
+        }
+
+        findViewById<ImageButton>(R.id.btnCancella).setOnClickListener(){
+            fermaRegistrare()
+            File("$dirPath$nomeFile.mp3") // formato nome del file
+            Toast.makeText(this, "registrazione eliminata", Toast.LENGTH_SHORT).show()
+            // messaggio mostrato quando si schiaccia sul bottone cancella
+        }
+
+        findViewById<ImageButton>(R.id.btnCancella).isClickable = false // btnCancella non
+        // cliccabile in questo momento
+
     }
+
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -128,15 +170,48 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
             start()
         }
 
-        findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_pausa) // settaggio bottone di pausa
+        // settaggio bottone di pausa
+        findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_pausa)
+
+
         staRegistrando = true
         inPausa = false
         tempo.avvio() //metodo presente dentro la classe Tempo.kt
 
+        findViewById<ImageButton>(R.id.btnCancella).isClickable = true // il bottone cancella
+        // è cliccabile
+        findViewById<ImageButton>(R.id.btnCancella).setImageResource(R.drawable.baseline_delete_24)
+
+        findViewById<ImageButton>(R.id.btnElenco).visibility = View.GONE // in questo momento
+        //il bottone elenco non è visibile
+        findViewById<ImageButton>(R.id.btnFatto).visibility = View.VISIBLE // in questo momento
+        //il bottone fatto è visibile
+
     }
 
     private fun fermaRegistrare(){
+
+
         tempo.stop()
+
+        recorder.apply {
+            stop()
+            release()
+        }
+
+        inPausa = false
+        staRegistrando = false
+
+        findViewById<ImageButton>(R.id.btnElenco).visibility = View.VISIBLE // bottone elenco visibile
+        findViewById<ImageButton>(R.id.btnFatto).visibility = View.GONE // bottone fatto non visibile
+
+        findViewById<ImageButton>(R.id.btnCancella).isClickable = false // tasto cancella non cliccabile
+        findViewById<ImageButton>(R.id.btnCancella).setImageResource(R.drawable.baseline_delete_24_disabled)
+        findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_registra)
+
+        findViewById<TextView>(R.id.cronometro).text = "00:00.00"
+        ampiezza = findViewById<com.example.progrivazucchi.FormaOnda>(R.id.forma_onda).clear()
+
     }
 
     // quando viene dato il via al timer, questa funzione fa partire il tempo e lo ferma

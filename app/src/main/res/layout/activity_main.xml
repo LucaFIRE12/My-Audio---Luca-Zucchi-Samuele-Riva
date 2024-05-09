@@ -49,6 +49,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/ic_sfondo_bottone"
+            android:contentDescription="NULL"
             android:src="@drawable/baseline_done_24"
             android:visibility="gone" />
     </LinearLayout>

@@ -33,6 +33,8 @@ class FormaOnda(context: Context?, attrs: AttributeSet?): View(context, attrs) {
     //i valori vengono salvati dentro un arraylist, che scorre durante la fase di registrazione
     fun aggiungiAmpiezza(amp: Float){
         ampiezza.add(amp)
+
+
         picchi.clear()
         for (i in ampiezza.indices){
             var sx = sw - i*(w+d)       //parametri per dare forma alle punte dei picchi
@@ -49,7 +51,7 @@ class FormaOnda(context: Context?, attrs: AttributeSet?): View(context, attrs) {
     //includendo, punto di inizio, fine, tipo di barra ed arrotondamento
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
-
+        //canvas?.drawRoundRect(RectF(60f, 60f, 60+80f, 60f+360f), 6f, 6f, colore)
         picchi.forEach{
             canvas?.drawRoundRect(it, raggio, raggio, colore)        //allineamento dei picchi, formati dalla funzione aggiungiAmpiezza
         }
