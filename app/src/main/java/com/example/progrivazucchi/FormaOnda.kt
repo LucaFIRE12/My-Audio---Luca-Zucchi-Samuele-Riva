@@ -20,31 +20,30 @@ class FormaOnda(context: Context?, attrs: AttributeSet?): View(context, attrs) {
     private var sw = 0f     //width forma d'onda
     private var sh = 400f   //heigh forma d'onda
 
-    //private var maxPicchi = 0f
+    private var maxPicchi = 0
 
 
     init {
         colore.color = Color.rgb(244,81,30)
 
         sw = resources.displayMetrics.widthPixels.toFloat()
-
-        //maxPicchi = (sw/(w+d)).toInt().toFloat()
+        maxPicchi = (sw/(w+d)).toInt()
     }
 
     //funzione che mostra a livello grafico l'intensità del suono, più una barra è ampia e più è alto di decibel
     //i valori vengono salvati dentro un arraylist, che scorre durante la fase di registrazione
     fun aggiungiAmpiezza(amp: Float){
-        //var normalizza = Math.min(amp.toInt()/7, 400).toFloat()
-        ampiezze.add(amp)
+        var normalizza = sh/amp.toInt()             //Math.min(amp.toInt()*1, 400).toFloat()
+        ampiezze.add(normalizza)
         picchi.clear()
-        //var ampiezze = ampiezza.takeLast(maxPicchi.toInt())
+        var amps = ampiezze.takeLast(maxPicchi)
 
         //parametri per dare forma alle punte dei picchi
-        for (i in ampiezze.indices){
+        for (i in amps.indices){
             var sx = sw - i*(w+d)           // distanza dal bordo sinistro del telefono
-            var sopra = 7f                 // altezza della barra -> quello che dovrebbe variare in base all'uso di record
+            var sopra = sh/2 - amps[i]/2             // posizione della barra
             var dx = sx + w                 // base della barra
-            var sotto = ampiezze[i]
+            var sotto = sopra + amps[i]
             picchi.add(RectF(sx, sopra, dx, sotto))         // punte dei picchi
         }
         invalidate()
@@ -55,7 +54,7 @@ class FormaOnda(context: Context?, attrs: AttributeSet?): View(context, attrs) {
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
         picchi.forEach{
-            canvas?.drawRoundRect(it, raggio, raggio, colore)        //allineamento dei picchi, formati dalla funzione aggiungiAmpiezza
+            canvas.drawRoundRect(it, raggio, raggio, colore)        //allineamento dei picchi, formati dalla funzione aggiungiAmpiezza
         }
     }
 }

@@ -209,20 +209,22 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
 
         findViewById<TextView>(R.id.cronometro).text = "00:00.00"
 
-        // ho messo questa funzione come commento perchè sennò non runna nulla
 
-        //ampiezza = findViewById<com.example.progrivazucchi.FormaOnda>(R.id.forma_onda).clear()
+        // ho messo questa funzione come commento perchè sennò non runna nulla
+        //ampiezza = findViewById<FormaOnda>(R.id.forma_onda).clear()
 
     }
 
     // quando viene dato il via al timer, questa funzione fa partire il tempo e lo ferma
     override fun onTimerTick(duration: String) {
-         val esecuzione = findViewById<TextView>(R.id.cronometro)
-         esecuzione.text = duration
-         var onda: FormaOnda = findViewById(R.id.forma_onda)
-         onda.aggiungiAmpiezza(recorder.maxAmplitude.toFloat())
-
-        //findViewById<FormaOnda>(R.id.forma_onda).aggiungiAmpiezza(recorder.maxAmplitude.toFloat())     //aggiorna la forma d'onda
+        val esecuzione = findViewById<TextView>(R.id.cronometro)
+        esecuzione.text = duration
+        var onda: FormaOnda = findViewById(R.id.forma_onda)
+        var prova = recorder.maxAmplitude.toFloat()
+        if(prova != null){
+            Toast.makeText(this, "Contenuto recorder: $prova", Toast.LENGTH_SHORT).show()
+            onda.aggiungiAmpiezza(amp = recorder.maxAmplitude.toFloat()*1)
+        }
     }
 }
 
