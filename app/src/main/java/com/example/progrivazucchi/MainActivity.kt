@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.View
-import android.widget.Button
 import androidx.core.app.ActivityCompat
 import android.widget.ImageButton
 import android.widget.TextView
@@ -18,7 +17,6 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Timer
 
 
 const val REQUEST_CODE =200
@@ -210,16 +208,21 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
         findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_registra)
 
         findViewById<TextView>(R.id.cronometro).text = "00:00.00"
-        ampiezza = findViewById<com.example.progrivazucchi.FormaOnda>(R.id.forma_onda).clear()
+
+        // ho messo questa funzione come commento perchè sennò non runna nulla
+
+        //ampiezza = findViewById<com.example.progrivazucchi.FormaOnda>(R.id.forma_onda).clear()
 
     }
 
     // quando viene dato il via al timer, questa funzione fa partire il tempo e lo ferma
     override fun onTimerTick(duration: String) {
-
          val esecuzione = findViewById<TextView>(R.id.cronometro)
          esecuzione.text = duration
-         findViewById<FormaOnda>(R.id.forma_onda).aggiungiAmpiezza(recorder.maxAmplitude.toFloat())     //aggiorna la forma d'onda
+         var onda: FormaOnda = findViewById(R.id.forma_onda)
+         onda.aggiungiAmpiezza(recorder.maxAmplitude.toFloat())
+
+        //findViewById<FormaOnda>(R.id.forma_onda).aggiungiAmpiezza(recorder.maxAmplitude.toFloat())     //aggiorna la forma d'onda
     }
 }
 
