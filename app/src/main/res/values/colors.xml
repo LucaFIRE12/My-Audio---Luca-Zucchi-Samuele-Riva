@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#ECECEC</color>
+    <color name="grayDark">#a9a9a9</color>
+    <color name="ColoreCornice" >#1E88E5</color>
+    <color name="BackGroundOpaco" >#61000000</color>
+
 </resources>

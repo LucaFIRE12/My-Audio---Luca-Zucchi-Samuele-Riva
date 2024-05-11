@@ -6,4 +6,18 @@
     </style>
 
     <style name="Theme.ProgRivaZucchi" parent="Base.Theme.ProgRivaZucchi" />
+    
+    <style name="StileTestoLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" tools:ignore="DuplicateDefinition">
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="boxBackgroundColor">@color/gray</item>
+        <item name="boxStrokeColor">@color/ColoreCornice</item>
+        <item name="boxCornerRadiusBottomStart">26dp</item>
+        <item name="boxCornerRadiusBottomStart">26dp</item>
+        <item name="boxCornerRadiusTopStart">26dp</item>
+        <item name="boxCornerRadiusTopStart">26dp</item>
+
+
+
+    </style>
 </resources>
