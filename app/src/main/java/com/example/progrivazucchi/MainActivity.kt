@@ -6,9 +6,13 @@ import android.content.pm.PackageManager
 import android.media.MediaRecorder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import androidx.core.app.ActivityCompat
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -19,6 +23,7 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
+
 
 
 
@@ -106,8 +111,25 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
             findViewById<TextView>(R.id.inputNomeFile).setText(nomeFile)
 
 
+        }
 
 
+        // quando il bottone viene premuto il back ground viene reso non visibile e il bottomsheet
+        // viene collassato
+        findViewById<Button>(R.id.btnElimina).setOnClickListener{
+            File("$dirPath$nomeFile.mp3").delete()
+            rimozione()
+        }
+
+        //qui viene nascosto il bottomsheet e implementato il salvataggio
+        findViewById<Button>(R.id.BtnOk).setOnClickListener{
+            rimozione()
+            salvataggio()
+        }
+
+        findViewById<View>(R.id.BottomSheetBackGround).setOnClickListener(){
+            File("$dirPath$nomeFile.mp3").delete()
+            rimozione()
         }
 
         findViewById<ImageButton>(R.id.btnCancella).setOnClickListener(){
@@ -115,12 +137,42 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
             File("$dirPath$nomeFile.mp3") // formato nome del file
             Toast.makeText(this, "registrazione eliminata", Toast.LENGTH_SHORT).show()
             // messaggio mostrato quando si schiaccia sul bottone cancella
+
         }
 
         findViewById<ImageButton>(R.id.btnCancella).isClickable = false // btnCancella non
         // cliccabile in questo momento
 
     }
+
+    private fun salvataggio(){
+        //rinominazione di un file
+
+        // creazione nuovo nome
+        val nuovoNomeFile = findViewById<TextView>(R.id.inputNomeFile).text.toString()
+        if(nuovoNomeFile != nomeFile){
+            var nuovoFile = File("$dirPath$nuovoNomeFile.mp3") // creazione nuovo file
+            File("$dirPath$nomeFile.mp3").renameTo(nuovoFile) //rinominazione
+        }
+    }
+
+    private fun rimozione(){
+        // eliminazione visibilità del background
+        findViewById<View>(R.id.BottomSheetBackGround).visibility= View.GONE
+        nascondiKeyboard(findViewById<TextView>(R.id.inputNomeFile))
+        Handler(Looper.getMainLooper()).postDelayed({
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }, 100) // la funzione attende 100 milliSecondi e nasconde il bottomSheet
+    }
+
+    // funzione utile per nascondere la tastiera
+    private fun nascondiKeyboard(view: View ){
+        val inputmm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    // input method manager, gestisce le comunicazioni tra processi
+        inputmm.hideSoftInputFromWindow(view.windowToken, 0) // nasconde la tastiera
+
+    }
+
 
 
 

@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    app:layout_behavior="@string/bottom_sheet_behavior"
     android:id="@+id/bottomSheet"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_behavior="@string/bottom_sheet_behavior"
+
+
+
     android:background="@drawable/background_tondo"
     android:orientation="vertical">
 
@@ -38,7 +42,7 @@
         android:gravity="center"
         android:layout_marginBottom="80dp">
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/BtnElimina"
+            android:id="@+id/btnElimina"
             android:layout_width="150dp"
             android:layout_height="60dp"
             android:text="Elimina"
