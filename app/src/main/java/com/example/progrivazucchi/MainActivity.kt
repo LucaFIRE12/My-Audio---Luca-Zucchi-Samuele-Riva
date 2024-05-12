@@ -11,12 +11,15 @@ import android.os.Vibrator
 import android.view.View
 import androidx.core.app.ActivityCompat
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
+
 
 
 const val REQUEST_CODE =200
@@ -43,6 +46,9 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
 
     private lateinit var vibrazione: Vibrator
 
+    // riferimento al LinearLayout di bottom_sheet.xml
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +62,13 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
         if(!permissionGranted)
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE) //all'utente verra presentata la
         //interfaccia utente per richiedere i permessi, successivamente verrà informato se sono stati accettati
+
+        bottomSheetBehavior = BottomSheetBehavior.from(findViewById<LinearLayout>(R.id.bottomSheet))
+        bottomSheetBehavior.peekHeight = 0 // in questo modo quando il layout bottom_sheet verrà chiuso
+        // sara completamente invisibile
+
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED // il bottonm_sheet viene qui
+        // definito effettivamente collassato
 
         //richiama il metodo OnTimerTickListener sia da questa classe che tutto ciò che è presnet dentro al file Tempo.kt
         tempo = Tempo(this)
@@ -81,9 +94,20 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
 
         findViewById<ImageButton>(R.id.btnFatto).setOnClickListener(){
             fermaRegistrare()
-            //TODO
             Toast.makeText(this, "registrazione salvata", Toast.LENGTH_SHORT).show()
             // messaggio mostrato quando si schiaccia sul bottone salvataggio
+
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED // in questo modo lo stato del
+            // bottom_sheet è definito come "espanso"
+
+            findViewById<View>(R.id.BottomSheetBackGround).visibility = View.VISIBLE
+            // il bottom sheet è visibile nel momento in cui si preme il bottone btnFatto
+
+            findViewById<TextView>(R.id.inputNomeFile).setText(nomeFile)
+
+
+
+
         }
 
         findViewById<ImageButton>(R.id.btnCancella).setOnClickListener(){
