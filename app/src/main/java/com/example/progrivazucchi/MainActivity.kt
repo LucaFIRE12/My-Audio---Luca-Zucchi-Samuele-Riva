@@ -18,13 +18,16 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.room.Room.databaseBuilder
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.coroutines.*
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
+import java.io.ObjectOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
-
-
+import androidx.room.Room as Room
 
 
 const val REQUEST_CODE =200
@@ -47,7 +50,11 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
     private var staRegistrando = false
     private var inPausa = false
 
+    private var duration = ""
+
     private lateinit var tempo: Tempo
+
+    private lateinit var db: AppDatabase
 
     private lateinit var vibrazione: Vibrator
 
@@ -59,14 +66,17 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-
-
         permissionGranted = ActivityCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED
 
         if(!permissionGranted)
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE) //all'utente verra presentata la
         //interfaccia utente per richiedere i permessi, successivamente verrà informato se sono stati accettati
+
+        db = Room.databaseBuilder(
+            this,
+            AppDatabase::class.java,
+            "registratoreAudio"
+        ).build()
 
         val included = findViewById<LinearLayout>(R.id.bottomSheetIncluder)
         val bottomSheetBehavior = BottomSheetBehavior.from(included)
@@ -98,7 +108,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
 
         }
 
-        findViewById<ImageButton>(R.id.btnFatto).setOnClickListener(){
+        findViewById<ImageButton>(R.id.btnFatto).setOnClickListener {
             fermaRegistrare()
             Toast.makeText(this, "registrazione salvata", Toast.LENGTH_SHORT).show()
             // messaggio mostrato quando si schiaccia sul bottone salvataggio
@@ -109,7 +119,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
             findViewById<View>(R.id.BottomSheetBackGround).visibility = View.VISIBLE
             // il bottom sheet è visibile nel momento in cui si preme il bottone btnFatto
 
-            findViewById<TextView>(R.id.inputNomeFile).setText(nomeFile)
+            findViewById<TextView>(R.id.inputNomeFile).text = nomeFile
 
 
         }
@@ -128,12 +138,12 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
             salvataggio()
         }
 
-        findViewById<View>(R.id.BottomSheetBackGround).setOnClickListener(){
+        findViewById<View>(R.id.BottomSheetBackGround).setOnClickListener {
             File("$dirPath$nomeFile.mp3").delete()
             rimozione()
         }
 
-        findViewById<ImageButton>(R.id.btnCancella).setOnClickListener(){
+        findViewById<ImageButton>(R.id.btnCancella).setOnClickListener {
             fermaRegistrare()
             File("$dirPath$nomeFile.mp3") // formato nome del file
             Toast.makeText(this, "registrazione eliminata", Toast.LENGTH_SHORT).show()
@@ -154,6 +164,25 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
         if(nuovoNomeFile != nomeFile){
             var nuovoFile = File("$dirPath$nuovoNomeFile.mp3") // creazione nuovo file
             File("$dirPath$nomeFile.mp3").renameTo(nuovoFile) //rinominazione
+        }
+
+        var filePath = "$dirPath$nuovoNomeFile.mp3"     //salvataggio del db
+        var timestamp = Date().time
+        var ampsPath = "$dirPath$nuovoNomeFile"
+
+        try {
+            var fos = FileOutputStream(ampsPath)
+            var out = ObjectOutputStream(fos)
+            out.writeObject(ampiezza)           //salva la forma d'onda del file
+            fos.close()
+            out.close()
+        }catch (e :IOException){}
+
+        var registrazione = RegistratoreAudio(nomeFile,filePath,timestamp,duration,ampsPath)
+
+                    //per il salvataggio, viene creato un thread che lavora in background apposta
+        GlobalScope.launch {
+            db.registratoreAudioDao().inserisci(registrazione)      //salvataggio nel server di una registrazione appena effettuata
         }
     }
 
@@ -302,6 +331,8 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
             Toast.makeText(this, "Contenuto recorder: $prova", Toast.LENGTH_SHORT).show()
             onda.aggiungiAmpiezza(amp = recorder.maxAmplitude.toFloat()*1)
         }
+
+        this.duration = duration.dropLast(3)
     }
 }
 
