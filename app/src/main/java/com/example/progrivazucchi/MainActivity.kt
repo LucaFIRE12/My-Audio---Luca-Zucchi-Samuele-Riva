@@ -68,7 +68,8 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE) //all'utente verra presentata la
         //interfaccia utente per richiedere i permessi, successivamente verrà informato se sono stati accettati
 
-        bottomSheetBehavior = BottomSheetBehavior.from(findViewById<LinearLayout>(R.id.bottomSheet))
+        val included = findViewById<LinearLayout>(R.id.bottomSheetIncluder)
+        val bottomSheetBehavior = BottomSheetBehavior.from(included)
         bottomSheetBehavior.peekHeight = 0 // in questo modo quando il layout bottom_sheet verrà chiuso
         // sara completamente invisibile
 

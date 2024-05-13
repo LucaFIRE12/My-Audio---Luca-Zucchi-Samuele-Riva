@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     app:layout_behavior="@string/bottom_sheet_behavior"
-    android:id="@+id/bottomSheet"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
+    android:id="@+id/bottomSheetIncluded"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
-
-
     android:background="@drawable/background_tondo"
     android:orientation="vertical">
 

@@ -92,13 +92,17 @@
         android:background="@color/BackGroundOpaco"/>
 
     <include
+        android:id="@+id/bottomSheetIncluder"
         layout="@layout/bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="2dp"
-        android:layout_marginTop="530dp"/>
+        android:layout_marginBottom="0dp"
+        app:behavior_peekHeight="90dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        />
 
 
 
