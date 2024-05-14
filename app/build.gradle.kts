@@ -3,8 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-android")
     id("kotlin-kapt")
-
-
+    id("com.google.devtools.ksp") version "1.8.10-1.0.9" apply false
 }
 
 android {
@@ -55,6 +54,10 @@ dependencies {
 
     implementation("androidx.room:room-runtime:$room_version")
     kapt ("androidx.room:room-runtime:$room_version")
-
+    kapt ("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
+}
+
+kapt {
+    correctErrorTypes=true
 }

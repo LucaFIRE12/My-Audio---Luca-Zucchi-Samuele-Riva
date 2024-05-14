@@ -2,6 +2,7 @@ package com.example.progrivazucchi
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaRecorder
 import androidx.appcompat.app.AppCompatActivity
@@ -101,9 +102,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
         }
 
         findViewById<ImageButton>(R.id.btnElenco).setOnClickListener{
-            //TODO
-            Toast.makeText(this, "bottone elenco", Toast.LENGTH_SHORT).show()
-            // messaggio mostrato quando si schiaccia sul bottone elenco
+            startActivity(Intent(this, Galleria::class.java))
 
 
         }
@@ -134,6 +133,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
 
         //qui viene nascosto il bottomsheet e implementato il salvataggio
         findViewById<Button>(R.id.BtnOk).setOnClickListener{
+            if (::ampiezza.isInitialized) {}
             rimozione()
             salvataggio()
         }
@@ -169,6 +169,8 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
         var filePath = "$dirPath$nuovoNomeFile.mp3"     //salvataggio del db
         var timestamp = Date().time
         var ampsPath = "$dirPath$nuovoNomeFile"
+
+        if (::ampiezza.isInitialized) {}
 
         try {
             var fos = FileOutputStream(ampsPath)
