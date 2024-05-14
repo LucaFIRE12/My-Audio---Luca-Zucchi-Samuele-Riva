@@ -19,7 +19,6 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.room.Room.databaseBuilder
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.*
 import java.io.File
@@ -28,7 +27,7 @@ import java.io.IOException
 import java.io.ObjectOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
-import androidx.room.Room as Room
+import androidx.room.Room
 
 
 const val REQUEST_CODE =200
@@ -180,7 +179,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
             out.close()
         }catch (e :IOException){}
 
-        var registrazione = RegistratoreAudio(nomeFile,filePath,timestamp,duration,ampsPath)
+        var registrazione = RegistratoreAudio(nuovoNomeFile,filePath,timestamp,duration,ampsPath)
 
                     //per il salvataggio, viene creato un thread che lavora in background apposta
         GlobalScope.launch {

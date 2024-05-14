@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey as PrimaryKey1
 //db = database
 
 @Entity(tableName = "registratoreAudio")
-data class RegistratoreAudio(       //tutto l'occorrente che server per l'esecuzione del db
+data class  RegistratoreAudio(       //tutto l'occorrente che server per l'esecuzione del db
     var nomefile: String,
     var filepath: String,
     var timestamp: Long,
