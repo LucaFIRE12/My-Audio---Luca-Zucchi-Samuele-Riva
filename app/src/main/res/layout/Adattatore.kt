@@ -23,6 +23,7 @@ class Adattatore(var records : List<AudioRecord>) : RecyclerView.Adapter<ViewHol
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater
+
     }
 
     override fun getItemCount(): Int {
