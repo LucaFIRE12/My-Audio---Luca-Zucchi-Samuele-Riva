@@ -17,12 +17,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.sql.Timestamp
 import java.util.Date
+import kotlinx.datetime.Clock
+
 
 
 
 // utile a mappare il layout di itemview, quindi conosce cosa contengono i layout delle registrazioni,
 // come settare i valori che le riguardano e como interagire con essi
-class Adattatore(var records : List<AudioRecord>) : RecyclerView.Adapter<ViewHolder>() {
+class Adattatore(var records : ArrayList<RegistratoreAudio>) : RecyclerView.Adapter<ViewHolder>() {
 
     // collega ogni singolo elemento del layout itemview a una variabile
     inner class GestoreView(itemView : View) : RecyclerView.ViewHolder(itemView){
@@ -41,14 +43,14 @@ class Adattatore(var records : List<AudioRecord>) : RecyclerView.Adapter<ViewHol
 
     }
 
-    // ritorna il numero di elementi (items) nella RecyclerView ed è usato per stabilire quando
+    // ritorna il numero di elementi (items) nella recyclerView ed è usato per stabilire quando
     // terminare la visualizzazione di nuovi elementi
     // RecyclerView: contiene le viste corrispondenti ai dati
     override fun getItemCount(): Int {
         return records.size
     }
 
-    // funzione che viene chiamata dalla RecyclerView per associare un ViewHolder a un istanza di
+    // funzione che viene chiamata dalla recyclerView per associare un ViewHolder a un istanza di
     // dati
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // quando cerchiamo di creare items quando la RecycleReview sta ancora caricando
@@ -58,7 +60,7 @@ class Adattatore(var records : List<AudioRecord>) : RecyclerView.Adapter<ViewHol
             var sdf = SimpleDateFormat("dd/MM/yyyy")
             var date = Date(record.timestamp)
             var strDate = sdf.format(date)
-            holder.itemView.findViewById<TextView>(R.id.tvNomeFile).text = record.nomeFile
+            holder.itemView.findViewById<TextView>(R.id.tvNomeFile).text = record.nomefile
             holder.itemView.findViewById<TextView>(R.id.tvMeta).text = "${record.duration} $strDate"
         }
     }
