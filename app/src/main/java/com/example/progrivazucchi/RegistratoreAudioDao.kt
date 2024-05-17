@@ -14,7 +14,7 @@ interface RegistratoreAudioDao {
     fun prendiTutto(): List<RegistratoreAudio>          //restituisce una lista di Registratore audio
 
     @Insert
-    fun inserisci(vararg registratoreAudio: RegistratoreAudio)      //fa INSERT INTO del db
+    fun insert(vararg registratoreAudio: RegistratoreAudio)      //fa INSERT INTO del db
 
     @Delete
     fun cancella(registratoreAudio: RegistratoreAudio)

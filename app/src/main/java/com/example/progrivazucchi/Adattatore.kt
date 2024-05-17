@@ -56,10 +56,11 @@ class Adattatore(var records : List<AudioRecord>) : RecyclerView.Adapter<ViewHol
             var record = records[position]
 
             var sdf = SimpleDateFormat("dd/MM/yyyy")
-            var date = Date(record.timestamp)
-            var strDate = sdf.format(date)
-            holder.itemView.findViewById<TextView>(R.id.tvNomeFile).text = record.nomeFile
-            holder.itemView.findViewById<TextView>(R.id.tvMeta).text = "${record.duration} $strDate"
+            //var date = Date(record.timestamp)
+            //var strDate = sdf.format(date)
+
+            //holder.itemView.findViewById<TextView>(R.id.tvNomeFile).text = record.nomeFile
+            //holder.itemView.findViewById<TextView>(R.id.tvMeta).text = "${record.duration} $strDate"
         }
     }
 

@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
 
         //qui viene nascosto il bottomsheet e implementato il salvataggio
         findViewById<Button>(R.id.BtnOk).setOnClickListener{
-            if (::ampiezza.isInitialized) {}
+            if(::ampiezza.isInitialized) {}
             rimozione()
             salvataggio()
         }
@@ -155,6 +155,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
 
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun salvataggio(){
         //rinominazione di un file
 
@@ -179,11 +180,12 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
             out.close()
         }catch (e :IOException){}
 
-        var registrazione = RegistratoreAudio(nuovoNomeFile,filePath,timestamp,duration,ampsPath)
+        var registrazione = RegistratoreAudio(nomeFile,filePath,timestamp,duration,ampsPath)
+
 
                     //per il salvataggio, viene creato un thread che lavora in background apposta
         GlobalScope.launch {
-            db.registratoreAudioDao().inserisci(registrazione)      //salvataggio nel server di una registrazione appena effettuata
+            db.registratoreAudioDao().insert(registrazione)      //salvataggio nel server di una registrazione appena effettuata
         }
     }
 
