@@ -16,13 +16,42 @@ import java.util.Date
 
 // utile a mappare il layout di itemview, quindi conosce cosa contengono i layout delle registrazioni,
 // come settare i valori che le riguardano e como interagire con essi
-class Adattatore(var registrazione : ArrayList<RegistratoreAudio>) : RecyclerView.Adapter<ViewHolder>() {
+class Adattatore(var registrazione : ArrayList<RegistratoreAudio>, var listener: OnItemClickListener) : RecyclerView.Adapter<ViewHolder>() {
 
     // collega ogni singolo elemento del layout itemview a una variabile
-    inner class GestoreView(itemView : View) : RecyclerView.ViewHolder(itemView){
+    // View.OnClickListener: per lanciare la player Activity tramite tocco di un bottone
+    // View.OnLongClickListener: Utilizzato per riscontare quando l'utente
+    // mantiene il tocco su una vista per un periodo più lungo del semplice click
+    inner class GestoreView(itemView : View) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener{
         var tvNomeFile : TextView = itemView.findViewById<TextView>(R.id.tvNomeFile)
         var tvMeta : TextView = itemView.findViewById<TextView>(R.id.tvMeta)
         var checkBox : CheckBox = itemView.findViewById(R.id.checkbox)
+
+        init {
+            // this si riferisce a View.OnClickListener
+            itemView.setOnClickListener(this)
+            // this si riferisce a View.OnLongClickListener
+            itemView.setOnLongClickListener(this)
+        }
+        // quando un elemento viene cliccato viene chiamata la funzione
+        // onItemClickListener di Galleria.kt
+
+        override fun onLongClick(v: View?): Boolean {
+            val position = adapterPosition
+            if(position != RecyclerView.NO_POSITION){
+                listener.onItemClickListener(position)
+            }
+            return true
+        }
+
+        // quando un elemento viene cliccato viene chiamata la funzione
+        // onItemLongClickListener di Galleria.kt
+        override fun onClick(v: View?) {
+            val position = adapterPosition
+            if(position != RecyclerView.NO_POSITION){
+                listener.onItemLongClickListener(position)
+            }
+        }
     }
 
     // ritorna un oggetto ViewHolder fornendogli una vista, ovvero il contenuto del
