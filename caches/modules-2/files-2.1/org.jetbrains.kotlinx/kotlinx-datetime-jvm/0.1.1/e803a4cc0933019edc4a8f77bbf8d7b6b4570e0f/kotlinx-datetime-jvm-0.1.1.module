@@ -1,0 +1,116 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "url": "../../kotlinx-datetime/0.1.1/kotlinx-datetime-0.1.1.module",
+    "group": "org.jetbrains.kotlinx",
+    "module": "kotlinx-datetime",
+    "version": "0.1.1",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.4",
+      "buildId": "3rxvu7sr6rh7lebibkbvdred6u"
+    }
+  },
+  "variants": [
+    {
+      "name": "jvm-api",
+      "attributes": {
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "kotlinx-datetime-jvm-0.1.1.jar",
+          "url": "kotlinx-datetime-jvm-0.1.1.jar",
+          "size": 66807,
+          "sha512": "83cf29b5e8095c4fdc2bb8a07d6cd74d99fde4a580b5fab000a3ae8e1d07a8751a6a3c6bb6ae0ac58be0662b43528c429e197325015da8570b0ff0868a8e3550",
+          "sha256": "61a1c793cfc5eba4a30d03cafeec6a802c569cbf6e9a0cb925d51f0295f52590",
+          "sha1": "f937ac874d2969f50d68701cd2737c0ca1571300",
+          "md5": "49ed299227643353521ca165292e9572"
+        }
+      ]
+    },
+    {
+      "name": "jvm-runtime",
+      "attributes": {
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "kotlinx-datetime-jvm-0.1.1.jar",
+          "url": "kotlinx-datetime-jvm-0.1.1.jar",
+          "size": 66807,
+          "sha512": "83cf29b5e8095c4fdc2bb8a07d6cd74d99fde4a580b5fab000a3ae8e1d07a8751a6a3c6bb6ae0ac58be0662b43528c429e197325015da8570b0ff0868a8e3550",
+          "sha256": "61a1c793cfc5eba4a30d03cafeec6a802c569cbf6e9a0cb925d51f0295f52590",
+          "sha1": "f937ac874d2969f50d68701cd2737c0ca1571300",
+          "md5": "49ed299227643353521ca165292e9572"
+        }
+      ]
+    },
+    {
+      "name": "metadata-api",
+      "attributes": {
+        "org.gradle.usage": "kotlin-metadata",
+        "org.jetbrains.kotlin.platform.type": "common"
+      },
+      "available-at": {
+        "url": "../../kotlinx-datetime-metadata/0.1.1/kotlinx-datetime-metadata-0.1.1.module",
+        "group": "org.jetbrains.kotlinx",
+        "module": "kotlinx-datetime-metadata",
+        "version": "0.1.1"
+      }
+    },
+    {
+      "name": "metadata-commonMainMetadataElements",
+      "attributes": {
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.platform.type": "common"
+      },
+      "available-at": {
+        "url": "../../kotlinx-datetime-metadata/0.1.1/kotlinx-datetime-metadata-0.1.1.module",
+        "group": "org.jetbrains.kotlinx",
+        "module": "kotlinx-datetime-metadata",
+        "version": "0.1.1"
+      }
+    }
+  ]
+}

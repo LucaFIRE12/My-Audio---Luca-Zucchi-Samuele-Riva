@@ -4,9 +4,14 @@ import android.media.AudioRecord
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
-
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
+import androidx.room.Room
+import androidx.room.Room.databaseBuilder
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class Galleria : AppCompatActivity() {
@@ -18,6 +23,11 @@ class Galleria : AppCompatActivity() {
         setContentView(R.layout.activity_galleria)
 
         records = ArrayList()
+        database = databaseBuilder(
+            this,
+            AppDatabase::class.java,
+            "registratoreAudio"
+        ).build()
         myAdapter = Adattatore(records)
 
         // la recyclerView necessita di due informazioni: 1)un adattatore per sapere come deve
@@ -25,7 +35,18 @@ class Galleria : AppCompatActivity() {
         // come posizionare gli items e riciclare quelli che non sono sullo schermo
 
         findViewById<ConstraintLayout>(R.id.recyclerview).apply {
-            //adapter = myAdapter
+            var adapter = myAdapter
+            var LayoutManager = LinearLayoutManager(context)
         }
     }
+    //metodo che aggiorna il sistema dell'aggiornamento del db e inserimento della query
+    private fun fetchAll(){
+        GlobalScope.launch {
+            records.clear();
+            var queryResult = database.registratoreAudioDao().prendiTutto()
+            records.addAll(queryResult)
+            myAdapter.notifyDataSetChanged()
+        }
+    }
+
 }

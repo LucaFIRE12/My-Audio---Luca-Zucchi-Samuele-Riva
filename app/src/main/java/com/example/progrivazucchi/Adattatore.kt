@@ -1,30 +1,22 @@
 package com.example.progrivazucchi
 
-import android.content.Context
-import android.Manifest
-import android.media.AudioRecord
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import java.text.SimpleDateFormat
 import java.util.*
-import java.sql.Timestamp
 import java.util.Date
-import kotlinx.datetime.Clock
 
 
 
 
 // utile a mappare il layout di itemview, quindi conosce cosa contengono i layout delle registrazioni,
 // come settare i valori che le riguardano e como interagire con essi
-class Adattatore(var records : ArrayList<RegistratoreAudio>) : RecyclerView.Adapter<ViewHolder>() {
+class Adattatore(var registrazione : ArrayList<RegistratoreAudio>) : RecyclerView.Adapter<ViewHolder>() {
 
     // collega ogni singolo elemento del layout itemview a una variabile
     inner class GestoreView(itemView : View) : RecyclerView.ViewHolder(itemView){
@@ -33,7 +25,7 @@ class Adattatore(var records : ArrayList<RegistratoreAudio>) : RecyclerView.Adap
         var checkBox : CheckBox = itemView.findViewById(R.id.checkbox)
     }
 
-    // ritorna un oggetto ViewHolder fornendowli una vista, ovvero il contenuto del
+    // ritorna un oggetto ViewHolder fornendogli una vista, ovvero il contenuto del
     // layout itemview
     // ViewHolder: involucro attorno alla vista che contiene il layout per un elemento particolare
     // nella List<AudioRecorder>
@@ -47,7 +39,7 @@ class Adattatore(var records : ArrayList<RegistratoreAudio>) : RecyclerView.Adap
     // terminare la visualizzazione di nuovi elementi
     // RecyclerView: contiene le viste corrispondenti ai dati
     override fun getItemCount(): Int {
-        return records.size
+        return registrazione.size
     }
 
     // funzione che viene chiamata dalla recyclerView per associare un ViewHolder a un istanza di
@@ -55,7 +47,7 @@ class Adattatore(var records : ArrayList<RegistratoreAudio>) : RecyclerView.Adap
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // quando cerchiamo di creare items quando la RecycleReview sta ancora caricando
         if(position != RecyclerView.NO_POSITION){
-            var record = records[position]
+            var record = registrazione[position]
 
             var sdf = SimpleDateFormat("dd/MM/yyyy")
             var date = Date(record.timestamp)

@@ -28,6 +28,7 @@ import java.io.ObjectOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import androidx.room.Room
+import java.lang.Math.*
 
 
 const val REQUEST_CODE =200
@@ -329,11 +330,14 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
         val esecuzione = findViewById<TextView>(R.id.cronometro)
         esecuzione.text = duration
         var onda: FormaOnda = findViewById(R.id.forma_onda)
-        var prova = recorder.maxAmplitude.toFloat()
-        if(prova != null){
-            Toast.makeText(this, "Contenuto recorder: $prova", Toast.LENGTH_SHORT).show()
-            onda.aggiungiAmpiezza(amp = recorder.maxAmplitude.toFloat()*1)
+        onda.aggiungiAmpiezza(amp = recorder.maxAmplitude.toFloat())
+        if(onda==null){
+            Toast.makeText(this, "funziona", Toast.LENGTH_SHORT).show()
         }
+        else{
+            Toast.makeText(this, "non funziona", Toast.LENGTH_SHORT).show()
+        }
+        Toast.makeText(this, "funziona", Toast.LENGTH_SHORT).show()
 
         this.duration = duration.dropLast(3)
     }

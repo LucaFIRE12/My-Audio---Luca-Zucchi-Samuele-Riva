@@ -8,7 +8,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 
-class FormaOnda(context: Context?, attrs: AttributeSet?): View(context, attrs) {
+class FormaOnda(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private var colore = Paint()    //colori impiegati nella forma d'onda
     private var ampiezze = ArrayList<Float>()   //ampiezza del suono
     private var picchi = ArrayList<RectF>()   //picchi del suono
@@ -33,15 +33,15 @@ class FormaOnda(context: Context?, attrs: AttributeSet?): View(context, attrs) {
     //funzione che mostra a livello grafico l'intensità del suono, più una barra è ampia e più è alto di decibel
     //i valori vengono salvati dentro un arraylist, che scorre durante la fase di registrazione
     fun aggiungiAmpiezza(amp: Float){
-        var normalizza = sh/amp.toInt()             //Math.min(amp.toInt()*1, 400).toFloat()
+        var normalizza = sh/amp.toInt()//Math.min((amp.toInt()/7, 400)).toFloat()             //Math.min(amp.toInt()*1, 400).toFloat()
         ampiezze.add(normalizza)
         picchi.clear()
         var amps = ampiezze.takeLast(maxPicchi)
 
         //parametri per dare forma alle punte dei picchi
         for (i in amps.indices){
-            var sx = sw - i*(w+d)           // distanza dal bordo sinistro del telefono
-            var sopra = sh/2 - amps[i]/2             // posizione della barra
+            var sx = sw-i*(w+d)           // distanza dal bordo sinistro del telefono
+            var sopra = sh/2 - amps[i]/2            // posizione della barra
             var dx = sx + w                 // base della barra
             var sotto = sopra + amps[i]
             picchi.add(RectF(sx, sopra, dx, sotto))         // punte dei picchi
@@ -56,5 +56,7 @@ class FormaOnda(context: Context?, attrs: AttributeSet?): View(context, attrs) {
         picchi.forEach{
             canvas.drawRoundRect(it, raggio, raggio, colore)        //allineamento dei picchi, formati dalla funzione aggiungiAmpiezza
         }
+        //canvas?.drawRoundRect(RectF(20f, 30f, 20+30f, 30+60f), 6f, 6f, colore)
+
     }
 }
