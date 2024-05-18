@@ -30,10 +30,13 @@ import java.util.Date
 import androidx.room.Room
 import java.lang.Math.*
 
-
+// RIGHE 40, 67 E 179
 const val REQUEST_CODE =200
 class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
 
+    // SE TOLGO LATEINIT E LO PONGO = arrayListOf()
+    // NON DA PIù ERRORRE QUA MA ALLA RIGA 203 bottomSheetBehavior
+    // DICE SEMPRE CHE MANCA LA DICHIARAZIONE, PROBABILMENTE ALLA RIGA 67
     private lateinit var ampiezza: ArrayList<Float>
 
     //richiesta dei permessi necessari
@@ -60,6 +63,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
     private lateinit var vibrazione: Vibrator
 
     // riferimento al LinearLayout di bottom_sheet.xml
+    // SE TOLGO LATEINIT L'APP NON CRASHA AL SALVATAGGIO
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
 
@@ -133,7 +137,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
 
         //qui viene nascosto il bottomsheet e implementato il salvataggio
         findViewById<Button>(R.id.BtnOk).setOnClickListener{
-            if(::ampiezza.isInitialized) {}
+
             rimozione()
             salvataggio()
         }
@@ -171,7 +175,8 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
         var timestamp = Date().time
         var ampsPath = "$dirPath$nuovoNomeFile"
 
-        if (::ampiezza.isInitialized) {}
+        // VA AGGIUNTO SE SI TOGLIE LATEINIT ALLA DICHIARAZIONE DI AMPIEZZA
+        // ampiezza = arrayListOf()
 
         try {
             var fos = FileOutputStream(ampsPath)
@@ -195,6 +200,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
         findViewById<View>(R.id.BottomSheetBackGround).visibility= View.GONE
         nascondiKeyboard(findViewById<TextView>(R.id.inputNomeFile))
         Handler(Looper.getMainLooper()).postDelayed({
+
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }, 100) // la funzione attende 100 milliSecondi e nasconde il bottomSheet
     }
