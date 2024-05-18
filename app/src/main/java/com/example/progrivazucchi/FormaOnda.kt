@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
+import android.media.MediaRecorder
 import android.util.AttributeSet
 import android.view.View
 
@@ -38,13 +39,13 @@ class FormaOnda(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
         picchi.clear()
         var amps = ampiezze.takeLast(maxPicchi)
 
-        //parametri per dare forma alle punte dei picchi
+
         for (i in amps.indices){
-            var sx = sw-i*(w+d)           // distanza dal bordo sinistro del telefono
-            var sopra = sh/2 - amps[i]/2            // posizione della barra
-            var dx = sx + w                 // base della barra
+            var sx = sw-i*(w+d)
+            var sopra = sh/2 - amps[i]/2
+            var dx = sx + w
             var sotto = sopra + amps[i]
-            picchi.add(RectF(sx, sopra, dx, sotto))         // punte dei picchi
+            picchi.add(RectF(sx, sopra, dx, sotto))
         }
         invalidate()
     }
