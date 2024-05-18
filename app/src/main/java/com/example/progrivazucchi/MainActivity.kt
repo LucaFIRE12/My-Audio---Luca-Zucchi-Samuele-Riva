@@ -36,7 +36,8 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
     // SE TOLGO LATEINIT E LO PONGO = arrayListOf()
     // NON DA PIù ERRORRE QUA MA ALLA RIGA 203 bottomSheetBehavior
     // DICE SEMPRE CHE MANCA LA DICHIARAZIONE, PROBABILMENTE ALLA RIGA 67
-    private lateinit var ampiezza: ArrayList<Float>
+    // prima c'era leteinit e non ? = null
+    private var ampiezza: ArrayList<Float>? = null
 
     //richiesta dei permessi necessari
     private var permissions = arrayOf(Manifest.permission.RECORD_AUDIO) // creazione di un array di permessi richiesti al manifest file ,contenente info sul
@@ -159,6 +160,8 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
 
     }
 
+
+
     @OptIn(DelicateCoroutinesApi::class)
     private fun salvataggio(){
         //rinominazione di un file
@@ -200,7 +203,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
         nascondiKeyboard(findViewById<TextView>(R.id.inputNomeFile))
         Handler(Looper.getMainLooper()).postDelayed({
 
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            this.bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }, 100) // la funzione attende 100 milliSecondi e nasconde il bottomSheet
     }
 
