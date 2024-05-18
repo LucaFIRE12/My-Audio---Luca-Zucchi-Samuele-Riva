@@ -5,7 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
-import android.media.MediaRecorder
 import android.util.AttributeSet
 import android.view.View
 
@@ -34,7 +33,7 @@ class FormaOnda(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     //funzione che mostra a livello grafico l'intensità del suono, più una barra è ampia e più è alto di decibel
     //i valori vengono salvati dentro un arraylist, che scorre durante la fase di registrazione
     fun aggiungiAmpiezza(amp: Float){
-        var normalizza = sh/amp.toInt()//Math.min((amp.toInt()/7, 400)).toFloat()             //Math.min(amp.toInt()*1, 400).toFloat()
+        var normalizza = Math.min(amp.toInt()/7, 400).toFloat() //sh/amp.toInt()            //Math.min(amp.toInt()*1, 400).toFloat()
         ampiezze.add(normalizza)
         picchi.clear()
         var amps = ampiezze.takeLast(maxPicchi)

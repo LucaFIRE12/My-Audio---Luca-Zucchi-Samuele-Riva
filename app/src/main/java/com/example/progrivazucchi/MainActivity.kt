@@ -31,7 +31,7 @@ import androidx.room.Room
 
 // RIGHE 40, 67 E 179
 const val REQUEST_CODE =200
-class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener {
+class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
     // SE TOLGO LATEINIT E LO PONGO = arrayListOf()
     // NON DA PIù ERRORRE QUA MA ALLA RIGA 203 bottomSheetBehavior
