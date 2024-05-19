@@ -6,6 +6,12 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 
+
+                                //CANCELLARE TUTTO IL FILE IN MANIERA INDISCRIMINATA NONAPPENA SI SARA' CREATO UN RIMPIAZZO
+                                //LA CLASSE DAO NON è PIU' SUPPORTATA
+
+
+
 @Dao
             //db = database
             //Dao = Data Access Objects, aiuta la realizzazione e lo svolgimento del db usando metodi e funzioni al posto delle query

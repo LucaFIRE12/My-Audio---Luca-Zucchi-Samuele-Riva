@@ -180,7 +180,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         // VA AGGIUNTO SE SI TOGLIE LATEINIT ALLA DICHIARAZIONE DI AMPIEZZA
         // ampiezza = arrayListOf()
 
-        try {
+        try {                                                 //!!MOLTO PROBABILMENTE DENTRO QUSTO TRY C'è QUALCHE VALORE CHE NON VIENE PASSATO NELLA MANIERA CORRETTA!!
             var fos = FileOutputStream(ampsPath)
             var out = ObjectOutputStream(fos)
             out.writeObject(ampiezza)           //salva la forma d'onda del file
@@ -188,7 +188,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
             out.close()
         }catch (e :IOException){}
 
-        var registrazione = RegistratoreAudio(nomeFile,filePath,timestamp,duration,ampsPath)
+        var registrazione = RegistratoreAudio(nomeFile,filePath,timestamp,duration,ampsPath)            //      !!RIVEDERE LE CALL DEL DB!!
 
 
                     //per il salvataggio, viene creato un thread che lavora in background apposta
@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         nascondiKeyboard(findViewById<TextView>(R.id.inputNomeFile))
         Handler(Looper.getMainLooper()).postDelayed({
 
-            this.bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            this.bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED                        ///!!SECONDO ME USANDO LO STATE COLLAPSED, CHIUDI IL PROCESSO DELL'APP!!
         }, 100) // la funzione attende 100 milliSecondi e nasconde il bottomSheet
     }
 
@@ -261,7 +261,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
 
         recorder = MediaRecorder()
-        dirPath = "${externalCacheDir?.absolutePath}/"
+        dirPath = "${externalCacheDir?.absolutePath}/"          //!!RIVEDERE IL PERCORSO DEI FILE!!
 
         var simpleDateFormat = SimpleDateFormat("dd.mm.yyyy_hh.mm.ss") // costruzione formato di una data relativa
         // a un salvataggio
@@ -334,13 +334,16 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
     }
 
     // quando viene dato il via al timer, questa funzione fa partire il tempo e lo ferma
-    override fun onTimerTick(duration: String) {
+    override fun onTimerTick(duration: String) {                    //!!VERIFICARE TUTTA LA PARTE DEL MIC CON UN DISPOSITIVO FISICO NO EMULATORE!!
         val esecuzione = findViewById<TextView>(R.id.cronometro)
         esecuzione.text = duration
         var onda: FormaOnda = findViewById(R.id.forma_onda)
         onda.aggiungiAmpiezza(recorder.maxAmplitude.toFloat())
 
+
+
         //if(permissionGranted){
+
           //  Toast.makeText(this, recorder.maxAmplitude.toString(), Toast.LENGTH_SHORT).show()
 
         //}else{
