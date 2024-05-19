@@ -113,13 +113,15 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
         findViewById<ImageButton>(R.id.btnFatto).setOnClickListener {
             fermaRegistrare()
-            Toast.makeText(this, "registrazione salvata", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "opzioni di salvataggio", Toast.LENGTH_SHORT).show()
             // messaggio mostrato quando si schiaccia sul bottone salvataggio
 
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED // in questo modo lo stato del
             // bottom_sheet è definito come "espanso"
 
             findViewById<View>(R.id.BottomSheetBackGround).visibility = View.VISIBLE
+            // AGGIUNTO IL 19/05
+            findViewById<LinearLayout>(R.id.bottomSheetIncluder).visibility = View.VISIBLE
             // il bottom sheet è visibile nel momento in cui si preme il bottone btnFatto
 
             findViewById<TextView>(R.id.inputNomeFile).text = nomeFile
@@ -138,8 +140,8 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         //qui viene nascosto il bottomsheet e implementato il salvataggio
         findViewById<Button>(R.id.BtnOk).setOnClickListener{
 
-            rimozione()
-            salvataggio()
+            rimozione() // toglie il bottomSheet
+            salvataggio() // salva il file nell'archivio
         }
 
         findViewById<View>(R.id.BottomSheetBackGround).setOnClickListener {
@@ -202,8 +204,13 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         findViewById<View>(R.id.BottomSheetBackGround).visibility= View.GONE
         nascondiKeyboard(findViewById<TextView>(R.id.inputNomeFile))
         Handler(Looper.getMainLooper()).postDelayed({
+            // AGGIUNTO AL POSTO DI BOTTOMSHEETBEHAVIOR IL 19/05
+            // COMUNQUE NON VIENE SALVATA LA REGISTRAZIONE NELL'ARCHIVIO
+            findViewById<LinearLayout>(R.id.bottomSheetIncluder).visibility = View.GONE
+            // SOSTITUITO PERCHè FACRASHARE L'APP, NON SO QUANTO POSSA ANDARE BENE LA
+            // SOSTITUZIONE
 
-            this.bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED                        ///!!SECONDO ME USANDO LO STATE COLLAPSED, CHIUDI IL PROCESSO DELL'APP!!
+            //this.bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED                        ///!!SECONDO ME USANDO LO STATE COLLAPSED, CHIUDI IL PROCESSO DELL'APP!!
         }, 100) // la funzione attende 100 milliSecondi e nasconde il bottomSheet
     }
 
