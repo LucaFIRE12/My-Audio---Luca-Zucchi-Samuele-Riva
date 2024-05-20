@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         //interfaccia utente per richiedere i permessi, successivamente verrà informato se sono stati accettati
 
         db = Room.databaseBuilder(
-            this,
+            applicationContext,
             AppDatabase::class.java,
             "registratoreAudio"
         ).build()
@@ -336,7 +336,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
 
         // ho messo questa funzione come commento perchè sennò non runna nulla
-        //ampiezza = findViewById<FormaOnda>(R.id.forma_onda).clear()
+        ampiezza!!.clear()
 
     }
 
@@ -345,7 +345,12 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         val esecuzione = findViewById<TextView>(R.id.cronometro)
         esecuzione.text = duration
         var onda: FormaOnda = findViewById(R.id.forma_onda)
-        onda.aggiungiAmpiezza(recorder.maxAmplitude.toFloat())
+        runOnUiThread {
+            if(staRegistrando){
+                onda.aggiungiAmpiezza(recorder.maxAmplitude.toFloat())
+            }
+        }
+        //onda.aggiungiAmpiezza(recorder.maxAmplitude.toFloat())
 
 
 
