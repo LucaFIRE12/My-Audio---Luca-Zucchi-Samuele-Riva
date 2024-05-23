@@ -58,8 +58,9 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
     private var duration = ""
 
     private lateinit var tempo: Tempo
+                        //SE IL SERVER NON VA BENE, sostituire registrazioniaudiodb con appdatabase
 
-    private lateinit var db: AppDatabase
+    private lateinit var db: RegistrazioniAudioDB
 
     private lateinit var vibrazione: Vibrator
 
@@ -78,11 +79,15 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE) //all'utente verra presentata la
         //interfaccia utente per richiedere i permessi, successivamente verrà informato se sono stati accettati
 
-        db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java,
-            "registratoreAudio"
-        ).build()
+
+
+                            //SE IL SERVER NON VA BENE, TOGLIERE DAL COMMENTO: db=room.databaseBuilder
+
+        //db = Room.databaseBuilder(
+          //  applicationContext,
+            //AppDatabase::class.java,
+            //"registratoreAudio"
+        //).build()
 
         val included = findViewById<LinearLayout>(R.id.bottomSheetIncluder)
         val bottomSheetBehavior = BottomSheetBehavior.from(included)
@@ -192,13 +197,20 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
             out.close()
         }catch (e :IOException){}
 
-        var registrazione = RegistratoreAudio(nomeFile,filePath,timestamp,duration,ampsPath)            //      !!RIVEDERE LE CALL DEL DB!!
+        db.inserisciRegistrazione(RegistrazioniAudio(nomeFile,filePath,timestamp,duration,ampsPath))
+        //var registrazione = RegistratoreAudio(nomeFile,filePath,timestamp,duration,ampsPath)            //      !!RIVEDERE LE CALL DEL DB!!
+
+
+
+
+                        //SE IL SERVER NON VA BENE, TOGLIERE DAL COMMENTO: VAR REGISTRAZIONI E GLOBALSCOPE.LAUNCH
+                        //E CANCELLARE: DB.INSERISCIREGISTRAZIONE(REGISTRAZIONE)
 
 
                     //per il salvataggio, viene creato un thread che lavora in background apposta
-        GlobalScope.launch {
-            db.registratoreAudioDao().insert(registrazione)      //salvataggio nel server di una registrazione appena effettuata
-        }
+       // GlobalScope.launch {
+         //   db.registratoreAudioDao().insert(registrazione)      //salvataggio nel server di una registrazione appena effettuata
+        //}
     }
 
     private fun rimozione(){
