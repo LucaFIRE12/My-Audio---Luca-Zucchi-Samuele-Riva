@@ -86,4 +86,9 @@ class Adattatore(var registrazione : ArrayList<RegistratoreAudio>, var listener:
         }
     }
 
+    fun setData(registrazione: ArrayList<RegistratoreAudio>){
+        this.registrazione = registrazione
+        notifyDataSetChanged()
+    }
+
 }

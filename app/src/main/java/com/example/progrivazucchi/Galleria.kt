@@ -39,6 +39,8 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             var adapter = myAdapter
             var LayoutManager = LinearLayoutManager(context)
         }
+
+        fetchAll()
     }
     //metodo che aggiorna il sistema dell'aggiornamento del db e inserimento della query
     private fun fetchAll(){
