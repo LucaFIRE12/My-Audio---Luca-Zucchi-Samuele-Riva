@@ -28,6 +28,7 @@ import java.io.ObjectOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import androidx.room.Room
+import com.example.progrivazucchi.FormaOnda
 
 // RIGHE 40, 67 E 179
 const val REQUEST_CODE =200
@@ -151,6 +152,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
         findViewById<ImageButton>(R.id.btnCancella).setOnClickListener {
             fermaRegistrare()
+
             File("$dirPath$nomeFile.mp3") // formato nome del file
             Toast.makeText(this, "registrazione eliminata", Toast.LENGTH_SHORT).show()
             // messaggio mostrato quando si schiaccia sul bottone cancella
@@ -252,7 +254,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         inPausa = false
         findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_pausa)
 
-        tempo.stop() //metodo presente dentro la classe Tempo.kt
+        tempo.avvio() //metodo presente dentro la classe Tempo.kt
     }
 
 
@@ -334,9 +336,9 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
         findViewById<TextView>(R.id.cronometro).text = "00:00.00"
 
-
-        // ho messo questa funzione come commento perchè sennò non runna nulla
-        ampiezza!!.clear()
+        // serve per resettare le onde sonore captate
+        var onda: FormaOnda = findViewById(R.id.forma_onda)
+        ampiezza = onda.clear()
 
     }
 

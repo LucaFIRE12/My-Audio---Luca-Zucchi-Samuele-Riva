@@ -49,6 +49,15 @@ class FormaOnda(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
         invalidate()
     }
 
+    fun clear() : ArrayList<Float>{
+        var amps = ampiezze.clone() as ArrayList<Float>
+        ampiezze.clear()
+        picchi.clear()
+        invalidate()
+
+        return amps
+    }
+
     // funzione che serve a dare una forma alle "barre" della forma d'onda della traccia audio
     //includendo, punto di inizio, fine, tipo di barra ed arrotondamento
     override fun draw(canvas: Canvas) {
