@@ -198,7 +198,6 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         }catch (e :IOException){}
 
         db = RegistrazioniAudioDB(this)
-
         db.inserisciRegistrazione(RegistrazioniAudio(nomeFile,filePath,timestamp,duration,ampsPath))
         //var registrazione = RegistratoreAudio(nomeFile,filePath,timestamp,duration,ampsPath)            //      !!RIVEDERE LE CALL DEL DB!!
 
