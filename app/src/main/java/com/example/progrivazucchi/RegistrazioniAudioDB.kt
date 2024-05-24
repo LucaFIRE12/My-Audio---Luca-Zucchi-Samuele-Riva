@@ -9,7 +9,7 @@ class RegistrazioniAudioDB(context: Context) : SQLiteOpenHelper(context, DATABAS
 
     companion object{
         private const val DATABASE_NAME = "registrazioneAudio.db"
-        private const val DATABASE_VERSION = "1"
+        private const val DATABASE_VERSION = 1
         private const val table_name = "registrazioni_salvate"
         private const val COLOUMN_name = "nomefile"
         private const val COLOUMN_filepath = "filepath"
