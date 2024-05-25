@@ -1,5 +1,6 @@
 package com.example.progrivazucchi
 
+import android.content.Intent
 import android.media.AudioRecord
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -55,7 +56,11 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     // Nel momento in cui si tiene premuto su un elemento, diventa visibile il
     // Toast "Click semplice"
     override fun onItemClickListener(position: Int) {
-        Toast.makeText(this, "Click semplice", Toast.LENGTH_SHORT).show()
+        var audioRecord = records[position]
+        var intent  = Intent(this, LettoreAudio::class.java)
+        intent.putExtra("filepath", audioRecord.filepath)
+        intent.putExtra("nomefile", audioRecord.nomefile)
+        startActivity(intent)
     }
 
     // Nel momento in cui si tiene premuto su un elemento, diventa visibile il
