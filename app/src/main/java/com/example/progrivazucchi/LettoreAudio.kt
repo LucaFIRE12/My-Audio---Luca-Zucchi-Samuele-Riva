@@ -1,14 +1,17 @@
 package com.example.progrivazucchi
 
 import android.media.MediaPlayer
+import android.media.PlaybackParams
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.SeekBar
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.chip.Chip
+import kotlinx.coroutines.delay
 
 class LettoreAudio : AppCompatActivity() {
     private lateinit var mediaPlayer: MediaPlayer
@@ -21,6 +24,8 @@ class LettoreAudio : AppCompatActivity() {
     private lateinit var runnable: Runnable
     private lateinit var handler: Handler
     private var ritardo = 1000L
+    private var jumpValue = 1000
+    private var playVelocitaIndietro = 1.0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +56,8 @@ class LettoreAudio : AppCompatActivity() {
             playPausePlayer()
         }
         playPausePlayer()
+        // ogni posizione del seekBar progress si ricollega
+        // ad una posizione del mediaPlayer
         seekBar.max = mediaPlayer.duration
 
         mediaPlayer.setOnCompletionListener {
@@ -58,15 +65,62 @@ class LettoreAudio : AppCompatActivity() {
             handler.removeCallbacks(runnable)
 
         }
+
+        // premendo il bottone btnAvantiSec la registrazione del player si muove di 1 secondo
+        findViewById<Button>(R.id.btnAvantiSec).setOnClickListener {
+            mediaPlayer.seekTo(mediaPlayer.currentPosition + jumpValue)
+            seekBar.progress += jumpValue
+
+        }
+
+        findViewById<Button>(R.id.btnIndietroSec).setOnClickListener {
+            mediaPlayer.seekTo(mediaPlayer.currentPosition - jumpValue)
+            seekBar.progress -= jumpValue
+        }
+
+        // bottone moltiplicazione di velocità di riproduzione delle registrazioni
+        chip.setOnClickListener{
+            if(playVelocitaIndietro != 2.0f){
+                // se la velocità di riproduzione è diversa da 2 la
+                // velocità di riproduzione aumenta di 0.5f
+                playVelocitaIndietro += 0.5f
+
+            }
+            else{
+                // se la velocità di riproduzione è uguale a 2 la
+                // velocità di riproduzione ritorna a 0.5f
+                playVelocitaIndietro = 0.5f
+            }
+
+            mediaPlayer.playbackParams = PlaybackParams().setSpeed(playVelocitaIndietro)
+            chip.text = "x ${playVelocitaIndietro}"
+        }
+
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            // fromUser : se il cambiamento è stato effettuato dall'utente o no
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                // se è inizializzato dall'utente:
+                if(fromUser){
+                    mediaPlayer.seekTo(progress)
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+
+        })
     }
 
     private fun playPausePlayer(){              //funzione per far partire il player
         if(mediaPlayer.isPlaying){
-            mediaPlayer.start()
+            mediaPlayer.start() // avvio
             btnPlay.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_pause_circle, theme)
-            handler.postDelayed(runnable, 0)
+            handler.postDelayed(runnable, ritardo)
         }else{
-            mediaPlayer.pause()
+            mediaPlayer.pause() // pausa
             btnPlay.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_play_circle, theme)
             handler.removeCallbacks(runnable)
         }
