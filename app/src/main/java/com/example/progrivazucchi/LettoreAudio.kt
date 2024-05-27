@@ -9,6 +9,8 @@ import android.os.Looper
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.SeekBar
+import android.widget.TextView
+import android.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.delay
@@ -20,6 +22,11 @@ class LettoreAudio : AppCompatActivity() {
     private lateinit var btnAvantiSec: ImageButton
     private lateinit var chip: Chip
     private lateinit var seekBar: SeekBar
+    private lateinit var toolbar: Toolbar
+    private lateinit var mostraNomeFile: TextView
+    private lateinit var progresso: TextView
+    private lateinit var durata: TextView
+
 
     private lateinit var runnable: Runnable
     private lateinit var handler: Handler
@@ -33,12 +40,31 @@ class LettoreAudio : AppCompatActivity() {
         var filepath = intent.getStringExtra("filepath")
         var nomefile = intent.getStringExtra("nomefile")
 
+        toolbar = findViewById(R.id.toolbar)
+        mostraNomeFile = findViewById(R.id.mostraNomeFile)
+        progresso = findViewById(R.id.mostraProgresso)
+        durata = findViewById(R.id.mostraDurata)
+
+
+
+        setSupportActionBar(findViewById(R.id.toolbar))
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+
+        }
+
         mediaPlayer = MediaPlayer()
         mediaPlayer.apply {
             setDataSource(filepath)
             prepare()
         }
 
+        mostraNomeFile.text = nomefile              //mostra il nome del file
+
+
+        durata.text = mediaPlayer.duration.toString()                   //converte il minutaggio in stringa da mostrare in textview
 
         btnIndietroSec = findViewById(R.id.btnIndietroSec)
         btnAvantiSec = findViewById(R.id.btnAvantiSec)
@@ -49,6 +75,7 @@ class LettoreAudio : AppCompatActivity() {
         handler = Handler(Looper.getMainLooper())           //permette alla barra di scorrere in base allo stato di proseguimento del player
         runnable = Runnable {
             seekBar.progress = mediaPlayer.currentPosition
+            progresso.text = mediaPlayer.currentPosition.toString()         //converte il minutaggio in stringa da mostrare in textview
             handler.postDelayed(runnable, ritardo)                  //input lag simulato "necessario per evitare problemi coi processi"
         }
 
@@ -124,6 +151,14 @@ class LettoreAudio : AppCompatActivity() {
             btnPlay.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_play_circle, theme)
             handler.removeCallbacks(runnable)
         }
+
+    }
+
+    override fun onBackPressed() {          //mostra il bottone poer tornare indietro dalla riproduzione all'elenco delle registrazioni
+        super.onBackPressed()
+        mediaPlayer.stop()
+        mediaPlayer.release()
+        handler.removeCallbacks(runnable)
 
     }
 }
