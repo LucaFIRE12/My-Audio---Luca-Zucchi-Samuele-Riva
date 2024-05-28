@@ -45,7 +45,7 @@
         android:progress="40"
         android:progressTint="@color/ColoreCornice"
         android:thumbTint="@color/ColoreCornice"
-        app:layout_constraintBorrom_toBottomOf="@id/constraintLayout"
+        app:layout_constraintBottom_toBottomOf="@id/constraintLayout"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         tools:ignore="MissingConstraints" />
     <TextView

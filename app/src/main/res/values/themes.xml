@@ -20,4 +20,19 @@
 
 
     </style>
+    
+    <style name="StileRicerca" parent="ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox">
+        <item name="boxBackgroundColor">@color/gray</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="boxCornerRadiusBottomStart">36dp</item>
+        <item name="boxCornerRadiusTopStart">36dp</item>
+        <item name="boxCornerRadiusBottomEnd">36dp</item>
+        <item name="boxCornerRadiusTopEnd">36dp</item>
+        <item name="endIconMode">clear_text</item>
+        <item name="startIconDrawable">
+
+            @drawable/search_button_svgrepo_com</item>
+    </style>
 </resources>
