@@ -4,6 +4,8 @@ import android.content.Intent
 import android.media.AudioRecord
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import androidx.room.Room
 import androidx.room.Room.databaseBuilder
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -20,6 +23,8 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     private lateinit var records : ArrayList<RegistratoreAudio>
     private lateinit var myAdapter : Adattatore
     private lateinit var database: AppDatabase
+    private lateinit var ricerca_input : TextInputEditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_galleria)
@@ -42,7 +47,36 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         }
 
         fetchAll()
+
+        ricerca_input = findViewById(R.id.ricerca_input)                //barra di ricerca
+        ricerca_input.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {             //query di ricerca
+                var query = s.toString()
+                searchDatabase(query)
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+        })
     }
+
+    private fun searchDatabase(query: String) {             //funzione per la query di ricerca, dove trova tutti i nomi simili a ciò che abbiamo messo
+        GlobalScope.launch {
+            records.clear();
+            var queryResult = database.registratoreAudioDao().searchDatabase("%$query%")
+            records.addAll(queryResult)
+            runOnUiThread{
+                myAdapter.notifyDataSetChanged()
+            }
+        }
+    }
+
     //metodo che aggiorna il sistema dell'aggiornamento del db e inserimento della query
     private fun fetchAll(){
         GlobalScope.launch {

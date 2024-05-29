@@ -19,6 +19,9 @@ interface RegistratoreAudioDao {
     @Query("SELECT * FROM registratoreAudio")           //query, che mostra tutte le registrazioni presenti nel db
     fun prendiTutto(): List<RegistratoreAudio>          //restituisce una lista di Registratore audio
 
+    @Query("SELECT * FROM registratoreAudio WHERE nomefile LIKE :query")           //query, che mostra tutte le registrazioni presenti nel db
+    fun searchDatabase(query: String): List<RegistratoreAudio>
+
     @Insert
     fun insert(vararg registratoreAudio: RegistratoreAudio)      //fa INSERT INTO del db
 
