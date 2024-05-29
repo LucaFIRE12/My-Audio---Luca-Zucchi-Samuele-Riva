@@ -22,6 +22,16 @@ class Adattatore(var registrazione : ArrayList<RegistratoreAudio>, var listener:
     // View.OnClickListener: per lanciare la player Activity tramite tocco di un bottone
     // View.OnLongClickListener: Utilizzato per riscontare quando l'utente
     // mantiene il tocco su una vista per un periodo più lungo del semplice click
+    private var editMode = false
+
+    fun isEditMode(): Boolean {return editMode}
+    fun setEditMode(mode: Boolean){             //funzione che permette di salvare la modifica effettuata al record salvato
+        if (editMode != mode){
+            editMode = mode
+            notifyDataSetChanged()
+        }
+    }
+
     inner class GestoreView(itemView : View) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener{
         var tvNomeFile : TextView = itemView.findViewById<TextView>(R.id.tvNomeFile)
         var tvMeta : TextView = itemView.findViewById<TextView>(R.id.tvMeta)
@@ -83,6 +93,15 @@ class Adattatore(var registrazione : ArrayList<RegistratoreAudio>, var listener:
             var strDate = sdf.format(date)
             holder.itemView.findViewById<TextView>(R.id.tvNomeFile).text = record.nomefile
             holder.itemView.findViewById<TextView>(R.id.tvMeta).text = "${record.duration} $strDate"
+
+                                //se la funzione editMode è attiva, checbox diventa visibile e l'item viene selezionato
+            if(editMode){
+                holder.itemView.findViewById<CheckBox>(R.id.checkbox).visibility = View.VISIBLE
+                holder.itemView.findViewById<CheckBox>(R.id.checkbox).isChecked = record.isCheck
+            }else{
+                holder.itemView.findViewById<CheckBox>(R.id.checkbox).visibility = View.GONE
+                holder.itemView.findViewById<CheckBox>(R.id.checkbox).isChecked = false
+            }
         }
     }
 

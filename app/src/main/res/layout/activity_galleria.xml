@@ -19,27 +19,49 @@
             android:layout_height="130dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
             <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 app:title="Registrazioni" />
+            <RelativeLayout
+                android:id="@+id/editBar"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:padding="8dp">
+                <ImageButton
+                    android:id="@+id/btnChiuso"
+                    android:background="@drawable/ic_chiuso"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageButton
+                    android:id="@+id/btnSelezionaTutto"
+                    android:background="@drawable/ic_elenco"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/StileRicerca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:hintEnabled="false"
-            style="@style/StileRicerca">
+            android:orientation="horizontal"
+            app:hintEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/ricerca_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Cerca registrazioni"
+                android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:textColor="@color/grayDark"
-                android:textColorHint="@color/grayDark"
-                android:imeOptions="actionSearch"/>
+                android:textColorHint="@color/grayDark" />
 
         </com.google.android.material.textfield.TextInputLayout>
     </com.google.android.material.appbar.AppBarLayout>
