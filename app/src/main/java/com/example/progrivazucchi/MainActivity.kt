@@ -20,7 +20,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import kotlinx.coroutines.*
+
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
     private lateinit var tempo: Tempo
                         //SE IL SERVER NON VA BENE, sostituire registrazioniaudiodb con appdatabase
 
-    private lateinit var db: RegistrazioniAudioDB
+    private lateinit var db: registrazioniAudioDB
 
     private lateinit var vibrazione: Vibrator
 
@@ -171,7 +171,8 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
 
 
-    @OptIn(DelicateCoroutinesApi::class)
+    private lateinit var btnModifica: ImageButton
+    private lateinit var btnElimina: ImageButton
     private fun salvataggio(){
         //rinominazione di un file
 
@@ -210,7 +211,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
                     //per il salvataggio, viene creato un thread che lavora in background apposta
        // GlobalScope.launch {
-         //   db.registratoreAudioDao().insert(registrazione)      //salvataggio nel server di una registrazione appena effettuata
+            //db.registratoreAudioDao().insert(registrazione)      //salvataggio nel server di una registrazione appena effettuata
         //}
     }
 
