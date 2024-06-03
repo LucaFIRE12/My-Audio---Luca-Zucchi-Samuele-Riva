@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rinominaLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_tondo"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Rinominare registrazione?"
+        android:textAlignment="center"
+        android:textSize="26sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/StileTestoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputNomeFile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:padding="16dp"
+            tools:ignore="SpeakableTextPresentCheck"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="20dp">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAnnulla"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:text="Annulla"
+            android:backgroundTint="@color/gray"
+            android:textColor="@color/grayDark"
+            app:cornerRadius="26dp"
+            app:rippleColor="@color/grayDark"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSalva"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:text="Salva"
+            android:layout_marginStart="30dp"
+            android:backgroundTint="@color/ColoreCornice"
+            android:textColor="@color/white"
+            app:cornerRadius="26dp"
+            app:rippleColor="@color/grayDark"
+            />
+    </LinearLayout>
+
+</LinearLayout>

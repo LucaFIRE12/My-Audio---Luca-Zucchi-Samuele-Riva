@@ -32,7 +32,7 @@ interface RegistratoreAudioDao {
     fun cancella(registratoreAudio: Array<RegistratoreAudio>)
 
     @Update
-    fun aggiorna(registratoreAudio: Array<out RegistratoreAudio>)           //fa UPDATE del db "colonna"
+    fun aggiorna(registratoreAudio: RegistratoreAudio)           //fa UPDATE del db "colonna"
 
 
 }

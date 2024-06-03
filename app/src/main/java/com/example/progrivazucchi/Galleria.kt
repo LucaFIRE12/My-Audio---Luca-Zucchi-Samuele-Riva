@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -141,13 +143,49 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             dialog.show()
 
         }
+
+        findViewById<Button>(R.id.btnModifica).setOnClickListener{
+            val builder = AlertDialog.Builder(this)
+            val dialogView = layoutInflater.inflate(R.layout.rinomina_layout, null)
+            builder.setView(dialogView)
+            val dialog = builder.create()
+            val record = records.filter{it.isCheck}.get(0)
+            // cerco nel dialogView un TextInputEditText con id inputNomeFile
+            val textInput = dialogView.findViewById<TextInputEditText>(R.id.inputNomeFile)
+            textInput.setText(record.nomefile)
+
+            dialogView.findViewById<Button>(R.id.btnSalva).setOnClickListener{
+                val input = textInput.text.toString()
+                if(input.isEmpty()){
+                    Toast.makeText(this, "Il nome non può essere vuoto", Toast.LENGTH_LONG).show()
+                }else{
+                    record.nomefile = input // aggiorno il nomefile
+                    GlobalScope.launch {
+                        database.registratoreAudioDao().aggiorna(record)
+                        runOnUiThread{
+                            myAdapter.notifyItemChanged(records.indexOf(record))
+                            dialog.dismiss()
+                            esciEditMode()
+                        }
+                    }
+                }
+            }
+
+            dialogView.findViewById<Button>(R.id.btnAnnulla).setOnClickListener{
+                dialog.dismiss()
+            }
+
+            dialog.show()
+        }
     }
 
     private fun esciEditMode(){             //disabilita la funzione di modifica e ripristina la toolbar
         supportActionBar?.setDisplayShowTitleEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(true)
         editBar.visibility = View.GONE
+        //chiamati sia hidden che collapsed per far sparire il bottom sheet del tutto
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         records.map { it.isCheck = false }
         myAdapter.setEditMode(false)
     }
