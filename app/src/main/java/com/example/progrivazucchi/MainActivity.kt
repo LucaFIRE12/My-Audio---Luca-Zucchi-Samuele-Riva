@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
     private lateinit var tempo: Tempo
                         //SE IL SERVER NON VA BENE, sostituire registrazioniaudiodb con appdatabase
 
-    private lateinit var db: registrazioniAudioDB
+    private lateinit var db: RegistrazioniAudioDB
 
     private lateinit var vibrazione: Vibrator
 

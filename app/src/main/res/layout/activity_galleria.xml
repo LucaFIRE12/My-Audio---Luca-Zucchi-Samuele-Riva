@@ -91,6 +91,7 @@
             <ImageButton
                 android:id="@+id/btnElimina"
                 android:clickable="false"
+                android:contentDescription="NULL"
                 android:backgroundTint="@color/BackGroundOpaco"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -111,6 +112,7 @@
             <ImageButton
                 android:id="@+id/btnModifica"
                 android:backgroundTint="@color/BackGroundOpaco"
+                android:contentDescription="NULL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_modifica"/>
