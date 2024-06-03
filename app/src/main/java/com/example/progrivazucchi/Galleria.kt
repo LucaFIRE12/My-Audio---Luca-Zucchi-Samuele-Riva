@@ -144,7 +144,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
         }
 
-        findViewById<Button>(R.id.btnModifica).setOnClickListener{
+        findViewById<ImageButton>(R.id.btnModifica).setOnClickListener{
             val builder = AlertDialog.Builder(this)
             val dialogView = layoutInflater.inflate(R.layout.rinomina_layout, null)
             builder.setView(dialogView)
