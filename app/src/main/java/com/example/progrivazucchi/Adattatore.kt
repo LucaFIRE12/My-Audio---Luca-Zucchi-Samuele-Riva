@@ -16,7 +16,7 @@ import java.util.Date
 
 // utile a mappare il layout di itemview, quindi conosce cosa contengono i layout delle registrazioni,
 // come settare i valori che le riguardano e como interagire con essi
-class Adattatore(var registrazione : ArrayList<RegistratoreAudio>, var listener: OnItemClickListener) : RecyclerView.Adapter<ViewHolder>() {
+class Adattatore(var registrazione : ArrayList<RegistrazioniAudio>, var listener: OnItemClickListener) : RecyclerView.Adapter<ViewHolder>() {
 
     // collega ogni singolo elemento del layout itemview a una variabile
     // View.OnClickListener: per lanciare la player Activity tramite tocco di un bottone
@@ -105,7 +105,7 @@ class Adattatore(var registrazione : ArrayList<RegistratoreAudio>, var listener:
         }
     }
 
-    fun setData(registrazione: ArrayList<RegistratoreAudio>){
+    fun setData(registrazione: ArrayList<RegistrazioniAudio>){
         this.registrazione = registrazione
         notifyDataSetChanged()
     }

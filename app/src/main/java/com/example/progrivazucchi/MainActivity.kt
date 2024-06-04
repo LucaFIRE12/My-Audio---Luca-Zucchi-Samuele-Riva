@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
     private lateinit var tempo: Tempo
                         //SE IL SERVER NON VA BENE, sostituire registrazioniaudiodb con appdatabase
 
-    private lateinit var db: RegistrazioniAudioDB
+    private lateinit var db: RegistrazioniAudioSQLiteHelper
 
     private lateinit var vibrazione: Vibrator
 
@@ -77,14 +77,6 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         //interfaccia utente per richiedere i permessi, successivamente verrà informato se sono stati accettati
 
 
-
-                            //SE IL SERVER NON VA BENE, TOGLIERE DAL COMMENTO: db=room.databaseBuilder
-
-        //db = Room.databaseBuilder(
-          //  applicationContext,
-            //AppDatabase::class.java,
-            //"registratoreAudio"
-        //).build()
 
         val included = findViewById<LinearLayout>(R.id.bottomSheetIncluder)
         val bottomSheetBehavior = BottomSheetBehavior.from(included)
@@ -110,8 +102,6 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
         findViewById<ImageButton>(R.id.btnElenco).setOnClickListener{
             startActivity(Intent(this, Galleria::class.java))
-
-
         }
 
         findViewById<ImageButton>(R.id.btnFatto).setOnClickListener {
@@ -128,8 +118,6 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
             // il bottom sheet è visibile nel momento in cui si preme il bottone btnFatto
 
             findViewById<TextView>(R.id.inputNomeFile).text = nomeFile
-
-
         }
 
 
@@ -184,8 +172,6 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         var timestamp = Date().time
         var ampsPath = "$dirPath$nuovoNomeFile"
 
-        // VA AGGIUNTO SE SI TOGLIE LATEINIT ALLA DICHIARAZIONE DI AMPIEZZA
-        // ampiezza = arrayListOf()
 
         try {                                                 //!!MOLTO PROBABILMENTE DENTRO QUSTO TRY C'è QUALCHE VALORE CHE NON VIENE PASSATO NELLA MANIERA CORRETTA!!
             var fos = FileOutputStream(ampsPath)
@@ -194,21 +180,8 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
             out.close()
         }catch (e :IOException){}
 
-        db = RegistrazioniAudioDB(this)
+        db = RegistrazioniAudioSQLiteHelper(this)
         db.inserisciRegistrazione(RegistrazioniAudio(nomeFile,filePath,timestamp,duration))
-        //var registrazione = RegistratoreAudio(nomeFile,filePath,timestamp,duration,ampsPath)            //      !!RIVEDERE LE CALL DEL DB!!
-
-
-
-
-                        //SE IL SERVER NON VA BENE, TOGLIERE DAL COMMENTO: VAR REGISTRAZIONI E GLOBALSCOPE.LAUNCH
-                        //E CANCELLARE: DB.INSERISCIREGISTRAZIONE(REGISTRAZIONE)
-
-
-                    //per il salvataggio, viene creato un thread che lavora in background apposta
-       // GlobalScope.launch {
-            //db.registratoreAudioDao().insert(registrazione)      //salvataggio nel server di una registrazione appena effettuata
-        //}
     }
 
     private fun rimozione(){
@@ -233,9 +206,6 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         inputm.hideSoftInputFromWindow(view.windowToken, 0) // nasconde la tastiera
 
     }
-
-
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

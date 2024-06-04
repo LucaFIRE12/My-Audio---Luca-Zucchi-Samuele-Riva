@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class RegistrazioniAudioDB(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object{
         private const val DATABASE_NAME = "registrazioneAudio.db"
@@ -52,6 +52,27 @@ class RegistrazioniAudioDB(context: Context) : SQLiteOpenHelper(context, DATABAS
             put(collumn_timestamp, registrazioniAudio.timestamp)
             put(collumn_duration, registrazioniAudio.duration)
         }
+    }
+    fun prendiTutto(): List<RegistrazioniAudio> {
+        val db = readableDatabase
+        val cursor = db.query(table_name, null, null, null, null, null, null)
+        val registrazioniAudioList = mutableListOf<RegistrazioniAudio>()
+        while (cursor.moveToNext()) {
+            val nomefile = cursor.getString(cursor.getColumnIndex(COLOUMN_name))
+            val filepath = cursor.getString(cursor.getColumnIndex(COLOUMN_filepath))
+            val timestamp = cursor.getLong(cursor.getColumnIndex(collumn_timestamp))
+            val duration = cursor.getString(cursor.getColumnIndex(collumn_duration))
+            registrazioniAudioList.add(RegistrazioniAudio(nomefile, filepath, timestamp, duration))
+        }
+        cursor.close()
+        db.close()
+        return registrazioniAudioList
+    }
+
+    fun cancella(registrazioniAudio: RegistrazioniAudio){
+        val db = writableDatabase
+        db.delete(table_name, "$COLOUMN_name = ?", arrayOf(registrazioniAudio.nomefile))
+        db.close()
     }
 
 

@@ -19,9 +19,6 @@
             android:name=".LettoreAudio"
             android:exported="false" />
         <activity
-            android:name=".lettoreAudio"
-            android:exported="false" />
-        <activity
             android:name=".Galleria"
             android:exported="false" />
         <activity

@@ -15,7 +15,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room.databaseBuilder
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.textfield.TextInputEditText
@@ -25,11 +24,11 @@ import kotlinx.coroutines.launch
 
 
 class Galleria : AppCompatActivity(), OnItemClickListener {
-    private lateinit var records : ArrayList<RegistratoreAudio>
+    private lateinit var records : ArrayList<RegistrazioniAudio>
     private lateinit var myAdapter : Adattatore
-    private lateinit var database: AppDatabase
     private lateinit var ricerca_input : TextInputEditText
     private lateinit var toolbar : MaterialToolbar
+    private lateinit var database : RegistrazioneAudio
     private lateinit var editBar: View
     private lateinit var btnChiuso: ImageButton
     private lateinit var btnSelezionaTutto: ImageButton
@@ -66,11 +65,6 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
         records = ArrayList()
-        database = databaseBuilder(
-            this,
-            AppDatabase::class.java,
-            "registratoreAudio"
-        ).build()
         myAdapter = Adattatore(records, this)
 
         // la recyclerView necessita di due informazioni: 1)un adattatore per sapere come deve
@@ -105,6 +99,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         }
 
         btnSelezionaTutto.setOnClickListener {                                    //se viene premuto il pulsante seleziona tutto, seleziona tutti i record
+
             allChecked = !allChecked
             records.map { it.isCheck = allChecked }
             myAdapter.notifyDataSetChanged()
@@ -127,7 +122,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
                 val elimiare = records.filter { it.isCheck }.toTypedArray()
                 GlobalScope.launch {
-                    database.registratoreAudioDao().cancella(elimiare)
+                    database.registrazioniaudio().cancella(elimiare)
                     runOnUiThread{
                         records.removeAll(elimiare.toList())
                         myAdapter.notifyDataSetChanged()
