@@ -67,18 +67,12 @@
             android:layout_height="wrap_content"
             android:text="00:00.00"
             android:textSize="56sp"
-            app:layout_constraintBottom_toTopOf="@+id/forma_onda"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginBottom="20px"/>
 
-        <com.example.progrivazucchi.FormaOnda
-            android:id="@+id/forma_onda"
-            android:layout_width="match_parent"
-            android:layout_height="400px"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
 
 

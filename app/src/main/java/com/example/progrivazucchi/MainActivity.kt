@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaRecorder
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -19,6 +18,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 import java.io.File
@@ -27,8 +27,6 @@ import java.io.IOException
 import java.io.ObjectOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
-import androidx.room.Room
-import com.example.progrivazucchi.FormaOnda
 
 // RIGHE 40, 67 E 179
 const val REQUEST_CODE =200
@@ -38,7 +36,6 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
     // NON DA PIù ERRORRE QUA MA ALLA RIGA 203 bottomSheetBehavior
     // DICE SEMPRE CHE MANCA LA DICHIARAZIONE, PROBABILMENTE ALLA RIGA 67
     // prima c'era leteinit e non ? = null
-    private var ampiezza: ArrayList<Float>? = null
 
     //richiesta dei permessi necessari
     private var permissions = arrayOf(Manifest.permission.RECORD_AUDIO) // creazione di un array di permessi richiesti al manifest file ,contenente info sul
@@ -192,14 +189,13 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
         try {                                                 //!!MOLTO PROBABILMENTE DENTRO QUSTO TRY C'è QUALCHE VALORE CHE NON VIENE PASSATO NELLA MANIERA CORRETTA!!
             var fos = FileOutputStream(ampsPath)
-            var out = ObjectOutputStream(fos)
-            out.writeObject(ampiezza)           //salva la forma d'onda del file
+            var out = ObjectOutputStream(fos) //salva la forma d'onda del file
             fos.close()
             out.close()
         }catch (e :IOException){}
 
         db = RegistrazioniAudioDB(this)
-        db.inserisciRegistrazione(RegistrazioniAudio(nomeFile,filePath,timestamp,duration,ampsPath))
+        db.inserisciRegistrazione(RegistrazioniAudio(nomeFile,filePath,timestamp,duration))
         //var registrazione = RegistratoreAudio(nomeFile,filePath,timestamp,duration,ampsPath)            //      !!RIVEDERE LE CALL DEL DB!!
 
 
@@ -232,9 +228,9 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
     // funzione utile per nascondere la tastiera
     private fun nascondiKeyboard(view: View ){
-        val inputmm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     // input method manager, gestisce le comunicazioni tra processi
-        inputmm.hideSoftInputFromWindow(view.windowToken, 0) // nasconde la tastiera
+        inputm.hideSoftInputFromWindow(view.windowToken, 0) // nasconde la tastiera
 
     }
 
@@ -350,9 +346,6 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
         findViewById<TextView>(R.id.cronometro).text = "00:00.00"
 
-        // serve per resettare le onde sonore captate
-        var onda: FormaOnda = findViewById(R.id.forma_onda)
-        ampiezza = onda.clear()
 
     }
 
@@ -360,26 +353,6 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
     override fun onTimerTick(duration: String) {                    //!!VERIFICARE TUTTA LA PARTE DEL MIC CON UN DISPOSITIVO FISICO NO EMULATORE!!
         val esecuzione = findViewById<TextView>(R.id.cronometro)
         esecuzione.text = duration
-        var onda: FormaOnda = findViewById(R.id.forma_onda)
-        runOnUiThread {
-            if(staRegistrando){
-                onda.aggiungiAmpiezza(recorder.maxAmplitude.toFloat())
-            }
-        }
-        //onda.aggiungiAmpiezza(recorder.maxAmplitude.toFloat())
-
-
-
-        //if(permissionGranted){
-
-          //  Toast.makeText(this, recorder.maxAmplitude.toString(), Toast.LENGTH_SHORT).show()
-
-        //}else{
-          //  Toast.makeText(this, "Errore, non viene ricevuto nessun segnale audio", Toast.LENGTH_SHORT).show()
-        //}
-
-
-
         this.duration = duration.dropLast(3)
     }
 }

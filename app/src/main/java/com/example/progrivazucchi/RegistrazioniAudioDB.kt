@@ -15,7 +15,6 @@ class RegistrazioniAudioDB(context: Context) : SQLiteOpenHelper(context, DATABAS
         private const val COLOUMN_filepath = "filepath"
         private const val collumn_timestamp = "timestamp"
         private const val collumn_duration = "duration"
-        private const val collumn_ampsPath = "ampsPath"
 
 
 
@@ -23,7 +22,7 @@ class RegistrazioniAudioDB(context: Context) : SQLiteOpenHelper(context, DATABAS
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val createTableQuery = "CREATE TABLE $table_name ($COLOUMN_name TEXT PRIMARY KEY, $COLOUMN_filepath TEXT, $collumn_timestamp TEXT, $collumn_duration TEXT, $collumn_ampsPath TEXT)"
+        val createTableQuery = "CREATE TABLE $table_name ($COLOUMN_name TEXT PRIMARY KEY, $COLOUMN_filepath TEXT, $collumn_timestamp TEXT, $collumn_duration TEXT)"
         db?.execSQL(createTableQuery)
     }
 
@@ -40,7 +39,6 @@ class RegistrazioniAudioDB(context: Context) : SQLiteOpenHelper(context, DATABAS
             put(COLOUMN_filepath, registrazioniAudio.filepath)
             put(collumn_timestamp, registrazioniAudio.timestamp)
             put(collumn_duration, registrazioniAudio.duration)
-            put(collumn_ampsPath, registrazioniAudio.ampsPath)
         }
         db.insert(table_name, null, values)
         db.close()

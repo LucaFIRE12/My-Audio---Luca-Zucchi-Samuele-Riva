@@ -14,8 +14,7 @@ data class  RegistratoreAudio(       //tutto l'occorrente che server per l'esecu
     var nomefile: String,
     var filepath: String,
     var timestamp: Long,
-    var duration: String,
-    var ampsPath: String
+    var duration: String
 ){                                          // chiave primaria
     @PrimaryKey1(autoGenerate = true)
     var id = 0
