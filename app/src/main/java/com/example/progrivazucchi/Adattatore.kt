@@ -97,7 +97,7 @@ class Adattatore(var registrazione : ArrayList<RegistrazioniAudio>, var listener
                                 //se la funzione editMode è attiva, checbox diventa visibile e l'item viene selezionato
             if(editMode){
                 holder.itemView.findViewById<CheckBox>(R.id.checkbox).visibility = View.VISIBLE
-                holder.itemView.findViewById<CheckBox>(R.id.checkbox).isChecked = record.isCheck
+                holder.itemView.findViewById<CheckBox>(R.id.checkbox).isChecked = true
             }else{
                 holder.itemView.findViewById<CheckBox>(R.id.checkbox).visibility = View.GONE
                 holder.itemView.findViewById<CheckBox>(R.id.checkbox).isChecked = false

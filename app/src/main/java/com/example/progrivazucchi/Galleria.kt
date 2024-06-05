@@ -28,7 +28,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     private lateinit var myAdapter : Adattatore
     private lateinit var ricerca_input : TextInputEditText
     private lateinit var toolbar : MaterialToolbar
-    private lateinit var database : RegistrazioneAudio
+    private lateinit var database : RegistrazioniAudioSQLiteHelper
     private lateinit var editBar: View
     private lateinit var btnChiuso: ImageButton
     private lateinit var btnSelezionaTutto: ImageButton
@@ -122,7 +122,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
                 val elimiare = records.filter { it.isCheck }.toTypedArray()
                 GlobalScope.launch {
-                    database.registrazioniaudio().cancella(elimiare)
+                    database.cancella(elimiare)     //database.cancella(elimiare)
                     runOnUiThread{
                         records.removeAll(elimiare.toList())
                         myAdapter.notifyDataSetChanged()
@@ -130,15 +130,13 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
                     }
                 }
             }
-            builder.setPositiveButton("No"){ _, _ ->        //questo non fa nulla
+            builder.setPositiveButton("No"){ _, _ ->
 
-            }
+            }        //questo non fa nulla
 
-            val dialog= builder.create()
+            val dialog = builder.create()
             dialog.show()
-
         }
-
         findViewById<ImageButton>(R.id.btnModifica).setOnClickListener{
             val builder = AlertDialog.Builder(this)
             val dialogView = layoutInflater.inflate(R.layout.rinomina_layout, null)
@@ -156,7 +154,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
                 }else{
                     record.nomefile = input // aggiorno il nomefile
                     GlobalScope.launch {
-                        database.registratoreAudioDao().aggiorna(record)
+                        database.aggiornaRegistrazione(record)
                         runOnUiThread{
                             myAdapter.notifyItemChanged(records.indexOf(record))
                             dialog.dismiss()
