@@ -20,6 +20,12 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
 
 
     }
+    fun searchDatabase(db: SQLiteDatabase?) {
+        val query = "SELECT * FROM $table_name"
+        val cursor = db?.rawQuery(query, null)
+    }
+
+
 
     override fun onCreate(db: SQLiteDatabase?) {
         val createTableQuery = "CREATE TABLE $table_name ($COLOUMN_name TEXT PRIMARY KEY, $COLOUMN_filepath TEXT, $collumn_timestamp TEXT, $collumn_duration TEXT)"

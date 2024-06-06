@@ -101,7 +101,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         btnSelezionaTutto.setOnClickListener {                                    //se viene premuto il pulsante seleziona tutto, seleziona tutti i record
 
             allChecked = !allChecked
-            records.map { it.isCheck = allChecked }
+            records.map { it.isChecked = allChecked }
             myAdapter.notifyDataSetChanged()
 
             if (allChecked){
@@ -115,14 +115,14 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         btnElimina.setOnClickListener {                                             //elimina i record selezionati
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Vuoi Eliminare i record selezionati?")
-            val nbRecords = records.count { it.isCheck }
+            val nbRecords = records.count { it.isChecked }
             builder.setMessage("Sei sicuro di voler eliminare $nbRecords record(s)?")
 
             builder.setPositiveButton("Si"){ _, _ ->            //scelte dell'utente
 
-                val elimiare = records.filter { it.isCheck }.toTypedArray()
+                val elimiare = records.filter { it.isChecked }.toTypedArray()
                 GlobalScope.launch {
-                    database.cancella(elimiare)     //database.cancella(elimiare)
+                    database.cancella(elimiare)
                     runOnUiThread{
                         records.removeAll(elimiare.toList())
                         myAdapter.notifyDataSetChanged()
@@ -142,7 +142,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             val dialogView = layoutInflater.inflate(R.layout.rinomina_layout, null)
             builder.setView(dialogView)
             val dialog = builder.create()
-            val record = records.filter{it.isCheck}.get(0)
+            val record = records.filter{it.isChecked}.get(0)
             // cerco nel dialogView un TextInputEditText con id inputNomeFile
             val textInput = dialogView.findViewById<TextInputEditText>(R.id.inputNomeFile)
             textInput.setText(record.nomefile)
@@ -179,7 +179,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         //chiamati sia hidden che collapsed per far sparire il bottom sheet del tutto
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        records.map { it.isCheck = false }
+        records.map { it.isChecked = false }
         myAdapter.setEditMode(false)
     }
                                 //funzioni per rendere visibili o meno i pulsanti modifica
@@ -214,7 +214,8 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     private fun searchDatabase(query: String) {             //funzione per la query di ricerca, dove trova tutti i nomi simili a ciò che abbiamo messo
         GlobalScope.launch {
             records.clear();
-            var queryResult = database.registratoreAudioDao().searchDatabase("%$query%")
+            var queryResult = database.searchDatabase(query)
+
             records.addAll(queryResult)
             runOnUiThread{
                 myAdapter.notifyDataSetChanged()
@@ -226,7 +227,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     private fun fetchAll(){
         GlobalScope.launch {
             records.clear();
-            var queryResult = database.registratoreAudioDao().prendiTutto()
+            var queryResult = database.prendiTutto()
             records.addAll(queryResult)
             myAdapter.notifyDataSetChanged()
         }
@@ -238,10 +239,10 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         var audioRecord = records[position]
 
         if (myAdapter.isEditMode()){
-            records[position].isCheck = !records[position].isCheck
+            records[position].isChecked = !records[position].isChecked
             myAdapter.notifyItemChanged(position)
 
-            var selected = records.count { it.isCheck }
+            var selected = records.count { it.isChecked }
             when(selected){
                 0 -> {
                     disabilitaModifica()
@@ -270,7 +271,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     // Toast "Click lungo"
     override fun onItemLongClickListener(position: Int) {
         myAdapter.setEditMode(true)
-        records[position].isCheck = !records[position].isCheck
+        records[position].isChecked = !records[position].isChecked
         myAdapter.notifyItemChanged(position)
 
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED      //viene avviato il bottom sheet

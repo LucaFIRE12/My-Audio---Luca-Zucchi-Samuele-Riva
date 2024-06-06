@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
     private var duration = ""
 
     private lateinit var tempo: Tempo
-                        //SE IL SERVER NON VA BENE, sostituire registrazioniaudiodb con appdatabase
+
 
     private lateinit var db: RegistrazioniAudioSQLiteHelper
 
