@@ -1,6 +1,7 @@
 package com.example.progrivazucchi
 
 import android.content.Intent
+import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -87,6 +88,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {             //query di ricerca
                 var query = s.toString()
                 searchDatabase(query)
+
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -120,11 +122,11 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
             builder.setPositiveButton("Si"){ _, _ ->            //scelte dell'utente
 
-                val elimiare = records.filter { it.isChecked }.toTypedArray()
+                val eliminare = records.filter { it.isChecked }.toTypedArray()
                 GlobalScope.launch {
-                    database.cancella(elimiare)
+                    database.cancella(eliminare)
                     runOnUiThread{
-                        records.removeAll(elimiare.toList())
+                        records.removeAll(eliminare.toList())
                         myAdapter.notifyDataSetChanged()
                         esciEditMode()
                     }
@@ -211,7 +213,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
 
 
-    private fun searchDatabase(query: String) {             //funzione per la query di ricerca, dove trova tutti i nomi simili a ciò che abbiamo messo
+    private fun searchDatabase(query: SQLiteDatabase?) {             //funzione per la query di ricerca, dove trova tutti i nomi simili a ciò che abbiamo messo
         GlobalScope.launch {
             records.clear();
             var queryResult = database.searchDatabase(query)

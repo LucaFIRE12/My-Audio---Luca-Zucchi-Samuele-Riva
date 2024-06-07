@@ -1,9 +1,11 @@
 package com.example.progrivazucchi
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+
 
 class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -59,11 +61,13 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
             put(collumn_duration, registrazioniAudio.duration)
         }
     }
+    @SuppressLint("Range")
     fun prendiTutto(): List<RegistrazioniAudio> {
         val db = readableDatabase
         val cursor = db.query(table_name, null, null, null, null, null, null)
         val registrazioniAudioList = mutableListOf<RegistrazioniAudio>()
         while (cursor.moveToNext()) {
+
             val nomefile = cursor.getString(cursor.getColumnIndex(COLOUMN_name))
             val filepath = cursor.getString(cursor.getColumnIndex(COLOUMN_filepath))
             val timestamp = cursor.getLong(cursor.getColumnIndex(collumn_timestamp))
@@ -75,11 +79,15 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
         return registrazioniAudioList
     }
 
+
+
     fun cancella(registrazioniAudio: RegistrazioniAudio){
         val db = writableDatabase
         db.delete(table_name, "$COLOUMN_name = ?", arrayOf(registrazioniAudio.nomefile))
         db.close()
     }
+
+
 
 
 }
