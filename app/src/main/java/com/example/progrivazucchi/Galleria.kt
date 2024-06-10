@@ -1,7 +1,6 @@
 package com.example.progrivazucchi
 
 import android.content.Intent
-import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -68,6 +67,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         records = ArrayList()
         myAdapter = Adattatore(records, this)
 
+
         // la recyclerView necessita di due informazioni: 1)un adattatore per sapere come deve
         // apparire, come deve comportarsi, quali dati mostrare e di 2)un layoutManager che gli dica
         // come posizionare gli items e riciclare quelli che non sono sullo schermo
@@ -85,7 +85,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
             }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {             //query di ricerca
+            override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {             //query di ricerca
                 var query = s.toString()
                 searchDatabase(query)
 
@@ -213,11 +213,10 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
 
 
-    private fun searchDatabase(query: SQLiteDatabase?) {             //funzione per la query di ricerca, dove trova tutti i nomi simili a ciò che abbiamo messo
+    private fun searchDatabase(query: String) {             //funzione per la query di ricerca, dove trova tutti i nomi simili a ciò che abbiamo messo
         GlobalScope.launch {
             records.clear();
-            var queryResult = database.searchDatabase(query)
-
+            var queryResult = database.searchDatabase(query)     //"SELECT * FROM ${RegistrazioniAudioSQLiteHelper.table_name} WHERE nomefile LIKE '%$query%'"
             records.addAll(queryResult)
             runOnUiThread{
                 myAdapter.notifyDataSetChanged()

@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.database.Cursor
 
 
 class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -12,7 +13,7 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
     companion object{
         private const val DATABASE_NAME = "registrazioneAudio.db"
         private const val DATABASE_VERSION = 1
-        private const val table_name = "registrazioni_salvate"
+        const val table_name = "registrazioni_salvate"
         private const val COLOUMN_name = "nomefile"
         private const val COLOUMN_filepath = "filepath"
         private const val collumn_timestamp = "timestamp"
@@ -22,10 +23,13 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
 
 
     }
-    fun searchDatabase(db: SQLiteDatabase?) {
+    fun searchDatabase(query: String): Cursor {
+        val db = this.readableDatabase
         val query = "SELECT * FROM $table_name"
-        val cursor = db?.rawQuery(query, null)
+        val cursor = db.rawQuery(query, null)
+        return cursor
     }
+
 
 
 
@@ -81,9 +85,9 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
 
 
 
-    fun cancella(registrazioniAudio: RegistrazioniAudio){
+    fun cancella(registrazioniAudio: Array<RegistrazioniAudio>){
         val db = writableDatabase
-        db.delete(table_name, "$COLOUMN_name = ?", arrayOf(registrazioniAudio.nomefile))
+        db.delete(table_name, "$COLOUMN_name = ?", arrayOf(arrayOf(registrazioniAudio).toString()))
         db.close()
     }
 
