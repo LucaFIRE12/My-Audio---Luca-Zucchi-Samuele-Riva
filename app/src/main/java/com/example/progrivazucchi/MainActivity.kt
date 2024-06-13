@@ -30,6 +30,7 @@ import java.util.Date
 
 // RIGHE 40, 67 E 179
 const val REQUEST_CODE =200
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
     // SE TOLGO LATEINIT E LO PONGO = arrayListOf()
@@ -61,9 +62,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
     private lateinit var vibrazione: Vibrator
 
-    // riferimento al LinearLayout di bottom_sheet.xml
-    // SE TOLGO LATEINIT L'APP NON CRASHA AL SALVATAGGIO
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -156,29 +155,28 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
 
 
-    private lateinit var btnModifica: ImageButton
-    private lateinit var btnElimina: ImageButton
+
     private fun salvataggio(){
         //rinominazione di un file
 
         // creazione nuovo nome
         val nuovoNomeFile = findViewById<TextView>(R.id.inputNomeFile).text.toString()
         if(nuovoNomeFile != nomeFile){
-            var nuovoFile = File("$dirPath$nuovoNomeFile.mp3") // creazione nuovo file
+            val nuovoFile = File("$dirPath$nuovoNomeFile.mp3") // creazione nuovo file
             File("$dirPath$nomeFile.mp3").renameTo(nuovoFile) //rinominazione
         }
 
-        var filePath = "$dirPath$nuovoNomeFile.mp3"     //salvataggio del db
-        var timestamp = Date().time
-        var ampsPath = "$dirPath$nuovoNomeFile"
+        val filePath = "$dirPath$nuovoNomeFile.mp3"     //salvataggio del db
+        val timestamp = Date().time
+        val ampsPath = "$dirPath$nuovoNomeFile"
 
 
         try {                                                 //!!MOLTO PROBABILMENTE DENTRO QUSTO TRY C'è QUALCHE VALORE CHE NON VIENE PASSATO NELLA MANIERA CORRETTA!!
-            var fos = FileOutputStream(ampsPath)
-            var out = ObjectOutputStream(fos) //salva la forma d'onda del file
+            val fos = FileOutputStream(ampsPath)
+            val out = ObjectOutputStream(fos) //salva la forma d'onda del file
             fos.close()
             out.close()
-        }catch (e :IOException){}
+        }catch (_:IOException){}
 
         db = RegistrazioniAudioSQLiteHelper(this)
         db.inserisciRegistrazione(RegistrazioniAudio(nomeFile,filePath,timestamp,duration))
@@ -252,9 +250,9 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         recorder = MediaRecorder()
         dirPath = "${externalCacheDir?.absolutePath}/"          //!!RIVEDERE IL PERCORSO DEI FILE!!
 
-        var simpleDateFormat = SimpleDateFormat("dd.mm.yyyy_hh.mm.ss") // costruzione formato di una data relativa
+        val simpleDateFormat = SimpleDateFormat("dd.mm.yyyy_hh.mm.ss") // costruzione formato di una data relativa
         // a un salvataggio
-        var date = simpleDateFormat.format(Date())
+        val date = simpleDateFormat.format(Date())
 
 
         nomeFile = "audio_record-$date"
@@ -270,7 +268,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
             try {
                 prepare()
 
-            }catch (e: IOException){}
+            }catch (_: IOException){}
 
             start()
         }

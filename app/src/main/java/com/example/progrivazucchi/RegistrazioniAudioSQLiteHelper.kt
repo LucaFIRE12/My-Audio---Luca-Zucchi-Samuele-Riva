@@ -23,7 +23,7 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
 
 
     }
-    fun searchDatabase(query: String): Cursor {
+    fun searchDatabase(query: String): Cursor? {
         val db = this.readableDatabase
         val query = "SELECT * FROM $table_name"
         val cursor = db.rawQuery(query, null)

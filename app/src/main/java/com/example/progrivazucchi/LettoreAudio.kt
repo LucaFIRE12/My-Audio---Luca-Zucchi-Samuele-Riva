@@ -1,5 +1,6 @@
 package com.example.progrivazucchi
 
+import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.media.PlaybackParams
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +14,6 @@ import android.widget.TextView
 import android.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.chip.Chip
-import kotlinx.coroutines.delay
 
 class LettoreAudio : AppCompatActivity() {
     private lateinit var mediaPlayer: MediaPlayer
@@ -34,11 +34,12 @@ class LettoreAudio : AppCompatActivity() {
     private var jumpValue = 1000
     private var playVelocitaIndietro = 1.0f
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lettore_audio_)
-        var filepath = intent.getStringExtra("filepath")
-        var nomefile = intent.getStringExtra("nomefile")
+        val filepath = intent.getStringExtra("filepath")
+        val nomefile = intent.getStringExtra("nomefile")
 
         toolbar = findViewById(R.id.toolbar)
         mostraNomeFile = findViewById(R.id.mostraNomeFile)
@@ -120,7 +121,7 @@ class LettoreAudio : AppCompatActivity() {
             }
 
             mediaPlayer.playbackParams = PlaybackParams().setSpeed(playVelocitaIndietro)
-            chip.text = "x ${playVelocitaIndietro}"
+            chip.text = "x $playVelocitaIndietro"
         }
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{

@@ -1,6 +1,7 @@
 package com.example.progrivazucchi
 
 import android.content.Intent
+import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -13,8 +14,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.textfield.TextInputEditText
@@ -23,6 +22,7 @@ import kotlinx.coroutines.launch
 
 
 
+@Suppress("DEPRECATION")
 class Galleria : AppCompatActivity(), OnItemClickListener {
     private lateinit var records : ArrayList<RegistrazioniAudio>
     private lateinit var myAdapter : Adattatore
@@ -72,10 +72,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         // apparire, come deve comportarsi, quali dati mostrare e di 2)un layoutManager che gli dica
         // come posizionare gli items e riciclare quelli che non sono sullo schermo
 
-        findViewById<RecyclerView>(R.id.recyclerview).apply {
-            var adapter = myAdapter
-            var LayoutManager = LinearLayoutManager(context)
-        }
+
 
         fetchAll()
 
@@ -86,7 +83,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             }
 
             override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {             //query di ricerca
-                var query = s.toString()
+                val query = s.toString()
                 searchDatabase(query)
 
             }
@@ -126,7 +123,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
                 GlobalScope.launch {
                     database.cancella(eliminare)
                     runOnUiThread{
-                        records.removeAll(eliminare.toList())
+                        records.removeAll(eliminare.toList().toSet())
                         myAdapter.notifyDataSetChanged()
                         esciEditMode()
                     }
@@ -144,7 +141,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             val dialogView = layoutInflater.inflate(R.layout.rinomina_layout, null)
             builder.setView(dialogView)
             val dialog = builder.create()
-            val record = records.filter{it.isChecked}.get(0)
+            val record = records.filter{it.isChecked}[0]
             // cerco nel dialogView un TextInputEditText con id inputNomeFile
             val textInput = dialogView.findViewById<TextInputEditText>(R.id.inputNomeFile)
             textInput.setText(record.nomefile)
@@ -211,12 +208,12 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
     }
 
-
-
+    // COM'ERA PRIMA
+    /*
     private fun searchDatabase(query: String) {             //funzione per la query di ricerca, dove trova tutti i nomi simili a ciò che abbiamo messo
         GlobalScope.launch {
-            records.clear();
-            var queryResult = database.searchDatabase(query)     //"SELECT * FROM ${RegistrazioniAudioSQLiteHelper.table_name} WHERE nomefile LIKE '%$query%'"
+            records.clear()
+            val queryResult = database.searchDatabase(query)     //"SELECT * FROM ${RegistrazioniAudioSQLiteHelper.table_name} WHERE nomefile LIKE '%$query%'"
             records.addAll(queryResult)
             runOnUiThread{
                 myAdapter.notifyDataSetChanged()
@@ -224,11 +221,59 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         }
     }
 
+    */
+
+    // COM'è ORA
+
+    private fun searchDatabase(query: String): Collection<RegistrazioniAudio> {
+        if (query.isEmpty()) {
+            return listOf() // Return an empty list if the query is empty
+        }
+
+        // Perform the database query and get the Cursor
+        val cursor = database.searchDatabase(query)
+
+        // Convert the Cursor to a Collection<RegistrazioniAudio>
+        val queryResult = cursorToRegistrazioniAudio(cursor)
+
+        // Update the records list with the query results
+        GlobalScope.launch {
+            records.clear()
+            records.addAll(queryResult)
+
+            // Update the adapter on the main thread
+            runOnUiThread {
+                myAdapter.notifyDataSetChanged()
+            }
+        }
+
+        return queryResult
+    }
+
+    fun cursorToRegistrazioniAudio(cursor: Cursor?): List<RegistrazioniAudio> {
+        val result = mutableListOf<RegistrazioniAudio>()
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+
+                val nomefile = cursor.getString(cursor.getColumnIndexOrThrow("nomefile"))
+                val filepath = cursor.getString(cursor.getColumnIndexOrThrow("filepath"))
+                val timestamp = cursor.getLong(cursor.getColumnIndexOrThrow("timestamp"))
+                val duration = cursor.getString(cursor.getColumnIndexOrThrow("duration"))
+
+                val registrazione = RegistrazioniAudio(nomefile, filepath, timestamp, duration)
+                result.add(registrazione)
+            }
+            cursor.close()
+        }
+        return result
+    }
+
+
     //metodo che aggiorna il sistema dell'aggiornamento del db e inserimento della query
     private fun fetchAll(){
         GlobalScope.launch {
-            records.clear();
-            var queryResult = database.prendiTutto()
+            records.clear()
+            val queryResult = database.prendiTutto()
             records.addAll(queryResult)
             myAdapter.notifyDataSetChanged()
         }
@@ -237,13 +282,13 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     // Nel momento in cui si tiene premuto su un elemento, diventa visibile il
     // Toast "Click semplice"
     override fun onItemClickListener(position: Int) {               //permette di selezionare tramite check il record ed i record presenti
-        var audioRecord = records[position]
+        val audioRecord = records[position]
 
         if (myAdapter.isEditMode()){
             records[position].isChecked = !records[position].isChecked
             myAdapter.notifyItemChanged(position)
 
-            var selected = records.count { it.isChecked }
+            val selected = records.count { it.isChecked }
             when(selected){
                 0 -> {
                     disabilitaModifica()
@@ -259,7 +304,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
                 }
             }
         }else{
-            var intent  = Intent(this, LettoreAudio::class.java)
+            val intent  = Intent(this, LettoreAudio::class.java)
             intent.putExtra("filepath", audioRecord.filepath)
             intent.putExtra("nomefile", audioRecord.nomefile)
             startActivity(intent)

@@ -40,13 +40,13 @@ class Tempo(listener: OnTimerTickListener) {
     }
 
     //funzione che serve per mostrare il tempo effettivo sul display
-    fun formattaTempo():String{
+    private fun formattaTempo():String{
         val ms = durata % 1000
         val sec = (durata/1000) % 60
         val min = (durata/(1000*60)) % 60
-        var hrs = (durata/(1000*60*60))
+        val hrs = (durata/(1000*60*60))
 
-        var tempoFormattato = if(hrs>0)
+        val tempoFormattato = if(hrs>0)
             "%02d:%02d:%02d.%02d:".format(hrs, min, sec, ms) //%02 -> il risultato restituiscilo con 2 cifre
         else
             "%02d:%02d.%02d:".format(min, sec, ms)
