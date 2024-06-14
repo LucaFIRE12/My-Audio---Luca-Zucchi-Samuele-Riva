@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.sqlite.SQLiteDatabase
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Handler
@@ -66,6 +67,8 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        db = RegistrazioniAudioSQLiteHelper(this)           //avvio db
+        //SQLiteDatabase.openDatabase(RegistrazioniAudioSQLiteHelper.DATABASE_NAME, null, SQLiteDatabase.OPEN_READWRITE)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -150,6 +153,8 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
         findViewById<ImageButton>(R.id.btnCancella).isClickable = false // btnCancella non
         // cliccabile in questo momento
+
+
 
     }
 

@@ -14,6 +14,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.textfield.TextInputEditText
@@ -39,6 +41,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     private lateinit var btnElimina: ImageButton
     private lateinit var textModifica: TextView
     private lateinit var textElimina: TextView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +77,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
 
 
-        fetchAll()
+        //fetchAll()                <-- questa funzione non si capisce che fa ma sopratutto se integrata non si può accedere all'elenco
 
         ricerca_input = findViewById(R.id.ricerca_input)                //barra di ricerca
         ricerca_input.addTextChangedListener(object : TextWatcher{
