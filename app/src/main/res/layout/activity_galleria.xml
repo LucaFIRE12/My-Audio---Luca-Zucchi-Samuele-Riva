@@ -23,25 +23,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 app:title="Registrazioni" />
+
             <RelativeLayout
                 android:id="@+id/editBar"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingEnd="16dp"
+                android:padding="8dp"
                 android:paddingStart="16dp"
-                android:padding="8dp">
+                android:paddingEnd="16dp"
+                android:visibility="gone">
+
                 <ImageButton
                     android:id="@+id/btnChiuso"
-                    android:background="@drawable/ic_chiuso"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <ImageButton
-                    android:id="@+id/btnSelezionaTutto"
-                    android:background="@drawable/ic_elenco"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"/>
+                    android:background="@drawable/ic_chiuso" />
+
+                <ImageButton
+                    android:id="@+id/btnSelezionaTutto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/ic_elenco" />
             </RelativeLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -64,64 +67,72 @@
                 android:textColorHint="@color/grayDark" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
-            
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
+        android:id="@+id/listaRegistrazioniRecycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/itemview" />
+
     <LinearLayout
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        app:behavior_hideable="true"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:padding="16dp"
+        android:background="@color/white"
         android:elevation="8dp"
-        android:background="@color/white">
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_marginEnd="90dp"
             android:gravity="center"
-            android:layout_marginEnd="90dp">
+            android:orientation="vertical">
+
             <ImageButton
                 android:id="@+id/btnElimina"
-                android:clickable="false"
-                android:contentDescription="NULL"
-                android:backgroundTint="@color/BackGroundOpaco"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_elimina"/>
+                android:background="@drawable/ic_elimina"
+                android:backgroundTint="@color/BackGroundOpaco"
+                android:clickable="false"
+                android:contentDescription="NULL" />
+
             <TextView
                 android:id="@+id/textElimina"
                 android:layout_width="wrap_content"
-                android:textColor="@color/BackGroundOpaco"
                 android:layout_height="wrap_content"
-                android:text="Cancella"/>
+                android:text="Cancella"
+                android:textColor="@color/BackGroundOpaco" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
+
             <ImageButton
                 android:id="@+id/btnModifica"
-                android:backgroundTint="@color/BackGroundOpaco"
-                android:contentDescription="NULL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_modifica"/>
+                android:background="@drawable/ic_modifica"
+                android:backgroundTint="@color/BackGroundOpaco"
+                android:contentDescription="NULL" />
+
             <TextView
                 android:id="@+id/textModifica"
-                android:textColor="@color/BackGroundOpaco"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Modifica"/>
+                android:text="Modifica"
+                android:textColor="@color/BackGroundOpaco" />
         </LinearLayout>
     </LinearLayout>
 

@@ -13,6 +13,7 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.chip.Chip
 
 class LettoreAudio : AppCompatActivity() {
@@ -22,7 +23,7 @@ class LettoreAudio : AppCompatActivity() {
     private lateinit var btnAvantiSec: ImageButton
     private lateinit var chip: Chip
     private lateinit var seekBar: SeekBar
-    private lateinit var toolbar: Toolbar
+    private lateinit var toolbar: MaterialToolbar
     private lateinit var mostraNomeFile: TextView
     private lateinit var progresso: TextView
     private lateinit var durata: TextView
@@ -95,13 +96,13 @@ class LettoreAudio : AppCompatActivity() {
         }
 
         // premendo il bottone btnAvantiSec la registrazione del player si muove di 1 secondo
-        findViewById<Button>(R.id.btnAvantiSec).setOnClickListener {
+        findViewById<androidx.appcompat.widget.AppCompatImageButton>(R.id.btnAvantiSec).setOnClickListener {
             mediaPlayer.seekTo(mediaPlayer.currentPosition + jumpValue)
             seekBar.progress += jumpValue
 
         }
 
-        findViewById<Button>(R.id.btnIndietroSec).setOnClickListener {
+        findViewById<androidx.appcompat.widget.AppCompatImageButton>(R.id.btnIndietroSec).setOnClickListener {
             mediaPlayer.seekTo(mediaPlayer.currentPosition - jumpValue)
             seekBar.progress -= jumpValue
         }
@@ -143,7 +144,7 @@ class LettoreAudio : AppCompatActivity() {
     }
 
     private fun playPausePlayer(){              //funzione per far partire il player
-        if(mediaPlayer.isPlaying){
+        if(!mediaPlayer.isPlaying){
             mediaPlayer.start() // avvio
             btnPlay.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_pause_circle, theme)
             handler.postDelayed(runnable, ritardo)
@@ -157,7 +158,7 @@ class LettoreAudio : AppCompatActivity() {
 
     override fun onBackPressed() {          //mostra il bottone poer tornare indietro dalla riproduzione all'elenco delle registrazioni
         super.onBackPressed()
-        mediaPlayer.stop()
+        //mediaPlayer.stop()
         mediaPlayer.release()
         handler.removeCallbacks(runnable)
 

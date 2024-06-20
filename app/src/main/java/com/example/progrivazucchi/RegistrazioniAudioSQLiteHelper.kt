@@ -15,27 +15,25 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
         private const val DATABASE_NAME = "registrazioneAudio.db"
         private const val DATABASE_VERSION = 1
         const val table_name = "registrazioni_salvate"
-        private const val COLOUMN_name = "nomefile"
-        private const val COLOUMN_filepath = "filepath"
-        private const val collumn_timestamp = "timestamp"
-        private const val collumn_duration = "duration"
-
-
-
+        private const val column_name = "nomefile"
+        private const val column_filepath = "filepath"
+        private const val column_timestamp = "timestamp"
+        private const val column_duration = "duration"
 
     }
-    fun searchDatabase(query: String): Cursor? {
+    fun searchDatabase(criterium: String): Cursor? {
         val db = this.readableDatabase
-        val query = "SELECT * FROM $table_name"
+        var query = "SELECT * FROM $table_name "
+        if (!query.isEmpty()){
+            query += "WHERE $column_name LIKE '%$criterium%'"
+        }
         val cursor = db.rawQuery(query, null)
+        cursor.moveToFirst()
         return cursor
     }
 
-
-
-
     override fun onCreate(db: SQLiteDatabase?) {
-        val createTableQuery = "CREATE TABLE $table_name ($COLOUMN_name TEXT PRIMARY KEY, $COLOUMN_filepath TEXT, $collumn_timestamp TEXT, $collumn_duration TEXT)"
+        val createTableQuery = "CREATE TABLE $table_name ($column_name TEXT PRIMARY KEY, $column_filepath TEXT, $column_timestamp TEXT, $column_duration TEXT)"
         db?.execSQL(createTableQuery)
     }
 
@@ -48,51 +46,53 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
     fun inserisciRegistrazione(registrazioniAudio: RegistrazioniAudio){
         val db = writableDatabase
         val values = ContentValues().apply {
-            put(COLOUMN_name, registrazioniAudio.nomefile)
-            put(COLOUMN_filepath, registrazioniAudio.filepath)
-            put(collumn_timestamp, registrazioniAudio.timestamp)
-            put(collumn_duration, registrazioniAudio.duration)
+            put(column_name, registrazioniAudio.nomefile)
+            put(column_filepath, registrazioniAudio.filepath)
+            put(column_timestamp, registrazioniAudio.timestamp)
+            put(column_duration, registrazioniAudio.duration)
         }
-        db.insert(table_name, null, values)
+        db.insertOrThrow(table_name, null, values)
         db.close()
     }
 
     fun aggiornaRegistrazione(registrazioniAudio: RegistrazioniAudio){
         val db = writableDatabase
         val values = ContentValues().apply {
-            put(COLOUMN_name, registrazioniAudio.nomefile)
-            put(COLOUMN_filepath, registrazioniAudio.filepath)
-            put(collumn_timestamp, registrazioniAudio.timestamp)
-            put(collumn_duration, registrazioniAudio.duration)
+            put(column_name, registrazioniAudio.nomefile)
+            put(column_filepath, registrazioniAudio.filepath)
+            put(column_timestamp, registrazioniAudio.timestamp)
+            put(column_duration, registrazioniAudio.duration)
         }
+        db.update(table_name, values, "$column_name = ?", arrayOf(registrazioniAudio.nomefile))
+        db.close()
     }
-    @SuppressLint("Range")
     fun prendiTutto(): List<RegistrazioniAudio> {
         val db = readableDatabase
         val cursor = db.query(table_name, null, null, null, null, null, null)
         val registrazioniAudioList = mutableListOf<RegistrazioniAudio>()
-        while (cursor.moveToNext()) {
+        cursor.moveToFirst()
+        if(cursor.count != 0)
+        do{
+            // posso tradurre le colonne del cursore con il nome della colonna
+            // cursor.get... prende il nome della colonna e restituisce il relativo indice
 
-            val nomefile = cursor.getString(cursor.getColumnIndex(COLOUMN_name))
-            val filepath = cursor.getString(cursor.getColumnIndex(COLOUMN_filepath))
-            val timestamp = cursor.getLong(cursor.getColumnIndex(collumn_timestamp))
-            val duration = cursor.getString(cursor.getColumnIndex(collumn_duration))
+            // sapendo già come è strutturato il cursor è più sensato utilizzare
+            // gli indici interi diretti anzichè utilizzare getColumn.. e sopprimere
+            // l'errore relativo al -1
+            val nomefile = cursor.getString(0)//cursor.getColumnIndex(column_name)
+            val filepath = cursor.getString(1)//cursor.getColumnIndex(column_filepath)
+            val timestamp = cursor.getLong(2)//cursor.getColumnIndex(column_timestamp)
+            val duration = cursor.getString(3)//cursor.getColumnIndex(column_duration)
             registrazioniAudioList.add(RegistrazioniAudio(nomefile, filepath, timestamp, duration))
-        }
+        }while(cursor.moveToNext())
         cursor.close()
         db.close()
         return registrazioniAudioList
     }
 
-
-
     fun cancella(registrazioniAudio: Array<RegistrazioniAudio>){
         val db = writableDatabase
-        db.delete(table_name, "$COLOUMN_name = ?", arrayOf(arrayOf(registrazioniAudio).toString()))
+        db.delete(table_name, "$column_name = ?", arrayOf(arrayOf(registrazioniAudio).toString()))
         db.close()
     }
-
-
-
-
 }

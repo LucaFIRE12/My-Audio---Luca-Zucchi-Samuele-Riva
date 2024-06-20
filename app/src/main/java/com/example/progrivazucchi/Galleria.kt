@@ -2,7 +2,6 @@ package com.example.progrivazucchi
 
 import android.content.Intent
 import android.database.Cursor
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,10 +23,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-
 @Suppress("DEPRECATION")
 class Galleria : AppCompatActivity(), OnItemClickListener {
-    private lateinit var records : ArrayList<RegistrazioniAudio>
+    private lateinit var records : List<RegistrazioniAudio>
     private lateinit var myAdapter : Adattatore
     private lateinit var ricerca_input : TextInputEditText
     private lateinit var toolbar : MaterialToolbar
@@ -46,7 +45,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_galleria)
-
+        database = RegistrazioniAudioSQLiteHelper(this)
         toolbar = findViewById(R.id.toolbar)                //funzioni per chiamare la toolbar
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -54,6 +53,24 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
+        ricerca_input = findViewById<TextInputEditText>(R.id.ricerca_input)
+        ricerca_input.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    mostraElencoRegistrazioni(s.toString())
+9                }
+
+                override fun afterTextChanged(s: Editable?) {
+
+                }
+            })
 
         btnModifica = findViewById(R.id.btnModifica)
         btnElimina = findViewById(R.id.btnElimina)
@@ -79,23 +96,6 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
         //fetchAll()                <-- questa funzione non si capisce che fa ma sopratutto se integrata non si può accedere all'elenco
 
-        ricerca_input = findViewById(R.id.ricerca_input)                //barra di ricerca
-        ricerca_input.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {             //query di ricerca
-                val query = s.toString()
-                searchDatabase(query)
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-
-        })
         btnChiuso.setOnClickListener {                                            //se viene premuto il pulsante chiuso, ripristina la lista
             esciEditMode()
         }
@@ -126,7 +126,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
                 GlobalScope.launch {
                     database.cancella(eliminare)
                     runOnUiThread{
-                        records.removeAll(eliminare.toList().toSet())
+                        (records as ArrayList<RegistrazioniAudio>).removeAll(eliminare.toList().toSet())
                         myAdapter.notifyDataSetChanged()
                         esciEditMode()
                     }
@@ -172,6 +172,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
             dialog.show()
         }
+        mostraElencoRegistrazioni("")
     }
 
     private fun esciEditMode(){             //disabilita la funzione di modifica e ripristina la toolbar
@@ -227,30 +228,17 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     */
 
     // COM'è ORA
-
-    private fun searchDatabase(query: String): Collection<RegistrazioniAudio> {
-        if (query.isEmpty()) {
-            return listOf() // Return an empty list if the query is empty
-        }
-
-        // Perform the database query and get the Cursor
-        val cursor = database.searchDatabase(query)
-
-        // Convert the Cursor to a Collection<RegistrazioniAudio>
-        val queryResult = cursorToRegistrazioniAudio(cursor)
-
-        // Update the records list with the query results
-        GlobalScope.launch {
-            records.clear()
-            records.addAll(queryResult)
-
-            // Update the adapter on the main thread
-            runOnUiThread {
-                myAdapter.notifyDataSetChanged()
-            }
-        }
-
-        return queryResult
+    fun mostraElencoRegistrazioni(datoRicerca : String)
+    {
+        val recyclerView = findViewById<RecyclerView>(R.id.listaRegistrazioniRecycler)
+        recyclerView.layoutManager = (LinearLayoutManager(this))
+        recyclerView.setHasFixedSize(true)
+        val cursor = database.searchDatabase(datoRicerca)
+        val listaRegistrazioni = cursorToRegistrazioniAudio(cursor)
+        records = listaRegistrazioni
+        val adapter = Adattatore(listaRegistrazioni,this)
+        recyclerView.adapter=adapter
+        adapter.notifyDataSetChanged()
     }
 
     fun cursorToRegistrazioniAudio(cursor: Cursor?): List<RegistrazioniAudio> {
@@ -269,17 +257,6 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             cursor.close()
         }
         return result
-    }
-
-
-    //metodo che aggiorna il sistema dell'aggiornamento del db e inserimento della query
-    private fun fetchAll(){
-        GlobalScope.launch {
-            records.clear()
-            val queryResult = database.prendiTutto()
-            records.addAll(queryResult)
-            myAdapter.notifyDataSetChanged()
-        }
     }
 
     // Nel momento in cui si tiene premuto su un elemento, diventa visibile il
