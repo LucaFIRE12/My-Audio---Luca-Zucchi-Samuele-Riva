@@ -94,15 +94,19 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="90dp"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <ImageButton
+                android:minWidth="36dp"
+                android:minHeight="36dp"
                 android:id="@+id/btnElimina"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_elimina"
                 android:backgroundTint="@color/BackGroundOpaco"
                 android:clickable="false"
+
                 android:contentDescription="NULL" />
 
             <TextView
@@ -117,15 +121,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <ImageButton
+                android:minWidth="36dp"
+                android:minHeight="36dp"
                 android:id="@+id/btnModifica"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_modifica"
                 android:backgroundTint="@color/BackGroundOpaco"
-                android:contentDescription="NULL" />
+                android:contentDescription="NULL"/>
 
             <TextView
                 android:id="@+id/textModifica"

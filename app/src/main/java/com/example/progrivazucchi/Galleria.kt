@@ -176,12 +176,12 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     }
 
     private fun esciEditMode(){             //disabilita la funzione di modifica e ripristina la toolbar
-        supportActionBar?.setDisplayShowTitleEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         editBar.visibility = View.GONE
         //chiamati sia hidden che collapsed per far sparire il bottom sheet del tutto
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        //bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         records.map { it.isChecked = false }
         myAdapter.setEditMode(false)
     }

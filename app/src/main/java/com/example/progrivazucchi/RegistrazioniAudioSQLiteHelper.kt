@@ -92,7 +92,10 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
 
     fun cancella(registrazioniAudio: Array<RegistrazioniAudio>){
         val db = writableDatabase
-        db.delete(table_name, "$column_name = ?", arrayOf(arrayOf(registrazioniAudio).toString()))
+        for (registrazioniAudio in registrazioniAudio){
+            db.delete(table_name, "$column_name = ?", arrayOf(registrazioniAudio.nomefile))
+        }
+        //db.delete(table_name, "$column_name = ?", arrayOf(arrayOf(registrazioniAudio).toString()))
         db.close()
     }
 }
