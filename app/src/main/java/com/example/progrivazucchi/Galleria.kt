@@ -127,8 +127,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
                     runOnUiThread{
                         (records as ArrayList<RegistrazioniAudio>).removeAll(eliminare.toList().toSet())
                         myAdapter.notifyDataSetChanged()
-                        mostraElencoRegistrazioni("")
-
+                        mostraElencoRegistrazioni("")       //quando viene terminata l'eliminazione aggiorna la lista
                         esciEditMode()
                     }
                 }
@@ -155,16 +154,20 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
                 if(input.isEmpty()){
                     Toast.makeText(this, "Il nome non può essere vuoto", Toast.LENGTH_LONG).show()
                 }else{
-                    record.nomefile = input // aggiorno il nomefile
                     GlobalScope.launch {
-                        database.aggiornaRegistrazione(record)
+                        database.aggiornaRegistrazione(record, input)
                         runOnUiThread{
                             myAdapter.notifyItemChanged(records.indexOf(record))
+                            myAdapter.notifyDataSetChanged()
+                            mostraElencoRegistrazioni("")
                             dialog.dismiss()
                             esciEditMode()
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
                         }
                     }
                 }
+
             }
 
             dialogView.findViewById<Button>(R.id.btnAnnulla).setOnClickListener{

@@ -55,16 +55,17 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
         db.close()
     }
 
-    fun aggiornaRegistrazione(registrazioniAudio: RegistrazioniAudio){
+    fun aggiornaRegistrazione(registrazioniAudio: RegistrazioniAudio, nomefile: String){
         val db = writableDatabase
+
         val values = ContentValues().apply {
-            put(column_name, registrazioniAudio.nomefile)
+            put(column_name, nomefile)
             put(column_filepath, registrazioniAudio.filepath)
             put(column_timestamp, registrazioniAudio.timestamp)
             put(column_duration, registrazioniAudio.duration)
         }
         db.update(table_name, values, "$column_name = ?", arrayOf(registrazioniAudio.nomefile))
-        db.close()
+        //db.close()
     }
     fun prendiTutto(): List<RegistrazioniAudio> {
         val db = readableDatabase
