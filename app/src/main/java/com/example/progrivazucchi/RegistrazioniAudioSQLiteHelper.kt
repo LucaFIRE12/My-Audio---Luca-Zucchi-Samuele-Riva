@@ -95,7 +95,8 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
         for (registrazioniAudio in registrazioniAudio){
             db.delete(table_name, "$column_name = ?", arrayOf(registrazioniAudio.nomefile))
         }
+
         //db.delete(table_name, "$column_name = ?", arrayOf(arrayOf(registrazioniAudio).toString()))
-        db.close()
+        //db.close()
     }
 }

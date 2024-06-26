@@ -120,14 +120,14 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             val nbRecords = records.count { it.isChecked }
             builder.setMessage("Sei sicuro di voler eliminare $nbRecords record(s)?")
 
-            builder.setPositiveButton("Si"){ _, _ ->            //scelte dell'utente
-
+            builder.setNegativeButton("Si"){ _, _ ->            //scelte dell'utente
                 val eliminare = records.filter { it.isChecked }.toTypedArray()
                 GlobalScope.launch {
                     database.cancella(eliminare)
                     runOnUiThread{
                         (records as ArrayList<RegistrazioniAudio>).removeAll(eliminare.toList().toSet())
                         myAdapter.notifyDataSetChanged()
+
                         esciEditMode()
                     }
                 }
@@ -184,6 +184,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         //bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         records.map { it.isChecked = false }
         myAdapter.setEditMode(false)
+        myAdapter.notifyDataSetChanged()
     }
                                 //funzioni per rendere visibili o meno i pulsanti modifica
     private fun disabilitaModifica(){
@@ -200,13 +201,13 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     }
 
     private fun abilitaModifica(){
-        btnModifica.isClickable = false
+        btnModifica.isClickable = true
         btnModifica.backgroundTintList = ResourcesCompat.getColorStateList(resources, R.color.BackGroundOpaco, theme)
         textModifica.setTextColor(ResourcesCompat.getColor(resources, R.color.BackGroundOpaco, theme))
 
     }
     private fun abilitaElimina(){
-        btnElimina.isClickable = false
+        btnElimina.isClickable = true
         btnElimina.backgroundTintList = ResourcesCompat.getColorStateList(resources, R.color.BackGroundOpaco, theme)
         textElimina.setTextColor(ResourcesCompat.getColor(resources, R.color.BackGroundOpaco, theme))
 
@@ -231,7 +232,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     fun mostraElencoRegistrazioni(datoRicerca : String)
     {
         val recyclerView = findViewById<RecyclerView>(R.id.listaRegistrazioniRecycler)
-        recyclerView.layoutManager = (LinearLayoutManager(this))
+        recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
         val cursor = database.searchDatabase(datoRicerca)
         val listaRegistrazioni = cursorToRegistrazioniAudio(cursor)
@@ -306,6 +307,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             supportActionBar?.setDisplayShowTitleEnabled(false)
             supportActionBar?.setDisplayShowTitleEnabled(false)
             editBar.visibility = View.VISIBLE
+
 
             abilitaModifica()
             abilitaElimina()
