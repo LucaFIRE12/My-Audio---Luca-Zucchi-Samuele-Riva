@@ -127,6 +127,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
                     runOnUiThread{
                         (records as ArrayList<RegistrazioniAudio>).removeAll(eliminare.toList().toSet())
                         myAdapter.notifyDataSetChanged()
+                        mostraElencoRegistrazioni("")
 
                         esciEditMode()
                     }
