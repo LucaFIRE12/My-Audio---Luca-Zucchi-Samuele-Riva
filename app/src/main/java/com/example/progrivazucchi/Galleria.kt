@@ -162,10 +162,15 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
                             mostraElencoRegistrazioni("")
                             dialog.dismiss()
                             esciEditMode()
-                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                            btnModifica.visibility = View.GONE
+                            btnElimina.visibility = View.GONE
+                            textModifica.visibility = View.GONE
+                            textElimina.visibility = View.GONE
+                            bottomSheet.visibility = View.GONE
                         }
                     }
+
                 }
 
             }
@@ -266,7 +271,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
     // Nel momento in cui si tiene premuto su un elemento, diventa visibile il
     // Toast "Click semplice"
-    override fun onItemClickListener(position: Int) {               //permette di selezionare tramite check il record ed i record presenti
+    override fun onItemLongClickListener(position: Int) {               //permette di selezionare tramite check il record ed i record presenti
         val audioRecord = records[position]
 
         if (myAdapter.isEditMode()){
@@ -300,7 +305,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
     // Nel momento in cui si tiene premuto su un elemento, diventa visibile il
     // Toast "Click lungo"
-    override fun onItemLongClickListener(position: Int) {
+    override fun onItemClickListener(position: Int) {
         myAdapter.setEditMode(true)
         records[position].isChecked = !records[position].isChecked
         myAdapter.notifyItemChanged(position)

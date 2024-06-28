@@ -21,7 +21,7 @@
         />
     
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -34,6 +34,7 @@
             android:contentDescription="NULL"
             android:textStyle="bold"
             android:text="gvg"
+
             />
         <TextView
             android:id="@+id/tvMeta"
@@ -51,8 +52,8 @@
         android:id="@+id/checkbox"
         android:layout_width="30dp"
         android:layout_height="20dp"
-        android:visibility="gone"
-        android:clickable="false"
+        android:visibility="visible"
+        android:clickable="true"
         />
 
 </LinearLayout>
