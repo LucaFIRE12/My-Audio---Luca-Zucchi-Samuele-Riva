@@ -37,14 +37,17 @@
                     android:id="@+id/btnChiuso"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_chiuso" />
+                    android:background="@drawable/iconax3"
+                    android:layout_marginTop="-4dp"
+                    android:layout_marginStart="-17dp"/>
 
                 <ImageButton
                     android:id="@+id/btnSelezionaTutto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:background="@drawable/ic_elenco" />
+                    android:background="@drawable/condivisione"
+                    android:layout_marginTop="12dp"/>
             </RelativeLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
