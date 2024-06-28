@@ -66,7 +66,7 @@ class LettoreAudio : AppCompatActivity() {
         mostraNomeFile.text = nomefile              //mostra il nome del file
 
 
-        durata.text = mediaPlayer.duration.toString()                   //converte il minutaggio in stringa da mostrare in textview
+        durata.text = formatTime(mediaPlayer.duration)                   //converte il minutaggio in stringa da mostrare in textview
 
         btnIndietroSec = findViewById(R.id.btnIndietroSec)
         btnAvantiSec = findViewById(R.id.btnAvantiSec)
@@ -77,7 +77,7 @@ class LettoreAudio : AppCompatActivity() {
         handler = Handler(Looper.getMainLooper())           //permette alla barra di scorrere in base allo stato di proseguimento del player
         runnable = Runnable {
             seekBar.progress = mediaPlayer.currentPosition
-            progresso.text = mediaPlayer.currentPosition.toString()         //converte il minutaggio in stringa da mostrare in textview
+            progresso.text = formatTime(mediaPlayer.currentPosition)         //converte il minutaggio in stringa da mostrare in textview
             handler.postDelayed(runnable, ritardo)                  //input lag simulato "necessario per evitare problemi coi processi"
         }
 
@@ -162,5 +162,18 @@ class LettoreAudio : AppCompatActivity() {
         mediaPlayer.release()
         handler.removeCallbacks(runnable)
 
+    }
+
+    fun formatTime(timeInMillis: Int): String {
+        val totalSeconds = timeInMillis / 1000
+        val seconds = totalSeconds % 60
+        val minutes = (totalSeconds / 60) % 60
+        val hours = totalSeconds / 3600
+
+        return if (hours > 0) {
+            String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        } else {
+            String.format("%02d:%02d", minutes, seconds)
+        }
     }
 }
