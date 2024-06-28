@@ -184,7 +184,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         }catch (_:IOException){}
 
         db = RegistrazioniAudioSQLiteHelper(this)
-        db.inserisciRegistrazione(RegistrazioniAudio(nomeFile,filePath,timestamp,duration))
+        db.inserisciRegistrazione(RegistrazioniAudio(nuovoNomeFile,filePath,timestamp,duration))
     }
 
     private fun rimozione(){
