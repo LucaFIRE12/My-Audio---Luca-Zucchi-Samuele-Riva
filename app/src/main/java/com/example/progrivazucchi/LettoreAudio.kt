@@ -92,6 +92,7 @@ class LettoreAudio : AppCompatActivity() {
         mediaPlayer.setOnCompletionListener {
             btnPlay.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_play_circle, theme)
             handler.removeCallbacks(runnable)
+            resetToolbar()
 
         }
 
@@ -141,6 +142,10 @@ class LettoreAudio : AppCompatActivity() {
             }
 
         })
+
+
+
+
     }
 
     private fun playPausePlayer(){              //funzione per far partire il player
@@ -176,4 +181,12 @@ class LettoreAudio : AppCompatActivity() {
             String.format("%02d:%02d", minutes, seconds)
         }
     }
+
+    private fun resetToolbar() {
+        seekBar.progress= 0
+        progresso.text = "00:00"
+        // ... reset other toolbar elements as needed ...
+    }
+
+
 }

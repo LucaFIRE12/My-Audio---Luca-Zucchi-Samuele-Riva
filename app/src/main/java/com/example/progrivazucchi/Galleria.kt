@@ -32,7 +32,8 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     private lateinit var database : RegistrazioniAudioSQLiteHelper
     private lateinit var editBar: View
     private lateinit var btnChiuso: ImageButton
-    private lateinit var btnSelezionaTutto: ImageButton
+    //private lateinit var btnSelezionaTutto: ImageButton
+    private lateinit var btnCondivisione: ImageButton
     private var allChecked = false
     private lateinit var bottomSheet : LinearLayout
     private lateinit var bottomSheetBehavior : BottomSheetBehavior<LinearLayout>
@@ -79,7 +80,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
         editBar = findViewById(R.id.editBar)
         btnChiuso = findViewById(R.id.btnChiuso)
-        btnSelezionaTutto = findViewById(R.id.btnSelezionaTutto)
+        btnCondivisione = findViewById(R.id.btnCondivisione)
         bottomSheet = findViewById(R.id.bottomSheet)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -100,6 +101,15 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             esciEditMode()
         }
 
+        btnCondivisione.setOnClickListener {
+            val url = "https://youtube/5GMwP9ppjdk"
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "text/plain" // specifica del tipo di intent
+            intent.putExtra("Condivisione elemento ", url)
+            val chooser = Intent.createChooser(intent, "Condividisione...")
+            startActivity(chooser)
+        }
+        /*
         btnSelezionaTutto.setOnClickListener {                                    //se viene premuto il pulsante seleziona tutto, seleziona tutti i record
 
             allChecked = !allChecked
@@ -114,6 +124,8 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
                 disabilitaElimina()
             }
         }
+        */
+
         btnElimina.setOnClickListener {                                             //elimina i record selezionati
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Vuoi Eliminare i record selezionati?")

@@ -39,10 +39,13 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/iconax3"
                     android:layout_marginTop="-4dp"
-                    android:layout_marginStart="-17dp"/>
+                    android:layout_marginStart="-17dp"
+                    android:elevation="4dp"/>
+
+
 
                 <ImageButton
-                    android:id="@+id/btnSelezionaTutto"
+                    android:id="@+id/btnCondivisione"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"

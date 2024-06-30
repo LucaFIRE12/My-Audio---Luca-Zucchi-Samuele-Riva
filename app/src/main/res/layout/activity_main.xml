@@ -58,22 +58,45 @@
                 android:contentDescription="NULL"
                 android:src="@drawable/baseline_done_24"
                 android:visibility="gone" />
+
+
         </LinearLayout>
 
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/cronometro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:elevation="1dp"
             android:text="00:00.00"
             android:textSize="56sp"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintBottom_toBottomOf="@+id/decorative_vector"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginBottom="20px"/>
 
+            app:layout_constraintTop_toTopOf="@+id/decorative_vector" />
 
+        <ImageView
+            android:id="@+id/decorative_vector"
+            android:layout_width="394dp"
+            android:layout_height="394dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:elevation="1dp"
+            android:src="@drawable/cerchio_sottile"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.47"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/relativeLayout"
+            app:layout_constraintVertical_bias="0.442"
+            tools:ignore="MissingConstraints" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
