@@ -2,7 +2,9 @@ package com.example.progrivazucchi
 
 import android.content.Intent
 import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -102,12 +104,25 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         }
 
         btnCondivisione.setOnClickListener {
-            val url = "https://youtube/5GMwP9ppjdk"
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain" // specifica del tipo di intent
-            intent.putExtra("Condivisione elemento ", url)
-            val chooser = Intent.createChooser(intent, "Condividisione...")
-            startActivity(chooser)
+            val x = records.filter { it.isChecked }
+            for (record in x){
+
+                val sharePath = record.filepath
+                val uri = Uri.parse(sharePath)
+                val share = Intent(Intent.ACTION_SEND)
+                share.setType("audio/mp3")
+                share.putExtra(Intent.EXTRA_STREAM, uri)
+                startActivity(Intent.createChooser(share, "Condivisione..."))
+
+
+                /*
+                val intent = Intent(Intent.ACTION_SEND)
+                intent.type = "audio/mpeg"
+                intent.putExtra("Condivisione file", record.filepath)
+                val chooser = Intent.createChooser(intent, "Condividisione...")
+                startActivity(chooser)*/
+            }
+
         }
         /*
         btnSelezionaTutto.setOnClickListener {                                    //se viene premuto il pulsante seleziona tutto, seleziona tutti i record

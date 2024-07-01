@@ -3,10 +3,12 @@ package com.example.progrivazucchi
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.Cursor
 import android.database.sqlite.SQLiteQuery
+import androidx.core.content.ContextCompat.startActivity
 
 
 class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -96,8 +98,6 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
         for (registrazioniAudio in registrazioniAudio){
             db.delete(table_name, "$column_name = ?", arrayOf(registrazioniAudio.nomefile))
         }
-
-        //db.delete(table_name, "$column_name = ?", arrayOf(arrayOf(registrazioniAudio).toString()))
-        //db.close()
     }
+
 }
