@@ -104,13 +104,13 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         }
 
         btnCondivisione.setOnClickListener {
-            val x = records.filter { it.isChecked }
+            val x = records.filter { it.isChecked }     //record selezionati
             for (record in x){
 
-                val sharePath = record.filepath
+                val sharePath = record.filepath             //procedura di condivisione
                 val uri = Uri.parse(sharePath)
                 val share = Intent(Intent.ACTION_SEND)
-                share.setType("audio/mp3")
+                share.type = "audio/mp3"
                 share.putExtra(Intent.EXTRA_STREAM, uri)
                 startActivity(Intent.createChooser(share, "Condivisione..."))
 
