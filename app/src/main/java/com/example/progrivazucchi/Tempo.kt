@@ -47,9 +47,9 @@ class Tempo(listener: OnTimerTickListener) {
         val hrs = (durata/(1000*60*60))
 
         val tempoFormattato = if(hrs>0)
-            "%02d:%02d:%02d.%02d:".format(hrs, min, sec, ms) //%02 -> il risultato restituiscilo con 2 cifre
+            "%02d:%02d:%02d.%02d".format(hrs, min, sec, ms) //%02 -> il risultato restituiscilo con 2 cifre
         else
-            "%02d:%02d.%02d:".format(min, sec, ms)
+            "%02d:%02d.%02d".format(min, sec, ms)
         return tempoFormattato
 
     }
