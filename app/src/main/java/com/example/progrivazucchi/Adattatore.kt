@@ -23,6 +23,7 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
     // View.OnLongClickListener: Utilizzato per riscontare quando l'utente
     // mantiene il tocco su una vista per un periodo più lungo del semplice click
     private var editMode = false
+    private var count = 0
 
     fun isEditMode(): Boolean {return editMode}
     fun setEditMode(mode: Boolean){             //funzione che permette di salvare la modifica effettuata al record salvato
@@ -46,6 +47,20 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
 
         override fun onLongClick(v: View?): Boolean {
             val position = adapterPosition
+            setEditMode(true)
+
+
+
+            if(checkBox.isChecked){
+                count--
+                if(count == 0){
+                    setEditMode(false)
+                }
+            }else{
+                checkBox.isChecked = true
+                count++
+            }
+
             if(position != RecyclerView.NO_POSITION){
                 listener.onItemClickListener(position)
             }
@@ -56,6 +71,19 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
         // onItemLongClickListener di Galleria.kt
         override fun onClick(v: View?) {
             val position = adapterPosition
+
+            if(editMode){
+                if(checkBox.isChecked){
+                    count--
+                    if(count == 0){
+                        setEditMode(false)
+                    }
+                }else{
+                    checkBox.isChecked = true
+                    count++
+                }
+            }
+
             if(position != RecyclerView.NO_POSITION){
                 listener.onItemLongClickListener(position)
             }
@@ -97,6 +125,9 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
                 holder.itemView.findViewById<CheckBox>(R.id.checkbox).visibility = View.GONE
                 holder.itemView.findViewById<CheckBox>(R.id.checkbox).isChecked = false
             }
+
+
+
         }
     }
 

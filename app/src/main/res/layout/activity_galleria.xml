@@ -43,15 +43,7 @@
                     android:elevation="4dp"/>
 
 
-                <!--
-                <ImageButton
-                    android:id="@+id/btnSelezionatutto"
-                    android:layout_width="wrap_content"         Non implementata perchè non funzionante
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:background="@drawable/condivisione"
-                    android:layout_marginTop="12dp"/>
-                -->
+
 
                 <ImageButton
                     android:id="@+id/btnSelezionatutto"
@@ -155,6 +147,9 @@
                 android:layout_height="wrap_content"
                 android:text="Modifica"
                 android:textColor="@color/BackGroundOpaco" />
+
+
+
         </LinearLayout>
     </LinearLayout>
 

@@ -8,6 +8,7 @@ import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
@@ -46,6 +47,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     private lateinit var btnElimina: ImageButton
     private lateinit var textModifica: TextView
     private lateinit var textElimina: TextView
+
     //private lateinit var btnCondividi: ImageButton        Non implementata perchè non funzionante
 
 
@@ -95,20 +97,10 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         records = ArrayList()
         myAdapter = Adattatore(records, this)
 
-        btnChiuso.setOnClickListener {                                            //se viene premuto il pulsante chiuso, ripristina la lista
+        btnChiuso.setOnClickListener { //se viene premuto il pulsante chiuso, ripristina la lista
+            myAdapter.setEditMode(false)
             esciEditMode()
         }
-        /*btnCondividi.setOnClickListener {                 Non implementata perchè non funzionante
-            val x = records.filter { it.isChecked }
-            for (record in x){
-                val sharePath = record.filepath
-                val uri = Uri.parse(sharePath)
-                val intent = Intent(Intent.ACTION_SEND)
-                intent.type = "audio/mp3"
-                intent.putExtra(Intent.EXTRA_STREAM, uri)
-                startActivity(Intent.createChooser(intent, "Condividi"))
-            }
-        }*/
 
         btnSelezionaTutto.setOnClickListener {                                    //se viene premuto il pulsante seleziona tutto, seleziona tutti i record
             allChecked = !allChecked
@@ -182,7 +174,11 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             dialog.show()
         }
         mostraElencoRegistrazioni("")
+
+
     }
+
+
     private fun esciEditMode(){             //disabilita la funzione di modifica e ripristina la toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -219,6 +215,8 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         textElimina.setTextColor(ResourcesCompat.getColor(resources, R.color.BackGroundOpaco, theme))
 
     }
+
+
 
     fun mostraElencoRegistrazioni(datoRicerca : String)                                     //funzione che mostra la lista dei record aggiornati al termine di ogni operazione
     {
@@ -259,6 +257,12 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             records[position].isChecked = !records[position].isChecked
             myAdapter.notifyItemChanged(position)
             val selected = records.count { it.isChecked }
+
+
+
+            val checkBox = findViewById<CheckBox>(R.id.checkbox)
+
+
             when(selected){
                 0 -> {
                     disabilitaModifica()
