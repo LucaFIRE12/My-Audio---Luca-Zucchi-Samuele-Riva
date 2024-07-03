@@ -86,6 +86,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         }
 
         findViewById<ImageButton>(R.id.btnElenco).setOnClickListener{
+
             startActivity(Intent(this, Galleria::class.java))
         }
 

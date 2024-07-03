@@ -102,6 +102,11 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         btnChiuso.setOnClickListener { //se viene premuto il pulsante chiuso, ripristina la lista
             myAdapter.setEditMode(false)
             esciEditMode()
+
+            mostraElencoRegistrazioni("")
+
+            //startActivity(Intent(this, Galleria::class.java))
+
         }
 
         btnSelezionaTutto.setOnClickListener {                                    //se viene premuto il pulsante seleziona tutto, seleziona tutti i record

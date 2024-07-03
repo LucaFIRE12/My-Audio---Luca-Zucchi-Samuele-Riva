@@ -35,7 +35,9 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
             editMode = mode
             notifyDataSetChanged()
         }
+
     }
+
 
     inner class GestoreView(itemView : View) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener{
 
@@ -71,6 +73,8 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
             }
 
 
+
+
             /*val position = adapterPosition
             setEditMode(true)
 
@@ -97,6 +101,8 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
 
 
         }
+
+
 
         // quando un elemento viene cliccato viene chiamata la funzione
         // onItemLongClickListener di Galleria.kt
@@ -141,7 +147,12 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
 
              */
         }
+
+
+
     }
+
+
 
     // ritorna un oggetto ViewHolder fornendogli una vista, ovvero il contenuto del
     // layout itemview
@@ -151,6 +162,9 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
         val view = LayoutInflater.from(parent.context).inflate(R.layout.itemview, parent, false)
         return GestoreView(view)
     }
+
+
+
 
     // ritorna il numero di elementi (items) nella recyclerView ed è usato per stabilire quando
     // terminare la visualizzazione di nuovi elementi
