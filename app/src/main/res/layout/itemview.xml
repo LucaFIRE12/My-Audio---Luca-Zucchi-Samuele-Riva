@@ -44,14 +44,14 @@
             android:contentDescription="NULL"
             android:text="hgvgjv"
             />
-        
+
 
 
     </LinearLayout>
     <CheckBox
         android:id="@+id/checkbox"
         android:layout_width="30dp"
-        android:layout_height="20dp"
+        android:layout_height="30dp"
         android:visibility="visible"
         android:clickable="true"
         />

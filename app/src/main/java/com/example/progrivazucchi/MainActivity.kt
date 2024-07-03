@@ -29,38 +29,23 @@ import java.io.ObjectOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 
-// RIGHE 40, 67 E 179
 const val REQUEST_CODE =200
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
-
-    // SE TOLGO LATEINIT E LO PONGO = arrayListOf()
-    // NON DA PIù ERRORRE QUA MA ALLA RIGA 203 bottomSheetBehavior
-    // DICE SEMPRE CHE MANCA LA DICHIARAZIONE, PROBABILMENTE ALLA RIGA 67
-    // prima c'era leteinit e non ? = null
 
     //richiesta dei permessi necessari
     private var permissions = arrayOf(Manifest.permission.RECORD_AUDIO) // creazione di un array di permessi richiesti al manifest file ,contenente info sul
     // progetto ed in grado di rilasciare permessi che vanno esplicitamente richiesti nel codice. il risultato è una finestra in app che richiede all'utente un
     // permesso a cui lui decide se dare il consenso
-
-
     private var permissionGranted = false
-
-
     private lateinit var recorder: MediaRecorder
     private var dirPath = ""
     private var nomeFile = "" //inizializzazione nome di un file audio generico
     private var staRegistrando = false
     private var inPausa = false
-
     private var duration = ""
-
     private lateinit var tempo: Tempo
-
-
     private lateinit var db: RegistrazioniAudioSQLiteHelper
-
     private lateinit var vibrazione: Vibrator
 
 
@@ -68,7 +53,6 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         db = RegistrazioniAudioSQLiteHelper(this)           //avvio db
-        //SQLiteDatabase.openDatabase(RegistrazioniAudioSQLiteHelper.DATABASE_NAME, null, SQLiteDatabase.OPEN_READWRITE)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -98,7 +82,6 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
                 staRegistrando -> fermaRegistrazione()
                 else -> inizioRegistrazione()
             }
-
             vibrazione.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
         }
 
@@ -110,15 +93,11 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
             fermaRegistrare()
             Toast.makeText(this, "opzioni di salvataggio", Toast.LENGTH_SHORT).show()
             // messaggio mostrato quando si schiaccia sul bottone salvataggio
-
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED // in questo modo lo stato del
             // bottom_sheet è definito come "espanso"
-
             findViewById<View>(R.id.BottomSheetBackGround).visibility = View.VISIBLE
-            // AGGIUNTO IL 19/05
             findViewById<LinearLayout>(R.id.bottomSheetIncluder).visibility = View.VISIBLE
             // il bottom sheet è visibile nel momento in cui si preme il bottone btnFatto
-
             findViewById<TextView>(R.id.inputNomeFile).text = nomeFile
         }
 
@@ -148,14 +127,10 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
             File("$dirPath$nomeFile.mp3") // formato nome del file
             Toast.makeText(this, "registrazione eliminata", Toast.LENGTH_SHORT).show()
             // messaggio mostrato quando si schiaccia sul bottone cancella
-
         }
 
         findViewById<ImageButton>(R.id.btnCancella).isClickable = false // btnCancella non
         // cliccabile in questo momento
-
-
-
     }
 
 
@@ -167,16 +142,16 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         // creazione nuovo nome
         val nuovoNomeFile = findViewById<TextView>(R.id.inputNomeFile).text.toString()
         if(nuovoNomeFile != nomeFile){
-            val nuovoFile = File("$dirPath$nuovoNomeFile.mp3") // creazione nuovo file
-            File("$dirPath$nomeFile.mp3").renameTo(nuovoFile) //rinominazione
+            val nuovoFile = File("$dirPath$nuovoNomeFile.mpeg") // creazione nuovo file
+            File("$dirPath$nomeFile.mpeg").renameTo(nuovoFile) //rinominazione
         }
 
-        val filePath = "$dirPath$nuovoNomeFile.mp3"     //salvataggio del db
+        val filePath = "$dirPath$nuovoNomeFile.mpeg"     //salvataggio del db
         val timestamp = Date().time
         val ampsPath = "$dirPath$nuovoNomeFile"
 
 
-        try {                                                 //!!MOLTO PROBABILMENTE DENTRO QUSTO TRY C'è QUALCHE VALORE CHE NON VIENE PASSATO NELLA MANIERA CORRETTA!!
+        try {
             val fos = FileOutputStream(ampsPath)
             val out = ObjectOutputStream(fos) //salva la forma d'onda del file
             fos.close()
@@ -192,13 +167,7 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         findViewById<View>(R.id.BottomSheetBackGround).visibility= View.GONE
         nascondiKeyboard(findViewById<TextView>(R.id.inputNomeFile))
         Handler(Looper.getMainLooper()).postDelayed({
-            // AGGIUNTO AL POSTO DI BOTTOMSHEETBEHAVIOR IL 19/05
-            // COMUNQUE NON VIENE SALVATA LA REGISTRAZIONE NELL'ARCHIVIO
             findViewById<LinearLayout>(R.id.bottomSheetIncluder).visibility = View.GONE
-            // SOSTITUITO PERCHè FACRASHARE L'APP, NON SO QUANTO POSSA ANDARE BENE LA
-            // SOSTITUZIONE
-
-            //this.bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED                        ///!!SECONDO ME USANDO LO STATE COLLAPSED, CHIUDI IL PROCESSO DELL'APP!!
         }, 100) // la funzione attende 100 milliSecondi e nasconde il bottomSheet
     }
 
@@ -228,7 +197,6 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         recorder.pause()
         inPausa = true
         findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_registra)
-
         tempo.pausa() //metodo presente dentro la classe Tempo.kt
     }
 
@@ -236,7 +204,6 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
         recorder.resume()
         inPausa = false
         findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_pausa)
-
         tempo.avvio() //metodo presente dentro la classe Tempo.kt
     }
 
@@ -246,14 +213,8 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE)
             return
         }
-
-        // inizio processo di registrazione audio
-
-
-
-
         recorder = MediaRecorder()
-        dirPath = "${externalCacheDir?.absolutePath}/"          //!!RIVEDERE IL PERCORSO DEI FILE!!
+        dirPath = "${externalCacheDir?.absolutePath}/"
 
         val simpleDateFormat = SimpleDateFormat("dd.mm.yyyy_hh.mm.ss") // costruzione formato di una data relativa
         // a un salvataggio
@@ -268,13 +229,11 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
             // set utili per salvare i file in formato mp3
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC) //Advanced Audio Coding (AAC) è un formato di compressione audio digitale
-            setOutputFile("$dirPath$nomeFile.mp3")
+            setOutputFile("$dirPath$nomeFile.mpeg")
 
             try {
                 prepare()
-
             }catch (_: IOException){}
-
             start()
         }
 
@@ -297,33 +256,24 @@ class MainActivity : AppCompatActivity(), Tempo.OnTimerTickListener{
 
     }
 
-    private fun fermaRegistrare(){
-
-
+    private fun fermaRegistrare(){      //funzione per fermare la registrazione
         tempo.stop()
-
         recorder.apply {
             stop()
             release()
         }
-
         inPausa = false
         staRegistrando = false
-
         findViewById<ImageButton>(R.id.btnElenco).visibility = View.VISIBLE // bottone elenco visibile
         findViewById<ImageButton>(R.id.btnFatto).visibility = View.GONE // bottone fatto non visibile
-
         findViewById<ImageButton>(R.id.btnCancella).isClickable = false // tasto cancella non cliccabile
         findViewById<ImageButton>(R.id.btnCancella).setImageResource(R.drawable.baseline_delete_24_disabled)
         findViewById<ImageButton>(R.id.btnRegistra).setImageResource(R.drawable.ic_registra)
-
         findViewById<TextView>(R.id.cronometro).text = "00:00.00"
-
-
     }
 
     // quando viene dato il via al timer, questa funzione fa partire il tempo e lo ferma
-    override fun onTimerTick(duration: String) {                    //!!VERIFICARE TUTTA LA PARTE DEL MIC CON UN DISPOSITIVO FISICO NO EMULATORE!!
+    override fun onTimerTick(duration: String) {
         val esecuzione = findViewById<TextView>(R.id.cronometro)
         esecuzione.text = duration
         this.duration = duration.dropLast(3)

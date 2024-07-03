@@ -38,9 +38,7 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
         var checkBox : CheckBox = itemView.findViewById(R.id.checkbox)
 
         init {
-            // this si riferisce a View.OnClickListener
             itemView.setOnClickListener(this)
-            // this si riferisce a View.OnLongClickListener
             itemView.setOnLongClickListener(this)
         }
         // quando un elemento viene cliccato viene chiamata la funzione
@@ -71,7 +69,6 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.itemview, parent, false)
         return GestoreView(view)
-
     }
 
     // ritorna il numero di elementi (items) nella recyclerView ed è usato per stabilire quando
@@ -87,13 +84,11 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
         // quando cerchiamo di creare items quando la RecycleReview sta ancora caricando
         if(position != RecyclerView.NO_POSITION){
             var record = registrazione[position]
-
             var sdf = SimpleDateFormat("dd/MM/yyyy")
             var date = Date(record.timestamp)
             var strDate = sdf.format(date)
             holder.itemView.findViewById<TextView>(R.id.tvNomeFile).text = record.nomefile
             holder.itemView.findViewById<TextView>(R.id.tvMeta).text = "${record.duration} $strDate"
-
                                 //se la funzione editMode è attiva, checbox diventa visibile e l'item viene selezionato
             if(editMode){
                 holder.itemView.findViewById<CheckBox>(R.id.checkbox).visibility = View.VISIBLE
@@ -109,5 +104,4 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
         this.registrazione = registrazione
         notifyDataSetChanged()
     }
-
 }

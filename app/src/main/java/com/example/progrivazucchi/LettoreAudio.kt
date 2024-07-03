@@ -57,7 +57,7 @@ class LettoreAudio : AppCompatActivity() {
 
         }
 
-        mediaPlayer = MediaPlayer()
+        mediaPlayer = MediaPlayer()             //inizializzo il player
         mediaPlayer.apply {
             setDataSource(filepath)
             prepare()
@@ -89,6 +89,7 @@ class LettoreAudio : AppCompatActivity() {
         // ad una posizione del mediaPlayer
         seekBar.max = mediaPlayer.duration
 
+
         mediaPlayer.setOnCompletionListener {
             btnPlay.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_play_circle, theme)
             handler.removeCallbacks(runnable)
@@ -114,14 +115,12 @@ class LettoreAudio : AppCompatActivity() {
                 // se la velocità di riproduzione è diversa da 2 la
                 // velocità di riproduzione aumenta di 0.5f
                 playVelocitaIndietro += 0.5f
-
             }
             else{
                 // se la velocità di riproduzione è uguale a 2 la
                 // velocità di riproduzione ritorna a 0.5f
                 playVelocitaIndietro = 0.5f
             }
-
             mediaPlayer.playbackParams = PlaybackParams().setSpeed(playVelocitaIndietro)
             chip.text = "x $playVelocitaIndietro"
         }
@@ -134,18 +133,12 @@ class LettoreAudio : AppCompatActivity() {
                     mediaPlayer.seekTo(progress)
                 }
             }
-
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
-
         })
-
-
-
-
     }
 
     private fun playPausePlayer(){              //funzione per far partire il player
@@ -158,7 +151,6 @@ class LettoreAudio : AppCompatActivity() {
             btnPlay.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_play_circle, theme)
             handler.removeCallbacks(runnable)
         }
-
     }
 
     override fun onBackPressed() {          //mostra il bottone poer tornare indietro dalla riproduzione all'elenco delle registrazioni
@@ -166,15 +158,13 @@ class LettoreAudio : AppCompatActivity() {
         //mediaPlayer.stop()
         mediaPlayer.release()
         handler.removeCallbacks(runnable)
-
     }
 
-    fun formatTime(timeInMillis: Int): String {
+    fun formatTime(timeInMillis: Int): String {             //funzione per formattare il tempo in stringa
         val totalSeconds = timeInMillis / 1000
         val seconds = totalSeconds % 60
         val minutes = (totalSeconds / 60) % 60
         val hours = totalSeconds / 3600
-
         return if (hours > 0) {
             String.format("%02d:%02d:%02d", hours, minutes, seconds)
         } else {
@@ -182,10 +172,10 @@ class LettoreAudio : AppCompatActivity() {
         }
     }
 
-    private fun resetToolbar() {
+    private fun resetToolbar() {            //funzione per resettare il toolbar
         seekBar.progress= 0
         progresso.text = "00:00"
-        // ... reset other toolbar elements as needed ...
+
     }
 
 

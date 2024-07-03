@@ -4,17 +4,20 @@ import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
+import android.os.StrictMode
+import android.os.StrictMode.VmPolicy
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +26,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.File
 
 
 @Suppress("DEPRECATION")
@@ -34,8 +38,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     private lateinit var database : RegistrazioniAudioSQLiteHelper
     private lateinit var editBar: View
     private lateinit var btnChiuso: ImageButton
-    //private lateinit var btnSelezionaTutto: ImageButton
-    private lateinit var btnCondivisione: ImageButton
+    private lateinit var btnSelezionaTutto: ImageButton
     private var allChecked = false
     private lateinit var bottomSheet : LinearLayout
     private lateinit var bottomSheetBehavior : BottomSheetBehavior<LinearLayout>
@@ -43,6 +46,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     private lateinit var btnElimina: ImageButton
     private lateinit var textModifica: TextView
     private lateinit var textElimina: TextView
+    //private lateinit var btnCondividi: ImageButton        Non implementata perchè non funzionante
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,8 +60,9 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
+
         ricerca_input = findViewById<TextInputEditText>(R.id.ricerca_input)
-        ricerca_input.addTextChangedListener(object : TextWatcher {
+        ricerca_input.addTextChangedListener(object : TextWatcher {         //contenuto della barra di ricerca
                 override fun beforeTextChanged(
                     s: CharSequence?,
                     start: Int,
@@ -68,78 +73,51 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     mostraElencoRegistrazioni(s.toString())
-9                }
+                }
 
                 override fun afterTextChanged(s: Editable?) {
-
                 }
             })
 
-        btnModifica = findViewById(R.id.btnModifica)
+        btnModifica = findViewById(R.id.btnModifica)                //associazioni varie agli id nei rispettivi xml
         btnElimina = findViewById(R.id.btnElimina)
         textModifica = findViewById(R.id.textModifica)
         textElimina = findViewById(R.id.textElimina)
 
         editBar = findViewById(R.id.editBar)
         btnChiuso = findViewById(R.id.btnChiuso)
-        btnCondivisione = findViewById(R.id.btnCondivisione)
         bottomSheet = findViewById(R.id.bottomSheet)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        btnSelezionaTutto = findViewById(R.id.btnSelezionatutto)
+        //btnCondividi = findViewById(R.id.btnCondividi)            Non implementata perchè non funzionante
 
         records = ArrayList()
         myAdapter = Adattatore(records, this)
 
-
-        // la recyclerView necessita di due informazioni: 1)un adattatore per sapere come deve
-        // apparire, come deve comportarsi, quali dati mostrare e di 2)un layoutManager che gli dica
-        // come posizionare gli items e riciclare quelli che non sono sullo schermo
-
-
-
-        //fetchAll()                <-- questa funzione non si capisce che fa ma sopratutto se integrata non si può accedere all'elenco
-
         btnChiuso.setOnClickListener {                                            //se viene premuto il pulsante chiuso, ripristina la lista
             esciEditMode()
         }
-
-        btnCondivisione.setOnClickListener {
-            val x = records.filter { it.isChecked }     //record selezionati
+        /*btnCondividi.setOnClickListener {                 Non implementata perchè non funzionante
+            val x = records.filter { it.isChecked }
             for (record in x){
-
-                val sharePath = record.filepath             //procedura di condivisione
+                val sharePath = record.filepath
                 val uri = Uri.parse(sharePath)
-                val share = Intent(Intent.ACTION_SEND)
-                share.type = "audio/mp3"
-                share.putExtra(Intent.EXTRA_STREAM, uri)
-                startActivity(Intent.createChooser(share, "Condivisione..."))
-
-
-                /*
                 val intent = Intent(Intent.ACTION_SEND)
-                intent.type = "audio/mpeg"
-                intent.putExtra("Condivisione file", record.filepath)
-                val chooser = Intent.createChooser(intent, "Condividisione...")
-                startActivity(chooser)*/
+                intent.type = "audio/mp3"
+                intent.putExtra(Intent.EXTRA_STREAM, uri)
+                startActivity(Intent.createChooser(intent, "Condividi"))
             }
+        }*/
 
-        }
-        /*
         btnSelezionaTutto.setOnClickListener {                                    //se viene premuto il pulsante seleziona tutto, seleziona tutti i record
-
             allChecked = !allChecked
             records.map { it.isChecked = allChecked }
             myAdapter.notifyDataSetChanged()
-
-            if (allChecked){
-                disabilitaModifica()
-                abilitaElimina()
-            }else{
-                disabilitaModifica()
-                disabilitaElimina()
-            }
+            disabilitaModifica()
+            abilitaElimina()
         }
-        */
+
 
         btnElimina.setOnClickListener {                                             //elimina i record selezionati
             val builder = AlertDialog.Builder(this)
@@ -162,11 +140,10 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             builder.setPositiveButton("No"){ _, _ ->
 
             }        //questo non fa nulla
-
             val dialog = builder.create()
             dialog.show()
         }
-        findViewById<ImageButton>(R.id.btnModifica).setOnClickListener{
+        findViewById<ImageButton>(R.id.btnModifica).setOnClickListener{         //modifica i record selezionati, aggiorna il db e la lista
             val builder = AlertDialog.Builder(this)
             val dialogView = layoutInflater.inflate(R.layout.rinomina_layout, null)
             builder.setView(dialogView)
@@ -176,7 +153,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             val textInput = dialogView.findViewById<TextInputEditText>(R.id.inputNomeFile)
             textInput.setText(record.nomefile)
 
-            dialogView.findViewById<Button>(R.id.btnSalva).setOnClickListener{
+            dialogView.findViewById<Button>(R.id.btnSalva).setOnClickListener{              //salva il nuovo nome nel db, lo rende visibile nella lista e toglie la editMode
                 val input = textInput.text.toString()
                 if(input.isEmpty()){
                     Toast.makeText(this, "Il nome non può essere vuoto", Toast.LENGTH_LONG).show()
@@ -197,27 +174,21 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
                             bottomSheet.visibility = View.GONE
                         }
                     }
-
                 }
-
             }
-
             dialogView.findViewById<Button>(R.id.btnAnnulla).setOnClickListener{
                 dialog.dismiss()
             }
-
             dialog.show()
         }
         mostraElencoRegistrazioni("")
     }
-
     private fun esciEditMode(){             //disabilita la funzione di modifica e ripristina la toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         editBar.visibility = View.GONE
         //chiamati sia hidden che collapsed per far sparire il bottom sheet del tutto
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        //bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         records.map { it.isChecked = false }
         myAdapter.setEditMode(false)
         myAdapter.notifyDataSetChanged()
@@ -249,23 +220,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
     }
 
-    // COM'ERA PRIMA
-    /*
-    private fun searchDatabase(query: String) {             //funzione per la query di ricerca, dove trova tutti i nomi simili a ciò che abbiamo messo
-        GlobalScope.launch {
-            records.clear()
-            val queryResult = database.searchDatabase(query)     //"SELECT * FROM ${RegistrazioniAudioSQLiteHelper.table_name} WHERE nomefile LIKE '%$query%'"
-            records.addAll(queryResult)
-            runOnUiThread{
-                myAdapter.notifyDataSetChanged()
-            }
-        }
-    }
-
-    */
-
-    // COM'è ORA
-    fun mostraElencoRegistrazioni(datoRicerca : String)
+    fun mostraElencoRegistrazioni(datoRicerca : String)                                     //funzione che mostra la lista dei record aggiornati al termine di ogni operazione
     {
         val recyclerView = findViewById<RecyclerView>(R.id.listaRegistrazioniRecycler)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -278,7 +233,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         adapter.notifyDataSetChanged()
     }
 
-    fun cursorToRegistrazioniAudio(cursor: Cursor?): List<RegistrazioniAudio> {
+    fun cursorToRegistrazioniAudio(cursor: Cursor?): List<RegistrazioniAudio> {                     //funzione che converte il cursor in RegistrazioniAudio e lo carica in una lista
         val result = mutableListOf<RegistrazioniAudio>()
         if (cursor != null) {
             while (cursor.moveToNext()) {
@@ -300,11 +255,9 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     // Toast "Click semplice"
     override fun onItemLongClickListener(position: Int) {               //permette di selezionare tramite check il record ed i record presenti
         val audioRecord = records[position]
-
         if (myAdapter.isEditMode()){
             records[position].isChecked = !records[position].isChecked
             myAdapter.notifyItemChanged(position)
-
             val selected = records.count { it.isChecked }
             when(selected){
                 0 -> {
@@ -326,8 +279,6 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             intent.putExtra("nomefile", audioRecord.nomefile)
             startActivity(intent)
         }
-
-
     }
 
     // Nel momento in cui si tiene premuto su un elemento, diventa visibile il
@@ -336,18 +287,13 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         myAdapter.setEditMode(true)
         records[position].isChecked = !records[position].isChecked
         myAdapter.notifyItemChanged(position)
-
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED      //viene avviato il bottom sheet
-
         if (myAdapter.isEditMode() && editBar.visibility == View.GONE){
             supportActionBar?.setDisplayShowTitleEnabled(false)
             supportActionBar?.setDisplayShowTitleEnabled(false)
             editBar.visibility = View.VISIBLE
-
-
             abilitaModifica()
             abilitaElimina()
         }
     }
-
 }
