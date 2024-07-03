@@ -41,12 +41,14 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     private lateinit var btnChiuso: ImageButton
     private lateinit var btnSelezionaTutto: ImageButton
     private var allChecked = false
+    private var noneChecked = true
     private lateinit var bottomSheet : LinearLayout
     private lateinit var bottomSheetBehavior : BottomSheetBehavior<LinearLayout>
     private lateinit var btnModifica: ImageButton
     private lateinit var btnElimina: ImageButton
     private lateinit var textModifica: TextView
     private lateinit var textElimina: TextView
+    private var cont = 0
 
     //private lateinit var btnCondividi: ImageButton        Non implementata perchè non funzionante
 
@@ -115,6 +117,12 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Vuoi Eliminare i record selezionati?")
             val nbRecords = records.count { it.isChecked }
+
+            if (nbRecords == 0) {
+                Toast.makeText(this, "Nessun record selezionato", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             builder.setMessage("Sei sicuro di voler eliminare $nbRecords record(s)?")
 
             builder.setNegativeButton("Si"){ _, _ ->            //scelte dell'utente
@@ -135,7 +143,15 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             val dialog = builder.create()
             dialog.show()
         }
-        findViewById<ImageButton>(R.id.btnModifica).setOnClickListener{         //modifica i record selezionati, aggiorna il db e la lista
+        btnModifica.setOnClickListener{
+            //modifica i record selezionati, aggiorna il db e la lista
+            val nbRecords = records.count { it.isChecked }
+
+            if (nbRecords == 0) {
+                Toast.makeText(this, "Nessun record selezionato", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val builder = AlertDialog.Builder(this)
             val dialogView = layoutInflater.inflate(R.layout.rinomina_layout, null)
             builder.setView(dialogView)
@@ -253,6 +269,11 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     // Toast "Click semplice"
     override fun onItemLongClickListener(position: Int) {               //permette di selezionare tramite check il record ed i record presenti
         val audioRecord = records[position]
+
+        if(records[position].isChecked){
+            noneChecked= false
+        }
+
         if (myAdapter.isEditMode()){
             records[position].isChecked = !records[position].isChecked
             myAdapter.notifyItemChanged(position)
@@ -260,7 +281,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
 
 
-            val checkBox = findViewById<CheckBox>(R.id.checkbox)
+
 
 
             when(selected){
@@ -299,5 +320,8 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             abilitaModifica()
             abilitaElimina()
         }
+
     }
+
+
 }

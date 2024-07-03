@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:elevation="1dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:clickable="true"
@@ -49,14 +50,24 @@
 
     </LinearLayout>
 
-
-    <CheckBox
-        android:id="@+id/checkbox"
+    <ImageView
+        android:id="@+id/iconaV"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:visibility="visible"
-        android:clickable="true"
-        android:elevation="4dp"
+        android:src="@drawable/baseline_check_24"
+        android:visibility="invisible"
         />
 
-</LinearLayout>
+
+
+    <!--
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="visible"
+            android:clickable="true"
+            android:elevation="-1dp"
+            />
+    -->
+    </LinearLayout>
