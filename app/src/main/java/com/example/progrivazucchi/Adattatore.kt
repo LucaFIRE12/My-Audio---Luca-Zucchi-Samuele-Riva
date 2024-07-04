@@ -32,10 +32,8 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
 
     fun isEditMode(): Boolean {return editMode}
     fun setEditMode(mode: Boolean){             //funzione che permette di salvare la modifica effettuata al record salvato
-        if (editMode != mode){
-            editMode = mode
-            notifyDataSetChanged()
-        }
+        editMode = mode
+        notifyDataSetChanged()
 
     }
 

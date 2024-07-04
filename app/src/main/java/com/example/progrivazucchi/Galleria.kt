@@ -132,6 +132,8 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
 
         btnSelezionaTutto.setOnClickListener { //se viene premuto il pulsante seleziona tutto, seleziona tutti i record
+
+
             Toast.makeText(this, "Seleziona tutto", Toast.LENGTH_SHORT).show()
             mostraElencoRegistrazioni("")
             records.map { it.isChecked = !allChecked }
@@ -305,6 +307,11 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     override fun onItemLongClickListener(position: Int) {               //permette di selezionare tramite check il record ed i record presenti
         val audioRecord = records[position]
 
+        if(icSelezionaTutto.visibility == View.VISIBLE){
+            Toast.makeText(this, "Tenere premuto per selezionare", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         if(records[position].isChecked){
             noneChecked= false
         }
@@ -338,14 +345,20 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     // Nel momento in cui si tiene premuto su un elemento, diventa visibile il
     // Toast "Click lungo"
     override fun onItemClickListener(position: Int) {
-        if(btnSelezionaTutto.visibility == View.INVISIBLE){
+        val pos = position
+        if(icSelezionaTutto.visibility == View.VISIBLE){
             icSelezionaTutto.visibility = View.INVISIBLE
             btnSelezionaTutto.visibility = View.VISIBLE
             btnDeselezionaTutto.visibility = View.INVISIBLE
+            records.map { it.isChecked = allChecked }
+            myAdapter.notifyDataSetChanged()
+            onItemClickListener(pos)
+            return
         }
         icSelezionaTutto.visibility = View.INVISIBLE
         myAdapter.setEditMode(true)
         records[position].isChecked = !records[position].isChecked
+
         myAdapter.notifyItemChanged(position)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED      //viene avviato il bottom sheet
         if (myAdapter.isEditMode() && editBar.visibility == View.GONE){
