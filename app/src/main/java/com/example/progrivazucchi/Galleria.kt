@@ -134,8 +134,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         btnSelezionaTutto.setOnClickListener { //se viene premuto il pulsante seleziona tutto, seleziona tutti i record
             Toast.makeText(this, "Seleziona tutto", Toast.LENGTH_SHORT).show()
             mostraElencoRegistrazioni("")
-            allChecked = !allChecked
-            records.map { it.isChecked = allChecked }
+            records.map { it.isChecked = !allChecked }
             myAdapter.notifyDataSetChanged()
             disabilitaModifica()
             abilitaElimina()
@@ -339,6 +338,11 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     // Nel momento in cui si tiene premuto su un elemento, diventa visibile il
     // Toast "Click lungo"
     override fun onItemClickListener(position: Int) {
+        if(btnSelezionaTutto.visibility == View.INVISIBLE){
+            icSelezionaTutto.visibility = View.INVISIBLE
+            btnSelezionaTutto.visibility = View.VISIBLE
+            btnDeselezionaTutto.visibility = View.INVISIBLE
+        }
         icSelezionaTutto.visibility = View.INVISIBLE
         myAdapter.setEditMode(true)
         records[position].isChecked = !records[position].isChecked
