@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -40,6 +41,8 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     private lateinit var editBar: View
     private lateinit var btnChiuso: ImageButton
     private lateinit var btnSelezionaTutto: ImageButton
+    private lateinit var btnDeselezionaTutto: ImageButton
+    private lateinit var icSelezionaTutto: ImageView
     private var allChecked = false
     private var noneChecked = true
     private lateinit var bottomSheet : LinearLayout
@@ -95,6 +98,8 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         btnSelezionaTutto = findViewById(R.id.btnSelezionatutto)
+        btnDeselezionaTutto = findViewById(R.id.btnDeselezionatutto)
+        icSelezionaTutto = findViewById(R.id.iconaSelezionaTutto)
         //btnCondividi = findViewById(R.id.btnCondividi)            Non implementata perchè non funzionante
 
 
@@ -110,12 +115,33 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
         }
 
-        btnSelezionaTutto.setOnClickListener {                                    //se viene premuto il pulsante seleziona tutto, seleziona tutti i record
+        btnDeselezionaTutto.setOnClickListener {
+
+            Toast.makeText(this, "Deseleziona tutto", Toast.LENGTH_SHORT).show()
+            mostraElencoRegistrazioni("")
+            records.map { it.isChecked = !allChecked }
+            myAdapter.notifyDataSetChanged()
+            disabilitaModifica()
+            abilitaElimina()
+            icSelezionaTutto.visibility = View.INVISIBLE
+            btnSelezionaTutto.visibility = View.VISIBLE
+            btnDeselezionaTutto.visibility = View.INVISIBLE
+            btnChiuso.performClick()
+        }
+
+
+
+        btnSelezionaTutto.setOnClickListener { //se viene premuto il pulsante seleziona tutto, seleziona tutti i record
+            Toast.makeText(this, "Seleziona tutto", Toast.LENGTH_SHORT).show()
+            mostraElencoRegistrazioni("")
             allChecked = !allChecked
             records.map { it.isChecked = allChecked }
             myAdapter.notifyDataSetChanged()
             disabilitaModifica()
             abilitaElimina()
+            icSelezionaTutto.visibility = View.VISIBLE
+            btnSelezionaTutto.visibility = View.INVISIBLE
+            btnDeselezionaTutto.visibility = View.VISIBLE
         }
 
 
@@ -285,6 +311,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         }
 
         if (myAdapter.isEditMode()){
+            icSelezionaTutto.visibility = View.INVISIBLE
             records[position].isChecked = !records[position].isChecked
             myAdapter.notifyItemChanged(position)
             val selected = records.count { it.isChecked }
@@ -313,11 +340,13 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     // Nel momento in cui si tiene premuto su un elemento, diventa visibile il
     // Toast "Click lungo"
     override fun onItemClickListener(position: Int) {
+        icSelezionaTutto.visibility = View.INVISIBLE
         myAdapter.setEditMode(true)
         records[position].isChecked = !records[position].isChecked
         myAdapter.notifyItemChanged(position)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED      //viene avviato il bottom sheet
         if (myAdapter.isEditMode() && editBar.visibility == View.GONE){
+
             supportActionBar?.setDisplayShowTitleEnabled(false)
             supportActionBar?.setDisplayShowTitleEnabled(false)
             editBar.visibility = View.VISIBLE

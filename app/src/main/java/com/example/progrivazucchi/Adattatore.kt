@@ -123,7 +123,7 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
             }
 
             if(position != RecyclerView.NO_POSITION ){
-                listener.onItemClickListener(position)
+                listener.onItemLongClickListener(position)
             }
 
 
