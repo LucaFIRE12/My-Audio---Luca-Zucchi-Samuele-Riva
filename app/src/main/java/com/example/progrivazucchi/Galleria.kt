@@ -54,23 +54,21 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
 
 
-    //private lateinit var btnCondividi: ImageButton        Non implementata perchè non funzionante
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_galleria)
         database = RegistrazioniAudioSQLiteHelper(this)
-        toolbar = findViewById(R.id.toolbar)                //funzioni per chiamare la toolbar
+        toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(true)
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
-
         ricerca_input = findViewById<TextInputEditText>(R.id.ricerca_input)
-        ricerca_input.addTextChangedListener(object : TextWatcher {         //contenuto della barra di ricerca
+
+        //contenuto della barra di ricerca
+        ricerca_input.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?,
                     start: Int,
@@ -87,7 +85,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
                 }
             })
 
-        btnModifica = findViewById(R.id.btnModifica)                //associazioni varie agli id nei rispettivi xml
+        btnModifica = findViewById(R.id.btnModifica)
         btnElimina = findViewById(R.id.btnElimina)
         textModifica = findViewById(R.id.textModifica)
         textElimina = findViewById(R.id.textElimina)
@@ -100,23 +98,21 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         btnSelezionaTutto = findViewById(R.id.btnSelezionatutto)
         btnDeselezionaTutto = findViewById(R.id.btnDeselezionatutto)
         icSelezionaTutto = findViewById(R.id.iconaSelezionaTutto)
-        //btnCondividi = findViewById(R.id.btnCondividi)            Non implementata perchè non funzionante
-
-
         records = ArrayList()
         myAdapter = Adattatore(records, this)
 
-        btnChiuso.setOnClickListener { //se viene premuto il pulsante chiuso, ripristina la lista
+
+
+        //se viene premuto il pulsante chiuso, ripristina la lista
+        btnChiuso.setOnClickListener {
             myAdapter.setEditMode(false)
             esciEditMode()
-
             mostraElencoRegistrazioni("")
-
-
         }
 
-        btnDeselezionaTutto.setOnClickListener {
 
+        //se viene premuto il pulsante, deseleziona tutti i record
+        btnDeselezionaTutto.setOnClickListener {
             Toast.makeText(this, "Deseleziona tutto", Toast.LENGTH_SHORT).show()
             mostraElencoRegistrazioni("")
             records.map { it.isChecked = !allChecked }
@@ -130,10 +126,8 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         }
 
 
-
-        btnSelezionaTutto.setOnClickListener { //se viene premuto il pulsante seleziona tutto, seleziona tutti i record
-
-
+        //se viene premuto il pulsante seleziona tutto, seleziona tutti i record
+        btnSelezionaTutto.setOnClickListener {
             Toast.makeText(this, "Seleziona tutto", Toast.LENGTH_SHORT).show()
             mostraElencoRegistrazioni("")
             records.map { it.isChecked = !allChecked }
@@ -146,18 +140,16 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         }
 
 
-        btnElimina.setOnClickListener {                                             //elimina i record selezionati
+        //elimina i record selezionati
+        btnElimina.setOnClickListener {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Vuoi Eliminare i record selezionati?")
             val nbRecords = records.count { it.isChecked }
-
             if (nbRecords == 0) {
                 Toast.makeText(this, "Nessun record selezionato", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
             builder.setMessage("Sei sicuro di voler eliminare $nbRecords record(s)?")
-
             builder.setNegativeButton("Si"){ _, _ ->            //scelte dell'utente
                 val eliminare = records.filter { it.isChecked }.toTypedArray()
                 GlobalScope.launch {
@@ -171,15 +163,16 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
                 }
             }
             builder.setPositiveButton("No"){ _, _ ->
-
-            }        //questo non fa nulla
+            }
             val dialog = builder.create()
             dialog.show()
         }
-        btnModifica.setOnClickListener{
-            //modifica i record selezionati, aggiorna il db e la lista
-            val nbRecords = records.count { it.isChecked }
 
+
+        //modifica i record selezionati
+        btnModifica.setOnClickListener{
+
+            val nbRecords = records.count { it.isChecked }
             if (nbRecords == 0) {
                 Toast.makeText(this, "Nessun record selezionato", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -187,17 +180,18 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
                 Toast.makeText(this, "Solo un record può essere modificato", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
             val builder = AlertDialog.Builder(this)
             val dialogView = layoutInflater.inflate(R.layout.rinomina_layout, null)
             builder.setView(dialogView)
             val dialog = builder.create()
             val record = records.filter{it.isChecked}[0]
-            // cerco nel dialogView un TextInputEditText con id inputNomeFile
             val textInput = dialogView.findViewById<TextInputEditText>(R.id.inputNomeFile)
             textInput.setText(record.nomefile)
 
-            dialogView.findViewById<Button>(R.id.btnSalva).setOnClickListener{              //salva il nuovo nome nel db, lo rende visibile nella lista e toglie la editMode
+
+            //Dopo che viene scelto un record da modificare,
+            //cliccando il pulsante salva essa viene salvata nel db
+            dialogView.findViewById<Button>(R.id.btnSalva).setOnClickListener{
                 val input = textInput.text.toString()
                 if(input.isEmpty()){
                     Toast.makeText(this, "Il nome non può essere vuoto", Toast.LENGTH_LONG).show()
@@ -226,12 +220,10 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             dialog.show()
         }
         mostraElencoRegistrazioni("")
-
-
     }
 
-
-    private fun esciEditMode(){             //disabilita la funzione di modifica e ripristina la toolbar
+    //disabilita la funzione di modifica e ripristina la toolbar
+    private fun esciEditMode(){
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         editBar.visibility = View.GONE
@@ -240,38 +232,42 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         records.map { it.isChecked = false }
         myAdapter.setEditMode(false)
         myAdapter.notifyDataSetChanged()
-
     }
-                                //funzioni per rendere visibili o meno i pulsanti modifica
+
+
+    //funzioni per rendere visibili o meno il pulsante modifica
     private fun disabilitaModifica(){
         btnModifica.isClickable = false
         btnModifica.backgroundTintList = ResourcesCompat.getColorStateList(resources, R.color.grayDark, theme)
         textModifica.setTextColor(ResourcesCompat.getColor(resources, R.color.grayDark, theme))
-
     }
+
+    //funzioni per rendere visibili o meno il pulsante elimina
     private fun disabilitaElimina(){
         btnElimina.isClickable = false
         btnElimina.backgroundTintList = ResourcesCompat.getColorStateList(resources, R.color.grayDark, theme)
         textElimina.setTextColor(ResourcesCompat.getColor(resources, R.color.grayDark, theme))
-
     }
 
+
+    //funzioni per rendere visibili o meno il pulsante modifica
     private fun abilitaModifica(){
         btnModifica.isClickable = true
         btnModifica.backgroundTintList = ResourcesCompat.getColorStateList(resources, R.color.BackGroundOpaco, theme)
         textModifica.setTextColor(ResourcesCompat.getColor(resources, R.color.BackGroundOpaco, theme))
-
     }
+
+    //funzioni per rendere visibili o meno il pulsante elimina
     private fun abilitaElimina(){
         btnElimina.isClickable = true
         btnElimina.backgroundTintList = ResourcesCompat.getColorStateList(resources, R.color.BackGroundOpaco, theme)
         textElimina.setTextColor(ResourcesCompat.getColor(resources, R.color.BackGroundOpaco, theme))
-
     }
 
 
 
-    fun mostraElencoRegistrazioni(datoRicerca : String)                                     //funzione che mostra la lista dei record aggiornati al termine di ogni operazione
+    //funzione che mostra la lista dei record aggiornati al termine di ogni operazione
+    fun mostraElencoRegistrazioni(datoRicerca : String)
     {
         val recyclerView = findViewById<RecyclerView>(R.id.listaRegistrazioniRecycler)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -284,16 +280,17 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         adapter.notifyDataSetChanged()
     }
 
-    fun cursorToRegistrazioniAudio(cursor: Cursor?): List<RegistrazioniAudio> {                     //funzione che converte il cursor in RegistrazioniAudio e lo carica in una lista
+
+
+    //funzione che converte il cursor in RegistrazioniAudio
+    fun cursorToRegistrazioniAudio(cursor: Cursor?): List<RegistrazioniAudio> {
         val result = mutableListOf<RegistrazioniAudio>()
         if (cursor != null) {
             while (cursor.moveToNext()) {
-
                 val nomefile = cursor.getString(cursor.getColumnIndexOrThrow("nomefile"))
                 val filepath = cursor.getString(cursor.getColumnIndexOrThrow("filepath"))
                 val timestamp = cursor.getLong(cursor.getColumnIndexOrThrow("timestamp"))
                 val duration = cursor.getString(cursor.getColumnIndexOrThrow("duration"))
-
                 val registrazione = RegistrazioniAudio(nomefile, filepath, timestamp, duration)
                 result.add(registrazione)
             }
@@ -302,20 +299,20 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         return result
     }
 
+
+
     // Nel momento in cui si tiene premuto su un elemento, diventa visibile il
-    // Toast "Click semplice"
-    override fun onItemLongClickListener(position: Int) {               //permette di selezionare tramite check il record ed i record presenti
+    // Toast "Click semplice" permette di selezionare tramite check il record ed i record presenti
+    override fun onItemLongClickListener(position: Int) {
         val audioRecord = records[position]
 
         if(icSelezionaTutto.visibility == View.VISIBLE){
             Toast.makeText(this, "Tenere premuto per selezionare", Toast.LENGTH_SHORT).show()
             return
         }
-
         if(records[position].isChecked){
             noneChecked= false
         }
-
         if (myAdapter.isEditMode()){
             icSelezionaTutto.visibility = View.INVISIBLE
             records[position].isChecked = !records[position].isChecked
@@ -342,6 +339,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         }
     }
 
+
     // Nel momento in cui si tiene premuto su un elemento, diventa visibile il
     // Toast "Click lungo"
     override fun onItemClickListener(position: Int) {
@@ -358,19 +356,14 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         icSelezionaTutto.visibility = View.INVISIBLE
         myAdapter.setEditMode(true)
         records[position].isChecked = !records[position].isChecked
-
         myAdapter.notifyItemChanged(position)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED      //viene avviato il bottom sheet
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         if (myAdapter.isEditMode() && editBar.visibility == View.GONE){
-
             supportActionBar?.setDisplayShowTitleEnabled(false)
             supportActionBar?.setDisplayShowTitleEnabled(false)
             editBar.visibility = View.VISIBLE
             abilitaModifica()
             abilitaElimina()
         }
-
     }
-
-
 }

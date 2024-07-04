@@ -7,13 +7,11 @@ class Tempo(listener: OnTimerTickListener) {
     interface OnTimerTickListener{
         fun onTimerTick(duration: String)
     }
-
     private var handler = Handler(Looper.getMainLooper()!!)
     private lateinit var runnable: Runnable
-
-    // 100L -> 100 ms
     private var durata = 0L
     private var ritardo = 100L
+
 
     //quando viene attivata la funzione "avvio", viene fatto aspettare un minimo, prima di poter
     //restituire a schermo il risultato
@@ -30,10 +28,13 @@ class Tempo(listener: OnTimerTickListener) {
         handler.postDelayed(runnable, ritardo)
     }
 
+    //funzione che serve per fermare il runnable
     fun pausa(){
         handler.removeCallbacks(runnable)
     }
 
+
+    //funzione che serve per fermare il runnable e ripristinare il tempo
     fun stop(){
         handler.removeCallbacks(runnable)
         durata = 0L
@@ -45,12 +46,10 @@ class Tempo(listener: OnTimerTickListener) {
         val sec = (durata/1000) % 60
         val min = (durata/(1000*60)) % 60
         val hrs = (durata/(1000*60*60))
-
         val tempoFormattato = if(hrs>0)
             "%02d:%02d:%02d.%02d".format(hrs, min, sec, ms) //%02 -> il risultato restituiscilo con 2 cifre
         else
             "%02d:%02d.%02d".format(min, sec, ms)
         return tempoFormattato
-
     }
 }

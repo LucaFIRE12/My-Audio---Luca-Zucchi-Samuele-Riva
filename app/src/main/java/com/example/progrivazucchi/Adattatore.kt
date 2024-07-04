@@ -28,8 +28,6 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
     private var editMode = false
     private var count = 0
 
-
-
     fun isEditMode(): Boolean {return editMode}
     fun setEditMode(mode: Boolean){             //funzione che permette di salvare la modifica effettuata al record salvato
         editMode = mode
@@ -54,107 +52,40 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
         // onItemClickListener di Galleria.kt
 
         override fun onLongClick(v: View?): Boolean {
-
             val position = adapterPosition
-
-
             setEditMode(true)
-
             if(iconaV.visibility == View.INVISIBLE){
                 iconaV.visibility = View.VISIBLE
             }
             else{
                 iconaV.visibility = View.INVISIBLE
             }
-
             if(position != RecyclerView.NO_POSITION ){
                 listener.onItemClickListener(position)
                 return true
             }
 
-
-
-
-            /*val position = adapterPosition
-            setEditMode(true)
-
-
-
-            if(checkBox.isChecked){
-                count--
-                checkBox.isChecked = false
-                if(count == 0){
-                    setEditMode(false)
-
-                }
-            }else{
-                checkBox.isChecked = true
-                count++
-            }
-
-            if(position != RecyclerView.NO_POSITION ){
-                listener.onItemClickListener(position)
-                return true
-            }
-            */
             return true
-
-
         }
-
 
 
         // quando un elemento viene cliccato viene chiamata la funzione
         // onItemLongClickListener di Galleria.kt
         override fun onClick(v: View?) {
-
             val position = adapterPosition
-
             if(editMode==true){
                 if(iconaV.visibility == View.INVISIBLE){
                     iconaV.visibility = View.VISIBLE
                 }
                 else{
                     iconaV.visibility = View.INVISIBLE
-
                 }
             }
-
             if(position != RecyclerView.NO_POSITION ){
                 listener.onItemLongClickListener(position)
             }
-
-
-            /*
-            val position = adapterPosition
-
-            if(editMode){
-                if(checkBox.isChecked){
-                    count--
-                    checkBox.isChecked = false
-                    if(count == 0){
-                        setEditMode(false)
-
-                    }
-                }else{
-                    checkBox.isChecked = true
-                    count++
-                }
-            }
-
-            if(position != RecyclerView.NO_POSITION ){
-                listener.onItemClickListener(position)
-            }
-
-
-             */
         }
-
-
-
     }
-
-
 
     // ritorna un oggetto ViewHolder fornendogli una vista, ovvero il contenuto del
     // layout itemview
@@ -164,8 +95,6 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
         val view = LayoutInflater.from(parent.context).inflate(R.layout.itemview, parent, false)
         return GestoreView(view)
     }
-
-
 
 
     // ritorna il numero di elementi (items) nella recyclerView ed è usato per stabilire quando
@@ -186,21 +115,6 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
             var strDate = sdf.format(date)
             holder.itemView.findViewById<TextView>(R.id.tvNomeFile).text = record.nomefile
             holder.itemView.findViewById<TextView>(R.id.tvMeta).text = "${record.duration} $strDate"
-                                //se la funzione editMode è attiva, checbox diventa visibile e l'item viene selezionato
-
-            /*
-            if(editMode){
-                holder.itemView.findViewById<CheckBox>(R.id.checkbox).visibility = View.VISIBLE
-                holder.itemView.findViewById<CheckBox>(R.id.checkbox).isChecked   // = true
-            }else{
-                holder.itemView.findViewById<CheckBox>(R.id.checkbox).visibility = View.GONE
-                holder.itemView.findViewById<CheckBox>(R.id.checkbox).isChecked = false
-            }
-
-             */
-
-
-
         }
     }
 

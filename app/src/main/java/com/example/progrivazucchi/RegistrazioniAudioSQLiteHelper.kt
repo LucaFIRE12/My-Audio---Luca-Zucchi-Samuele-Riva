@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat.startActivity
 
 class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
-    companion object{                                                           //contante
+    companion object{
         private const val DATABASE_NAME = "registrazioneAudio.db"
         private const val DATABASE_VERSION = 1
         const val table_name = "registrazioni_salvate"
@@ -21,9 +21,12 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
         private const val column_filepath = "filepath"
         private const val column_timestamp = "timestamp"
         private const val column_duration = "duration"
-
     }
-    fun searchDatabase(criterium: String): Cursor? {            //funzione per la ricerca
+
+
+
+    //funzione per la ricerca
+    fun searchDatabase(criterium: String): Cursor? {
         val db = this.readableDatabase
         var query = "SELECT * FROM $table_name "
         if (!query.isEmpty()){
@@ -34,18 +37,25 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
         return cursor
     }
 
-    override fun onCreate(db: SQLiteDatabase?) {                                        //funzione per la creazione
+
+
+    //funzione per la creazione
+    override fun onCreate(db: SQLiteDatabase?) {
         val createTableQuery = "CREATE TABLE $table_name ($column_name TEXT PRIMARY KEY, $column_filepath TEXT, $column_timestamp TEXT, $column_duration TEXT)"
         db?.execSQL(createTableQuery)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {                                     //funzione per la modifica
+
+    //funzione per la modifica
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         val dropTableQuery = "DROP TABLE IF EXISTS $table_name"
         db?.execSQL(dropTableQuery)
         onCreate(db)
     }
 
-    fun inserisciRegistrazione(registrazioniAudio: RegistrazioniAudio){                     //funzione per l'inserimento
+
+    //funzione l'inserimento
+    fun inserisciRegistrazione(registrazioniAudio: RegistrazioniAudio){
         val db = writableDatabase
         val values = ContentValues().apply {
             put(column_name, registrazioniAudio.nomefile)
@@ -57,9 +67,10 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
         db.close()
     }
 
-    fun aggiornaRegistrazione(registrazioniAudio: RegistrazioniAudio, nomefile: String){                                //funzione per l'aggiornamento
-        val db = writableDatabase
 
+    //funzione per l'aggiornamento
+    fun aggiornaRegistrazione(registrazioniAudio: RegistrazioniAudio, nomefile: String){
+        val db = writableDatabase
         val values = ContentValues().apply {
             put(column_name, nomefile)
             put(column_filepath, registrazioniAudio.filepath)
@@ -68,7 +79,11 @@ class RegistrazioniAudioSQLiteHelper(context: Context) : SQLiteOpenHelper(contex
         }
         db.update(table_name, values, "$column_name = ?", arrayOf(registrazioniAudio.nomefile))
     }
-    fun cancella(registrazioniAudio: Array<RegistrazioniAudio>){                                        //funzione per la cancellazione
+
+
+
+    //funzione per la cancellazione
+    fun cancella(registrazioniAudio: Array<RegistrazioniAudio>){
         val db = writableDatabase
         for (registrazioniAudio in registrazioniAudio){
             db.delete(table_name, "$column_name = ?", arrayOf(registrazioniAudio.nomefile))

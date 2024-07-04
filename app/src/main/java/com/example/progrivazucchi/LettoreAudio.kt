@@ -27,8 +27,6 @@ class LettoreAudio : AppCompatActivity() {
     private lateinit var mostraNomeFile: TextView
     private lateinit var progresso: TextView
     private lateinit var durata: TextView
-
-
     private lateinit var runnable: Runnable
     private lateinit var handler: Handler
     private var ritardo = 1000L
@@ -46,15 +44,11 @@ class LettoreAudio : AppCompatActivity() {
         mostraNomeFile = findViewById(R.id.mostraNomeFile)
         progresso = findViewById(R.id.mostraProgresso)
         durata = findViewById(R.id.mostraDurata)
-
-
-
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         toolbar.setNavigationOnClickListener {
             onBackPressed()
-
         }
 
         mediaPlayer = MediaPlayer()             //inizializzo il player
@@ -63,39 +57,40 @@ class LettoreAudio : AppCompatActivity() {
             prepare()
         }
 
-        mostraNomeFile.text = nomefile              //mostra il nome del file
-
-
-        durata.text = formatTime(mediaPlayer.duration)                   //converte il minutaggio in stringa da mostrare in textview
-
+        mostraNomeFile.text = nomefile
+        durata.text = formatTime(mediaPlayer.duration)
         btnIndietroSec = findViewById(R.id.btnIndietroSec)
         btnAvantiSec = findViewById(R.id.btnAvantiSec)
         btnPlay = findViewById(R.id.btnPlay)
         chip = findViewById(R.id.chip)
         seekBar = findViewById(R.id.seekBar)
 
-        handler = Handler(Looper.getMainLooper())           //permette alla barra di scorrere in base allo stato di proseguimento del player
+
+
+        //permette alla barra di scorrere in base allo stato di proseguimento del player
+        handler = Handler(Looper.getMainLooper())
         runnable = Runnable {
             seekBar.progress = mediaPlayer.currentPosition
-            progresso.text = formatTime(mediaPlayer.currentPosition)         //converte il minutaggio in stringa da mostrare in textview
-            handler.postDelayed(runnable, ritardo)                  //input lag simulato "necessario per evitare problemi coi processi"
+            progresso.text = formatTime(mediaPlayer.currentPosition)
+            handler.postDelayed(runnable, ritardo)
         }
 
+        //bottone per far partire il player
         btnPlay.setOnClickListener{
             playPausePlayer()
         }
         playPausePlayer()
+
+
         // ogni posizione del seekBar progress si ricollega
         // ad una posizione del mediaPlayer
         seekBar.max = mediaPlayer.duration
-
-
         mediaPlayer.setOnCompletionListener {
             btnPlay.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_play_circle, theme)
             handler.removeCallbacks(runnable)
             resetToolbar()
-
         }
+
 
         // premendo il bottone btnAvantiSec la registrazione del player si muove di 1 secondo
         findViewById<androidx.appcompat.widget.AppCompatImageButton>(R.id.btnAvantiSec).setOnClickListener {
@@ -104,63 +99,68 @@ class LettoreAudio : AppCompatActivity() {
 
         }
 
+
+        // premendo il bottone btnIndietroSec la registrazione del player si muove di 1 secondo
         findViewById<androidx.appcompat.widget.AppCompatImageButton>(R.id.btnIndietroSec).setOnClickListener {
             mediaPlayer.seekTo(mediaPlayer.currentPosition - jumpValue)
             seekBar.progress -= jumpValue
         }
 
+
+
         // bottone moltiplicazione di velocità di riproduzione delle registrazioni
         chip.setOnClickListener{
             if(playVelocitaIndietro != 2.0f){
-                // se la velocità di riproduzione è diversa da 2 la
-                // velocità di riproduzione aumenta di 0.5f
                 playVelocitaIndietro += 0.5f
             }
             else{
-                // se la velocità di riproduzione è uguale a 2 la
-                // velocità di riproduzione ritorna a 0.5f
                 playVelocitaIndietro = 0.5f
             }
             mediaPlayer.playbackParams = PlaybackParams().setSpeed(playVelocitaIndietro)
             chip.text = "x $playVelocitaIndietro"
         }
 
+
+        //barra di avanzamento del player
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
-            // fromUser : se il cambiamento è stato effettuato dall'utente o no
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                // se è inizializzato dall'utente:
                 if(fromUser){
                     mediaPlayer.seekTo(progress)
                 }
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
             }
-
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         })
     }
 
-    private fun playPausePlayer(){              //funzione per far partire il player
+
+    //funzione per far partire il player
+    private fun playPausePlayer(){
         if(!mediaPlayer.isPlaying){
-            mediaPlayer.start() // avvio
+            mediaPlayer.start()
             btnPlay.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_pause_circle, theme)
             handler.postDelayed(runnable, ritardo)
         }else{
-            mediaPlayer.pause() // pausa
+            mediaPlayer.pause()
             btnPlay.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_play_circle, theme)
             handler.removeCallbacks(runnable)
         }
     }
 
-    override fun onBackPressed() {          //mostra il bottone poer tornare indietro dalla riproduzione all'elenco delle registrazioni
+    //mostra il bottone poer tornare indietro dalla riproduzione all'elenco delle registrazioni
+    override fun onBackPressed() {
         super.onBackPressed()
         //mediaPlayer.stop()
         mediaPlayer.release()
         handler.removeCallbacks(runnable)
     }
 
-    fun formatTime(timeInMillis: Int): String {             //funzione per formattare il tempo in stringa
+
+
+    //funzione per formattare il tempo in stringa
+    fun formatTime(timeInMillis: Int): String {
         val totalSeconds = timeInMillis / 1000
         val seconds = totalSeconds % 60
         val minutes = (totalSeconds / 60) % 60
@@ -172,11 +172,11 @@ class LettoreAudio : AppCompatActivity() {
         }
     }
 
-    private fun resetToolbar() {            //funzione per resettare il toolbar
+
+
+    //funzione per resettare il toolbar
+    private fun resetToolbar() {
         seekBar.progress= 0
         progresso.text = "00:00"
-
     }
-
-
 }
