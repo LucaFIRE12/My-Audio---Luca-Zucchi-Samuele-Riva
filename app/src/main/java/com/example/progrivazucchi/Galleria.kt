@@ -317,8 +317,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             val selected = records.count { it.isChecked }
             when(selected){
                 0 -> {
-                    disabilitaModifica()
-                    disabilitaElimina()
+                    btnChiuso.performClick()
                 }
                 1 -> {
                     abilitaModifica()
