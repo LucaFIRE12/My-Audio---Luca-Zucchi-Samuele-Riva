@@ -48,7 +48,8 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
     private lateinit var btnElimina: ImageButton
     private lateinit var textModifica: TextView
     private lateinit var textElimina: TextView
-    private var cont = 0
+
+
 
     //private lateinit var btnCondividi: ImageButton        Non implementata perchè non funzionante
 
@@ -96,6 +97,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         btnSelezionaTutto = findViewById(R.id.btnSelezionatutto)
         //btnCondividi = findViewById(R.id.btnCondividi)            Non implementata perchè non funzionante
 
+
         records = ArrayList()
         myAdapter = Adattatore(records, this)
 
@@ -105,7 +107,6 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
             mostraElencoRegistrazioni("")
 
-            //startActivity(Intent(this, Galleria::class.java))
 
         }
 
@@ -154,6 +155,9 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
 
             if (nbRecords == 0) {
                 Toast.makeText(this, "Nessun record selezionato", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }else if(nbRecords > 1){
+                Toast.makeText(this, "Solo un record può essere modificato", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -209,6 +213,7 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         records.map { it.isChecked = false }
         myAdapter.setEditMode(false)
         myAdapter.notifyDataSetChanged()
+
     }
                                 //funzioni per rendere visibili o meno i pulsanti modifica
     private fun disabilitaModifica(){
@@ -283,12 +288,6 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
             records[position].isChecked = !records[position].isChecked
             myAdapter.notifyItemChanged(position)
             val selected = records.count { it.isChecked }
-
-
-
-
-
-
             when(selected){
                 0 -> {
                     disabilitaModifica()

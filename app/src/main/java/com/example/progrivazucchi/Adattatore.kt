@@ -29,6 +29,7 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
     private var count = 0
 
 
+
     fun isEditMode(): Boolean {return editMode}
     fun setEditMode(mode: Boolean){             //funzione che permette di salvare la modifica effettuata al record salvato
         if (editMode != mode){
@@ -45,6 +46,7 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
         var tvMeta : TextView = itemView.findViewById<TextView>(R.id.tvMeta)
         //var checkBox : CheckBox = itemView.findViewById(R.id.checkbox)
         val iconaV : ImageView = itemView.findViewById<ImageView>(R.id.iconaV)
+
 
         init {
             itemView.setOnClickListener(this)
@@ -116,12 +118,14 @@ class Adattatore(var registrazione : List<RegistrazioniAudio>, var listener: OnI
                 }
                 else{
                     iconaV.visibility = View.INVISIBLE
+
                 }
             }
 
             if(position != RecyclerView.NO_POSITION ){
                 listener.onItemClickListener(position)
             }
+
 
             /*
             val position = adapterPosition
