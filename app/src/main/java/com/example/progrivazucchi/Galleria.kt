@@ -358,6 +358,11 @@ class Galleria : AppCompatActivity(), OnItemClickListener {
         records[position].isChecked = !records[position].isChecked
         myAdapter.notifyItemChanged(position)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        btnModifica.visibility = View.VISIBLE
+        btnElimina.visibility = View.VISIBLE
+        textModifica.visibility = View.VISIBLE
+        textElimina.visibility = View.VISIBLE
+        bottomSheet.visibility = View.VISIBLE
         if (myAdapter.isEditMode() && editBar.visibility == View.GONE){
             supportActionBar?.setDisplayShowTitleEnabled(false)
             supportActionBar?.setDisplayShowTitleEnabled(false)
